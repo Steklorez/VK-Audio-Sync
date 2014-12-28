@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:padding="@dimen/simple_music_one">
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="My music"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/apptheme_color"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/name"
+        android:layout_below="@+id/name"
+        android:text="main album"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/apptheme_color"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/quanSongs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/TextView01"
+        android:layout_below="@+id/TextView01"
+        android:text="33 songs"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/text_color_gray"
+        android:textSize="15sp" />
+
+</RelativeLayout>

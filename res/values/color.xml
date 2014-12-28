@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="notOrange">#ffbf7a</color>
+    <color name="text_color_white">#fff</color>
+    <color name="text_color_gray">#cdcdcd</color>
+    <color name="actionbar_background">#00000000</color>
+    <color name="black">#000</color>
+    <color name="notBlackBg">#646464</color>
+    <color name="red">#f00</color>
+     <color name="apptheme_color">#ff8800</color>
+
+</resources>

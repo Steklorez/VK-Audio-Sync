@@ -1,0 +1,34 @@
+<resources>
+
+    <style name="Holo.Theme.Custom" parent="Holo.Theme">
+        <item name="android:windowBackground">@drawable/ic_background</item>
+        <item name="actionBarStyle">@style/Widget.AppCompat.Base.ActionBar.Solid.Custom</item>
+        <item name="android:actionBarStyle">@style/Widget.AppCompat.Base.ActionBar.Solid.Custom</item>
+        <item name="android:checkboxStyle">@style/Holo.CompoundButton.CheckBox.Custom</item>
+    </style>
+
+    <style name="Widget.AppCompat.Base.ActionBar.Solid.Custom" parent="Widget.AppCompat.Base.ActionBar.Solid">
+        <item name="android:background">@drawable/apptheme_tab_unselected_holo</item>
+        <item name="background">@drawable/apptheme_tab_unselected_holo</item>
+        <item name="android:titleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Custom</item>
+        <item name="android:subtitleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Custom</item>
+        <item name="titleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Custom</item>
+        <item name="subtitleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Custom</item>
+    </style>
+
+    <style name="TextAppearance.AppCompat.Widget.ActionBar.Title.Custom" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textStyle">italic</item>
+        <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Custom" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
+        <item name="android:textStyle">italic</item>
+        <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="Holo.CompoundButton.CheckBox.Custom" parent="@style/Holo.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/apptheme_btn_check_holo_dark</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+</resources>

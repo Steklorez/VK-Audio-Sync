@@ -1,5 +1,7 @@
 package com.BBsRs.vkaudiosync;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.holoeverywhere.LayoutInflater;
@@ -11,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.UnsupportedTagException;
 import com.perm.kate.api.Audio;
 
 public class MusicAdapter extends BaseAdapter {
@@ -69,6 +74,8 @@ public class MusicAdapter extends BaseAdapter {
         holder.length.setText(stringPlusZero(String.valueOf((int)(musicList.get(position).duration)/60))+":"+stringPlusZero(String.valueOf((int)(musicList.get(position).duration)%60)));
         holder.title.setText(String.valueOf(musicList.get(position).artist));
         holder.subtitle.setText(String.valueOf(musicList.get(position).title));
+        
+        
         return rowView;
     }
     

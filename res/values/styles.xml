@@ -15,6 +15,8 @@
         <item name="android:actionBarStyle">@style/Widget.AppCompat.Base.ActionBar.Solid.Custom</item>
         <item name="android:checkboxStyle">@style/Holo.CompoundButton.CheckBox.Custom</item>
         <item name="android:listSelector">@drawable/apptheme_list_selector_holo_dark</item>
+        <item name="android:buttonStyle">@style/Button.Custom</item>
+        <item name="android:imageButtonStyle">@style/ImageButton.Custom</item>
     </style>
 
     <style name="Widget.AppCompat.Base.ActionBar.Solid.Custom" parent="Widget.AppCompat.Base.ActionBar.Solid">
@@ -39,6 +41,17 @@
     <style name="Holo.CompoundButton.CheckBox.Custom" parent="@style/Holo.CompoundButton.CheckBox">
         <item name="android:button">@drawable/apptheme_btn_check_holo_dark</item>
         <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="Button.Custom" parent="@style/Holo.Button">
+        <item name="android:background">@drawable/apptheme_btn_default_holo_dark</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:minWidth">64dip</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="ImageButton.Custom" parent="android:Widget.ImageButton">
+        <item name="android:background">@drawable/apptheme_btn_default_holo_dark</item>
     </style>
 
 </resources>

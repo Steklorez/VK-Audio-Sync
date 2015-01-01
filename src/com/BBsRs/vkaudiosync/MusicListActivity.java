@@ -1,19 +1,24 @@
 package com.BBsRs.vkaudiosync;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.widget.Button;
 import org.holoeverywhere.widget.ListView;
+import org.holoeverywhere.widget.RelativeLayout;
 import org.holoeverywhere.widget.TextView;
 
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.content.Context;
+import android.content.res.Resources.NotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -44,6 +49,16 @@ public class MusicListActivity extends Activity {
     DisplayImageOptions options ;
     
     ArrayList<MusicCollection> musicCollection = new ArrayList<MusicCollection>();
+    
+    //flag for error
+    boolean error=false;
+    
+    //LOG_TAG for log
+    String LOG_TAG = "MusicListActivity";
+    
+    RelativeLayout relativeErrorLayout;
+    TextView errorMessage;
+    Button errorRetryButton;
 
 	/** Called when the activity is first created. */
 	@SuppressWarnings("deprecation")
@@ -55,6 +70,9 @@ public class MusicListActivity extends Activity {
 	    //init all views
 	    listViewMusic = (ListView)this.findViewById(R.id.listViewMusic);
 	    mPullToRefreshLayout = (PullToRefreshLayout)findViewById(R.id.ptr_layout);
+    	relativeErrorLayout = (RelativeLayout)findViewById(R.id.errorLayout);
+    	errorMessage = (TextView)findViewById(R.id.errorMessage);
+    	errorRetryButton = (Button)findViewById(R.id.errorRetryButton);
 	    
 	    //retrieve old session
         account.restore(this);
@@ -84,6 +102,7 @@ public class MusicListActivity extends Activity {
 	    }
 	    else{
 	    	musicCollection = savedInstanceState.getParcelableArrayList("musicCollection");
+	    	error = savedInstanceState.getBoolean("error");
 	    	if ((musicCollection.size()>1)) {
 	    		MusicAdapter musicAdapter = new MusicAdapter(getApplicationContext(), musicCollection, options);
 	    		
@@ -109,6 +128,16 @@ public class MusicListActivity extends Activity {
 	         	customOnRefreshListener.onRefreshStarted(null);	
 	    	}
 	    }
+	    
+	    //programing error button
+        errorRetryButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mPullToRefreshLayout.setRefreshing(true);
+		        customOnRefreshListener.onRefreshStarted(null);
+		        errorRetryButton.setEnabled(false);
+			}
+		});
 	}
 	
 	@Override
@@ -117,6 +146,7 @@ public class MusicListActivity extends Activity {
 		 outState.putParcelableArrayList("musicCollection", musicCollection);
 		 outState.putInt("posX",  listViewMusic.getFirstVisiblePosition());
 		 outState.putString("UserName",  UserName);
+		 outState.putBoolean("error", error);
 	}
 	
     public class  CustomOnRefreshListener implements OnRefreshListener{
@@ -128,7 +158,7 @@ public class MusicListActivity extends Activity {
                 @Override
                 protected Void doInBackground(Void... params) {
                             try {
-                            	
+                            	error=true;
                             	musicCollection = new ArrayList<MusicCollection>();
                             	
                             	for (Audio one : api.getAudio(account.user_id, null, null, null, null, null)){
@@ -144,40 +174,62 @@ public class MusicListActivity extends Activity {
                                 
         						UserName = userOne.first_name+" "+userOne.last_name;
         						
-        						
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+        						error=false;
+                            } catch (NotFoundException e) {
+                            	error=true;
+            					Log.e(LOG_TAG, "data Error");
+            					e.printStackTrace();
+            				} catch (IOException e) {
+            					error=true;
+            					Log.e(LOG_TAG, "Load Error");
+            					e.printStackTrace();
+            				} catch (NullPointerException e) {
+            					error=true;
+            	        		Log.e(LOG_TAG, "null Load Error"); 
+            					e.printStackTrace();
+            				} catch (Exception e) {
+            					error=true;
+            	        		Log.e(LOG_TAG, "other Load Error");
+            					e.printStackTrace();
+            				}
                     return null;
                 }
 
                 @Override
                 protected void onPostExecute(Void result) {
                     super.onPostExecute(result);
-                    //reset list view
-                    if (headerView!=null)
-                    listViewMusic.removeHeaderView(headerView);
-                    
                     mPullToRefreshLayout.setRefreshing(false);
+                    if (!error){
+                    	listViewMusic.setVisibility(View.VISIBLE);
+                    	relativeErrorLayout.setVisibility(View.GONE);
+                    	
+                    	//reset list view
+                    	if (headerView!=null)
+                    		listViewMusic.removeHeaderView(headerView);
                     
-                    MusicAdapter musicAdapter = new MusicAdapter(getApplicationContext(), musicCollection, options);
+                    	MusicAdapter musicAdapter = new MusicAdapter(getApplicationContext(), musicCollection, options);
 
-                    // setting up list
-                    LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    if (headerView==null)
-                    headerView = inflater.inflate(R.layout.ic_simple_music_header);
-                    TextView name = (TextView) headerView.findViewById(R.id.name);
-                    TextView quanSongs = (TextView) headerView.findViewById(R.id.quanSongs);
+                    	// setting up list
+                    	LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    	if (headerView==null)
+                    		headerView = inflater.inflate(R.layout.ic_simple_music_header);
+                    	TextView name = (TextView) headerView.findViewById(R.id.name);
+                    	TextView quanSongs = (TextView) headerView.findViewById(R.id.quanSongs);
                     
-                    name.setText(UserName);
-                    quanSongs.setText(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
+                    	name.setText(UserName);
+                    	quanSongs.setText(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
                     
-                    listViewMusic.addHeaderView(headerView);
+                    	listViewMusic.addHeaderView(headerView);
                     
-                    listViewMusic.setAdapter(musicAdapter);
+                    	listViewMusic.setAdapter(musicAdapter);
                     
-                    Animation flyUpAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fly_up_anim);
-                    listViewMusic.startAnimation(flyUpAnimation);
+                    	Animation flyUpAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fly_up_anim);
+                    	listViewMusic.startAnimation(flyUpAnimation);
+                    } else {
+                    	listViewMusic.setVisibility(View.GONE);
+                    	relativeErrorLayout.setVisibility(View.VISIBLE);
+                    	errorRetryButton.setEnabled(true);
+                    }
                 }
             }.execute();
 		}

@@ -10,6 +10,7 @@ import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 import com.perm.kate.api.Auth;
 
 public class LoginActivity extends Activity {

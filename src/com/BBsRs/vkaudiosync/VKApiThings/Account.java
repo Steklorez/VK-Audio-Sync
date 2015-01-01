@@ -1,4 +1,4 @@
-package com.BBsRs.vkaudiosync;
+package com.BBsRs.vkaudiosync.VKApiThings;
 
 import android.content.Context;
 import android.content.SharedPreferences;

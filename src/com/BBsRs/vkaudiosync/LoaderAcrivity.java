@@ -6,11 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 
+import com.BBsRs.vkaudiosync.VKApiThings.Account;
+import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 import com.perm.kate.api.Api;
 
 public class LoaderAcrivity extends Activity {
 
-	private final int REQUEST_LOGIN = 1;
 	Account account = new Account();
 	Api api;
 

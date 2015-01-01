@@ -186,7 +186,7 @@ public class MusicListActivity extends Activity {
                             	musicCollection = new ArrayList<MusicCollection>();
                             	
                             	for (Audio one : api.getAudio(account.user_id, null, null, null, null, null)){
-                            		f = new File(android.os.Environment.getExternalStorageDirectory()+"/Music/"+one.artist+" - "+one.title+".mp3");
+                            		f = new File(android.os.Environment.getExternalStorageDirectory()+"/Music/"+(one.artist+" - "+one.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
                             		if (f.exists())
                             			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 1, 1));
                             		else 

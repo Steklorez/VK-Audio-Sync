@@ -81,7 +81,7 @@ public class DownloadService extends Service {
 					if (oneItem.checked == 1 && oneItem.exist == 0) {
 						Intent i = new Intent("DOWNLOADED");
 						i.putExtra("index", index);
-						i.putExtra("successfully", DownloadFromUrl(oneItem.url, oneItem.artist+" - "+oneItem.title+".mp3"));
+						i.putExtra("successfully", DownloadFromUrl(oneItem.url, (oneItem.artist+" - "+oneItem.title+".mp3").replaceAll("[\\/:*?\"<>|]", "")));
 						sendBroadcast(i);
 					}
 					index++;

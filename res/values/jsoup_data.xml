@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- This data below closed to translate ! Using only for download from internet -->
+    <string name="user_agent">Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.60 Safari/537.17</string>
+
+    <integer name="user_timeout">10000</integer>
+    <!-- end of data only for download from internet -->
+
+</resources>

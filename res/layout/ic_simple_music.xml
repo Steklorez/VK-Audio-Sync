@@ -6,66 +6,79 @@
     android:paddingRight="@dimen/simple_music_one"
     android:paddingTop="@dimen/simple_music_two" >
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/length"
-        android:layout_toRightOf="@+id/cover_art"
-        android:lines="1"
-        android:paddingLeft="@dimen/simple_music_two"
-        android:text="Rihanna ft. Kesha"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/text_color_white"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/subtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/title"
-        android:layout_alignRight="@+id/title"
-        android:layout_below="@+id/title"
-        android:lines="1"
-        android:paddingLeft="@dimen/simple_music_two"
-        android:text="Medium Text"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/text_color_gray"
-        android:textSize="15sp" />
-
-    <org.holoeverywhere.widget.CheckBox
-        android:id="@+id/checlDownload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/subtitle"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" 
-        android:button="@drawable/apptheme_btn_check_holo_dark"
-        android:background="@android:color/transparent"/>
-
-    <TextView
-        android:id="@+id/length"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/checlDownload"
-        android:layout_alignTop="@+id/title"
-        android:layout_toLeftOf="@+id/checlDownload"
-        android:gravity="center_vertical"
-        android:padding="@dimen/simple_music_three"
-        android:text="03:25"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/text_color_gray"
-        android:textSize="16sp" />
-
     <ImageView
         android:id="@+id/cover_art"
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/subtitle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/title"
         android:scaleType="centerCrop"
         android:src="@drawable/avatar_small" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/cover_art"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/cover_art"
+        android:layout_toRightOf="@+id/cover_art" >
+
+        <org.holoeverywhere.widget.CheckBox
+            android:id="@+id/checlDownload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/transparent"
+            android:button="@drawable/apptheme_btn_check_holo_dark" />
+
+        <TextView
+            android:id="@+id/length"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/checlDownload"
+            android:gravity="center_vertical"
+            android:padding="@dimen/simple_music_three"
+            android:text="03:25"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/text_color_gray"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/length"
+            android:gravity="center_vertical"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:paddingLeft="@dimen/simple_music_two"
+                android:text="Rihanna ft. Kesha"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/text_color_white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:paddingLeft="@dimen/simple_music_two"
+                android:text="Medium Text"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/text_color_gray"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

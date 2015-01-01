@@ -1,11 +1,6 @@
 package com.BBsRs.vkaudiosync;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -13,26 +8,26 @@ import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.TextView;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.mpatric.mp3agic.ID3v2;
-import com.mpatric.mp3agic.InvalidDataException;
-import com.mpatric.mp3agic.Mp3File;
-import com.mpatric.mp3agic.UnsupportedTagException;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.perm.kate.api.Api;
 import com.perm.kate.api.Audio;
 import com.perm.kate.api.User;
@@ -92,7 +87,16 @@ public class MusicListActivity extends Activity {
         
         imageLoader = ImageLoader.getInstance();
 		// Initialize ImageLoader with configuration. Do it once.
-	    imageLoader.init(ImageLoaderConfiguration.createDefault(getApplicationContext()));
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
+		.threadPriority(Thread.NORM_PRIORITY - 2)
+		.denyCacheImageMultipleSizesInMemory()
+		.diskCacheFileNameGenerator(new Md5FileNameGenerator())
+		.diskCacheSize(25 * 1024 * 1024) // 25 Mb
+		.tasksProcessingOrder(QueueProcessingType.LIFO)
+		//.writeDebugLogs() // Remove for release app
+		.build();
+        
+	    imageLoader.init(config);
         
         
       //refresh on open to load data when app first time started
@@ -110,10 +114,7 @@ public class MusicListActivity extends Activity {
                 protected Void doInBackground(Void... params) {
                             try {
                             	musicList = api.getAudio(account.user_id, null, null, null, null, null);
-//                                for (Audio one : musicList){
-//                                	Log.i("Music", one.title + " - "+one.url);
-//                                };
-                                
+                            	
                                 Collection<Long> u = new ArrayList<Long>();
                                 u.add(account.user_id);
                                 Collection<String> d = new ArrayList<String>();
@@ -122,55 +123,6 @@ public class MusicListActivity extends Activity {
                                 User userOne = api.getProfiles(u, d, "", "", "", "").get(0);
                                 
         						UserName = userOne.first_name+" "+userOne.last_name;
-        						//UserAvatarUrl = userOne.photo_400_orig;
-        						
-        						URL url = new URL(musicList.get(0).url);
-        						URLConnection connection = url.openConnection();
-        						InputStream in = connection.getInputStream();
-        						File music = new File(getApplicationInfo().dataDir+"/1.mp3");
-        						FileOutputStream fos = new FileOutputStream(music);
-        						byte[] buf = new byte[1024];
-        						
-        						int i=0;
-        						while (i<1000) {
-        						    int len = in.read(buf);
-        						    if (len == -1) {
-        						        break;
-        						    }
-        						    i++;
-        						    fos.write(buf, 0, len);
-        						}
-        						in.close();
-        						fos.flush();
-        						fos.close();
-        						
-        						try {
-        							Mp3File mp3file;
-        							mp3file = new Mp3File(getApplicationInfo().dataDir+"/1.mp3");
-        							System.out.println("Length of this mp3 is: " + mp3file.getLengthInSeconds() + " seconds");
-        					        System.out.println("Bitrate: " + mp3file.getLengthInSeconds() + " kbps " + (mp3file.isVbr() ? "(VBR)" : "(CBR)"));
-        					        System.out.println("Sample rate: " + mp3file.getSampleRate() + " Hz");
-        					        System.out.println("Has ID3v1 tag?: " + (mp3file.hasId3v1Tag() ? "YES" : "NO"));
-        					        System.out.println("Has ID3v2 tag?: " + (mp3file.hasId3v2Tag() ? "YES" : "NO"));
-        					        System.out.println("Has custom tag?: " + (mp3file.hasCustomTag() ? "YES" : "NO"));
-        					        if (mp3file.hasId3v2Tag()){
-        					            ID3v2 id3v2tag = mp3file.getId3v2Tag();
-        					            byte[] data = id3v2tag.getAlbumImage();
-        					            //converting the bytes to an image
-        					            BitmapFactory.Options options = new BitmapFactory.Options();
-//        					            options.inMutable = true;
-        					            bmp = BitmapFactory.decodeByteArray(data, 0, data.length, options);
-        					       }
-        						} catch (UnsupportedTagException e) {
-        							// TODO Auto-generated catch block
-        							e.printStackTrace();
-        						} catch (InvalidDataException e) {
-        							// TODO Auto-generated catch block
-        							e.printStackTrace();
-        						} catch (IOException e) {
-        							// TODO Auto-generated catch block
-        							e.printStackTrace();
-        						}
         						
         						
                             } catch (Exception e) {
@@ -188,7 +140,7 @@ public class MusicListActivity extends Activity {
                     
                     mPullToRefreshLayout.setRefreshing(false);
                     
-                    MusicAdapter musicAdapter = new MusicAdapter(getApplicationContext(), musicList);
+                    MusicAdapter musicAdapter = new MusicAdapter(getApplicationContext(), musicList, options, imageLoader);
 
                     // настраиваем список
                     LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);

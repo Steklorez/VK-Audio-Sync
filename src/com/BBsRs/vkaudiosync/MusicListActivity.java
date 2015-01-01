@@ -179,7 +179,7 @@ public class MusicListActivity extends Activity {
                     
                     MusicAdapter musicAdapter = new MusicAdapter(getApplicationContext(), musicCollection, options, imageLoader);
 
-                    // настраиваем список
+                    // setting up list
                     LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     if (headerView==null)
                     headerView = inflater.inflate(R.layout.ic_simple_music_header);
@@ -188,8 +188,6 @@ public class MusicListActivity extends Activity {
                     
                     name.setText(UserName);
                     quanSongs.setText(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
-//                    imageLoader.displayImage(UserAvatarUrl, avatar, options);
-                    //avatar.setImageBitmap(bmp);
                     
                     listViewMusic.addHeaderView(headerView);
                     

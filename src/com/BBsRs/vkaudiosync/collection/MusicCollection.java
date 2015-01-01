@@ -60,7 +60,7 @@ public void writeToParcel(Parcel out, int flags) {
      out.writeString(title);
      out.writeLong(duration);
      out.writeString(url);
-     out.writeLong(lyrics_id);
+     out.writeLong(lyrics_id != null ? lyrics_id : 0);
      out.writeInt(checked);
 }
 

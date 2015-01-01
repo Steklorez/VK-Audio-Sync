@@ -5,6 +5,7 @@
         <item name="actionBarStyle">@style/Widget.AppCompat.Base.ActionBar.Solid.Custom</item>
         <item name="android:actionBarStyle">@style/Widget.AppCompat.Base.ActionBar.Solid.Custom</item>
         <item name="android:checkboxStyle">@style/Holo.CompoundButton.CheckBox.Custom</item>
+        <item name="android:listSelector">@drawable/apptheme_list_selector_holo_dark</item>
     </style>
 
     <style name="Widget.AppCompat.Base.ActionBar.Solid.Custom" parent="Widget.AppCompat.Base.ActionBar.Solid">

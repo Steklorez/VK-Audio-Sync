@@ -14,13 +14,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.BBsRs.vkaudiosync.collection.MusicCollection;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.perm.kate.api.Audio;
 
 public class MusicAdapter extends BaseAdapter {
 
-	ArrayList<Audio> musicList;
+	ArrayList<MusicCollection> musicCollection = new ArrayList<MusicCollection>();
 	Context context;
 	LayoutInflater inflater;
 	DisplayImageOptions options;
@@ -28,8 +28,8 @@ public class MusicAdapter extends BaseAdapter {
 	String google = "https://www.google.ru/search?&safe=off&tbm=isch&tbs=isz:m&q=";
 	String charset = "UTF-8";
 	
-	public MusicAdapter (Context _context, ArrayList<Audio> _musicList, DisplayImageOptions _options, ImageLoader _imageLoader){
-		musicList = _musicList;
+	public MusicAdapter (Context _context, ArrayList<MusicCollection> _musicCollection, DisplayImageOptions _options, ImageLoader _imageLoader){
+		musicCollection = _musicCollection;
 		context = _context;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		options = _options;
@@ -39,13 +39,13 @@ public class MusicAdapter extends BaseAdapter {
 	// кол-во элементов
 	  @Override
 	  public int getCount() {
-	    return musicList.size();
+	    return musicCollection.size();
 	  }
 
 	  // элемент по позиции
 	  @Override
 	  public Object getItem(int position) {
-	    return musicList.get(position);
+	    return musicCollection.get(position);
 	  }
 
 	  // id по позиции
@@ -79,19 +79,25 @@ public class MusicAdapter extends BaseAdapter {
             holder = (ViewHolder) rowView.getTag();
         }
         
-        holder.length.setText(stringPlusZero(String.valueOf((int)(musicList.get(position).duration)/60))+":"+stringPlusZero(String.valueOf((int)(musicList.get(position).duration)%60)));
-        holder.title.setText(String.valueOf(musicList.get(position).artist));
-        holder.subtitle.setText(String.valueOf(musicList.get(position).title));
+        holder.length.setText(stringPlusZero(String.valueOf((int)(musicCollection.get(position).duration)/60))+":"+stringPlusZero(String.valueOf((int)(musicCollection.get(position).duration)%60)));
+        holder.title.setText(String.valueOf(musicCollection.get(position).artist));
+        holder.subtitle.setText(String.valueOf(musicCollection.get(position).title));
+        holder.checkDownload.setChecked(musicCollection.get(position).checked == 1 ? true : false);
         
         try {
-			imageLoader.displayImage(google + URLEncoder.encode(musicList.get(position).artist+ " - "+musicList.get(position).title, charset), holder.albumArt, options, true);
+			imageLoader.displayImage(google + URLEncoder.encode(musicCollection.get(position).artist+ " - "+musicCollection.get(position).title, charset), holder.albumArt, options, true);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         
         
-        
+        holder.checkDownload.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				musicCollection.get(position).checked = holder.checkDownload.isChecked() ? 1 : 0;
+			}
+		});
         return rowView;
     }
     

@@ -1,6 +1,5 @@
 package com.BBsRs.vkaudiosync;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -8,21 +7,18 @@ import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.TextView;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.BBsRs.vkaudiosync.collection.MusicCollection;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -41,7 +37,6 @@ public class MusicListActivity extends Activity {
     
     Account account=new Account();
     Api api;
-    ArrayList<Audio> musicList;
     
     String UserName = "";
     String UserAvatarUrl = "";
@@ -51,7 +46,7 @@ public class MusicListActivity extends Activity {
     DisplayImageOptions options ;
     ImageLoader imageLoader;
     
-    Bitmap bmp;
+    ArrayList<MusicCollection> musicCollection = new ArrayList<MusicCollection>();
 
 	/** Called when the activity is first created. */
 	@SuppressWarnings("deprecation")
@@ -100,8 +95,45 @@ public class MusicListActivity extends Activity {
         
         
       //refresh on open to load data when app first time started
-        mPullToRefreshLayout.setRefreshing(true);
-        customOnRefreshListener.onRefreshStarted(null);
+	    if(savedInstanceState == null) {
+	    	 mPullToRefreshLayout.setRefreshing(true);
+	         customOnRefreshListener.onRefreshStarted(null);
+	    }
+	    else{
+	    	musicCollection = savedInstanceState.getParcelableArrayList("musicCollection");
+	    	if ((musicCollection.size()>1)) {
+	    		MusicAdapter musicAdapter = new MusicAdapter(getApplicationContext(), musicCollection, options, imageLoader);
+	    		
+	    		LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                if (headerView==null)
+                headerView = inflater.inflate(R.layout.ic_simple_music_header);
+                TextView name = (TextView) headerView.findViewById(R.id.name);
+                TextView quanSongs = (TextView) headerView.findViewById(R.id.quanSongs);
+                
+                UserName = savedInstanceState.getString("UserName");
+                
+                name.setText(UserName);
+                quanSongs.setText(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
+                
+                listViewMusic.addHeaderView(headerView);
+                
+                listViewMusic.setAdapter(musicAdapter);
+                listViewMusic.setSelection(savedInstanceState.getInt("posX"));
+	    	}
+	    	
+	    	else {
+	    		mPullToRefreshLayout.setRefreshing(true);
+	         	customOnRefreshListener.onRefreshStarted(null);	
+	    	}
+	    }
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		 outState.putParcelableArrayList("musicCollection", musicCollection);
+		 outState.putInt("posX",  listViewMusic.getFirstVisiblePosition());
+		 outState.putString("UserName",  UserName);
 	}
 	
     public class  CustomOnRefreshListener implements OnRefreshListener{
@@ -113,7 +145,12 @@ public class MusicListActivity extends Activity {
                 @Override
                 protected Void doInBackground(Void... params) {
                             try {
-                            	musicList = api.getAudio(account.user_id, null, null, null, null, null);
+                            	
+                            	musicCollection = new ArrayList<MusicCollection>();
+                            	
+                            	for (Audio one : api.getAudio(account.user_id, null, null, null, null, null)){
+                            		musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 0));
+                            	}
                             	
                                 Collection<Long> u = new ArrayList<Long>();
                                 u.add(account.user_id);
@@ -140,7 +177,7 @@ public class MusicListActivity extends Activity {
                     
                     mPullToRefreshLayout.setRefreshing(false);
                     
-                    MusicAdapter musicAdapter = new MusicAdapter(getApplicationContext(), musicList, options, imageLoader);
+                    MusicAdapter musicAdapter = new MusicAdapter(getApplicationContext(), musicCollection, options, imageLoader);
 
                     // настраиваем список
                     LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -150,7 +187,7 @@ public class MusicListActivity extends Activity {
                     TextView quanSongs = (TextView) headerView.findViewById(R.id.quanSongs);
                     
                     name.setText(UserName);
-                    quanSongs.setText(musicList.size()+" "+getResources().getString(R.string.quan_songs));
+                    quanSongs.setText(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
 //                    imageLoader.displayImage(UserAvatarUrl, avatar, options);
                     //avatar.setImageBitmap(bmp);
                     

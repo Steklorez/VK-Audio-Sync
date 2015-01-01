@@ -1,5 +1,6 @@
 package com.BBsRs.vkaudiosync;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,14 +16,18 @@ import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLa
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources.NotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.BBsRs.vkaudiosync.Services.DownloadService;
 import com.BBsRs.vkaudiosync.VKApiThings.Account;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 import com.BBsRs.vkaudiosync.collection.MusicCollection;
@@ -59,6 +64,7 @@ public class MusicListActivity extends Activity {
     RelativeLayout relativeErrorLayout;
     TextView errorMessage;
     Button errorRetryButton;
+    File f;
 
 	/** Called when the activity is first created. */
 	@SuppressWarnings("deprecation")
@@ -149,6 +155,24 @@ public class MusicListActivity extends Activity {
 		 outState.putBoolean("error", error);
 	}
 	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	      switch (item.getItemId()) {
+	      case R.id.menu_start_download_service:
+	    	  Intent serviceIntent = new Intent(this, DownloadService.class); 
+	    	  serviceIntent.putExtra("musicCollection", musicCollection);
+	    	  startService(serviceIntent);
+	    	  break;
+	      }
+		return true;
+	}
+	
     public class  CustomOnRefreshListener implements OnRefreshListener{
 
 		@Override
@@ -162,7 +186,11 @@ public class MusicListActivity extends Activity {
                             	musicCollection = new ArrayList<MusicCollection>();
                             	
                             	for (Audio one : api.getAudio(account.user_id, null, null, null, null, null)){
-                            		musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 0));
+                            		f = new File(android.os.Environment.getExternalStorageDirectory()+"/Music/"+one.artist+" - "+one.title+".mp3");
+                            		if (f.exists())
+                            			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 1, 1));
+                            		else 
+                            			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 0, 0));
                             	}
                             	
                                 Collection<Long> u = new ArrayList<Long>();

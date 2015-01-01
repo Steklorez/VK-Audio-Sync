@@ -8,7 +8,10 @@ import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.widget.CheckBox;
 import org.holoeverywhere.widget.TextView;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -32,6 +35,7 @@ public class MusicAdapter extends BaseAdapter {
 		context = _context;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		options = _options;
+		_context.registerReceiver(musicDownloaded, new IntentFilter("DOWNLOADED"));
 	}
 	
 	// кол-во элементов
@@ -42,7 +46,7 @@ public class MusicAdapter extends BaseAdapter {
 
 	  // элемент по позиции
 	  @Override
-	  public Object getItem(int position) {
+	  public MusicCollection getItem(int position) {
 	    return musicCollection.get(position);
 	  }
 
@@ -51,7 +55,7 @@ public class MusicAdapter extends BaseAdapter {
 	  public long getItemId(int position) {
 	    return position;
 	  }
-	
+	  
     static class ViewHolder {
         public TextView length;
         public TextView title;
@@ -81,6 +85,7 @@ public class MusicAdapter extends BaseAdapter {
         holder.title.setText(String.valueOf(musicCollection.get(position).artist));
         holder.subtitle.setText(String.valueOf(musicCollection.get(position).title));
         holder.checkDownload.setChecked(musicCollection.get(position).checked == 1 ? true : false);
+        holder.checkDownload.setEnabled(musicCollection.get(position).exist == 0 ? true : false);
         
         try {
         	ImageLoader.getInstance().displayImage(google + URLEncoder.encode(musicCollection.get(position).artist+ " - "+musicCollection.get(position).title, charset), holder.albumArt, options, true);
@@ -105,6 +110,16 @@ public class MusicAdapter extends BaseAdapter {
 		else
 			return arg1;
 	}
+	
+	private BroadcastReceiver musicDownloaded = new BroadcastReceiver() {
+
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	    	getItem(intent.getExtras().getInt("index")).checked = intent.getExtras().getBoolean("successfully") ? 1 : 0;
+	    	getItem(intent.getExtras().getInt("index")).exist = intent.getExtras().getBoolean("successfully") ? 1 : 0;
+	    	notifyDataSetChanged();
+	    }
+	};
 
 
 }

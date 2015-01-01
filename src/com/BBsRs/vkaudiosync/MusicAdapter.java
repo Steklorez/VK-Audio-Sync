@@ -24,16 +24,14 @@ public class MusicAdapter extends BaseAdapter {
 	Context context;
 	LayoutInflater inflater;
 	DisplayImageOptions options;
-    ImageLoader imageLoader;
 	String google = "https://www.google.ru/search?&safe=off&tbm=isch&tbs=isz:m&q=";
 	String charset = "UTF-8";
 	
-	public MusicAdapter (Context _context, ArrayList<MusicCollection> _musicCollection, DisplayImageOptions _options, ImageLoader _imageLoader){
+	public MusicAdapter (Context _context, ArrayList<MusicCollection> _musicCollection, DisplayImageOptions _options){
 		musicCollection = _musicCollection;
 		context = _context;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		options = _options;
-        imageLoader = _imageLoader;
 	}
 	
 	// кол-во элементов
@@ -85,7 +83,7 @@ public class MusicAdapter extends BaseAdapter {
         holder.checkDownload.setChecked(musicCollection.get(position).checked == 1 ? true : false);
         
         try {
-			imageLoader.displayImage(google + URLEncoder.encode(musicCollection.get(position).artist+ " - "+musicCollection.get(position).title, charset), holder.albumArt, options, true);
+        	ImageLoader.getInstance().displayImage(google + URLEncoder.encode(musicCollection.get(position).artist+ " - "+musicCollection.get(position).title, charset), holder.albumArt, options, true);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -44,7 +44,6 @@ public class MusicListActivity extends Activity {
     View headerView = null;
     
     DisplayImageOptions options ;
-    ImageLoader imageLoader;
     
     ArrayList<MusicCollection> musicCollection = new ArrayList<MusicCollection>();
 
@@ -74,25 +73,11 @@ public class MusicListActivity extends Activity {
         
         //init image loader
         options = new DisplayImageOptions.Builder()
-        .showStubImage(R.drawable.deactivated_100)
+        .showStubImage(R.drawable.ic_music_stub)
         //.showImageForEmptyUri(R.drawable.logo)
         .cacheOnDisc(true)	
         .cacheInMemory(true)					
         .build();
-        
-        imageLoader = ImageLoader.getInstance();
-		// Initialize ImageLoader with configuration. Do it once.
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
-		.threadPriority(Thread.NORM_PRIORITY - 2)
-		.denyCacheImageMultipleSizesInMemory()
-		.diskCacheFileNameGenerator(new Md5FileNameGenerator())
-		.diskCacheSize(25 * 1024 * 1024) // 25 Mb
-		.tasksProcessingOrder(QueueProcessingType.LIFO)
-		//.writeDebugLogs() // Remove for release app
-		.build();
-        
-	    imageLoader.init(config);
-        
         
       //refresh on open to load data when app first time started
 	    if(savedInstanceState == null) {
@@ -102,7 +87,7 @@ public class MusicListActivity extends Activity {
 	    else{
 	    	musicCollection = savedInstanceState.getParcelableArrayList("musicCollection");
 	    	if ((musicCollection.size()>1)) {
-	    		MusicAdapter musicAdapter = new MusicAdapter(getApplicationContext(), musicCollection, options, imageLoader);
+	    		MusicAdapter musicAdapter = new MusicAdapter(getApplicationContext(), musicCollection, options);
 	    		
 	    		LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 if (headerView==null)
@@ -177,7 +162,7 @@ public class MusicListActivity extends Activity {
                     
                     mPullToRefreshLayout.setRefreshing(false);
                     
-                    MusicAdapter musicAdapter = new MusicAdapter(getApplicationContext(), musicCollection, options, imageLoader);
+                    MusicAdapter musicAdapter = new MusicAdapter(getApplicationContext(), musicCollection, options);
 
                     // setting up list
                     LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);

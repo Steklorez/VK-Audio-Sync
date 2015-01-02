@@ -15,8 +15,10 @@ import org.holoeverywhere.widget.TextView;
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources.NotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -54,6 +56,9 @@ public class MusicListActivity extends Activity {
     DisplayImageOptions options ;
     
     ArrayList<MusicCollection> musicCollection = new ArrayList<MusicCollection>();
+    
+    Menu mainMenu = null;
+    MusicAdapter musicAdapter;
     
     //flag for error
     boolean error=false;
@@ -110,7 +115,7 @@ public class MusicListActivity extends Activity {
 	    	musicCollection = savedInstanceState.getParcelableArrayList("musicCollection");
 	    	error = savedInstanceState.getBoolean("error");
 	    	if ((musicCollection.size()>1)) {
-	    		MusicAdapter musicAdapter = new MusicAdapter(getApplicationContext(), musicCollection, options);
+	    		musicAdapter = new MusicAdapter(getApplicationContext(), musicCollection, options);
 	    		
 	    		LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 if (headerView==null)
@@ -144,6 +149,9 @@ public class MusicListActivity extends Activity {
 		        errorRetryButton.setEnabled(false);
 			}
 		});
+        
+        //turn up download receiver
+        registerReceiver(musicDownloaded, new IntentFilter("DOWNLOADED"));
 	}
 	
 	@Override
@@ -158,6 +166,7 @@ public class MusicListActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
+		mainMenu = menu;
 		return true;
 	}
 	
@@ -165,6 +174,13 @@ public class MusicListActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	      switch (item.getItemId()) {
 	      case R.id.menu_start_download_service:
+	    	  //start task animation
+	    	  mPullToRefreshLayout.setRefreshing(true);
+	    	  //disable this menu button
+	    	  item.setEnabled(false); 
+	    	  item.setIcon(R.drawable.ic_menu_download_disabled);
+	    	  //disable pull to refresh
+	    	  //start service
 	    	  Intent serviceIntent = new Intent(this, DownloadService.class); 
 	    	  serviceIntent.putExtra("musicCollection", musicCollection);
 	    	  startService(serviceIntent);
@@ -172,6 +188,32 @@ public class MusicListActivity extends Activity {
 	      }
 		return true;
 	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		unregisterReceiver(musicDownloaded);
+	}
+	
+	private BroadcastReceiver musicDownloaded = new BroadcastReceiver() {
+
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	    	if (musicAdapter!=null){
+	    		musicAdapter.getItem(intent.getExtras().getInt("index")).checked = intent.getExtras().getBoolean("successfully") ? 1 : 0;
+	    		musicAdapter.getItem(intent.getExtras().getInt("index")).exist = intent.getExtras().getBoolean("successfully") ? 1 : 0;
+	    		musicAdapter.notifyDataSetChanged();
+	    	}
+	    	if (intent.getExtras().getBoolean("service_stopped")){
+	    		//stop task animation
+	    		mPullToRefreshLayout.setRefreshing(false);
+	    		if (mainMenu!=null){
+	    			mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
+	    			mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
+	    		}
+	    	}
+	    }
+	};
 	
     public class  CustomOnRefreshListener implements OnRefreshListener{
 
@@ -181,6 +223,7 @@ public class MusicListActivity extends Activity {
 			new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
+                	if (mainMenu !=null && mainMenu.findItem(R.id.menu_start_download_service).isEnabled()){
                             try {
                             	error=true;
                             	musicCollection = new ArrayList<MusicCollection>();
@@ -220,6 +263,7 @@ public class MusicListActivity extends Activity {
             	        		Log.e(LOG_TAG, "other Load Error");
             					e.printStackTrace();
             				}
+                	}
                     return null;
                 }
 
@@ -235,7 +279,7 @@ public class MusicListActivity extends Activity {
                     	if (headerView!=null)
                     		listViewMusic.removeHeaderView(headerView);
                     
-                    	MusicAdapter musicAdapter = new MusicAdapter(getApplicationContext(), musicCollection, options);
+                    	musicAdapter = new MusicAdapter(getApplicationContext(), musicCollection, options);
 
                     	// setting up list
                     	LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);

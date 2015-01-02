@@ -81,6 +81,9 @@ public class DownloadService extends Service {
 	public void stopServiceCustom(){
 		final Runnable updaterText = new Runnable() {
 	        public void run() {
+				Intent i = new Intent("DOWNLOADED");
+				i.putExtra("service_stopped", true);
+				sendBroadcast(i);
 	        	stopSelf();
 	        }
 	    };
@@ -94,10 +97,10 @@ public class DownloadService extends Service {
 				int index = 0;
 				for (MusicCollection oneItem : musicCollection){
 					if (oneItem.checked == 1 && oneItem.exist == 0) {
-						boolean successfully = DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", ""));
 						Intent i = new Intent("DOWNLOADED");
 						i.putExtra("index", index);
-						i.putExtra("successfully", successfully);
+						i.putExtra("successfully", DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", "")));
+						i.putExtra("service_stopped", false);
 						sendBroadcast(i);
 					}
 					index++;

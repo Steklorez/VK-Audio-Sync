@@ -8,10 +8,7 @@ import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.widget.CheckBox;
 import org.holoeverywhere.widget.TextView;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -35,7 +32,6 @@ public class MusicAdapter extends BaseAdapter {
 		context = _context;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		options = _options;
-		_context.registerReceiver(musicDownloaded, new IntentFilter("DOWNLOADED"));
 	}
 	
 	// кол-во элементов
@@ -110,16 +106,4 @@ public class MusicAdapter extends BaseAdapter {
 		else
 			return arg1;
 	}
-	
-	private BroadcastReceiver musicDownloaded = new BroadcastReceiver() {
-
-	    @Override
-	    public void onReceive(Context context, Intent intent) {
-	    	getItem(intent.getExtras().getInt("index")).checked = intent.getExtras().getBoolean("successfully") ? 1 : 0;
-	    	getItem(intent.getExtras().getInt("index")).exist = intent.getExtras().getBoolean("successfully") ? 1 : 0;
-	    	notifyDataSetChanged();
-	    }
-	};
-
-
 }

@@ -13,6 +13,9 @@ import java.util.ArrayList;
 
 import org.apache.http.util.ByteArrayBuffer;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +28,7 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 
+import com.BBsRs.vkaudiosync.MusicListActivity;
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.collection.MusicCollection;
 import com.mpatric.mp3agic.ID3v2;
@@ -47,12 +51,17 @@ public class DownloadService extends Service {
 	
 	private final Handler handler = new Handler();
 	
+	NotificationManager mNotificationManager;
+	Notification not;
+	PendingIntent contentIntent;
+	
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	public void onCreate() {
+		mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		super.onCreate();
 	}
 	
@@ -69,12 +78,14 @@ public class DownloadService extends Service {
 		wl.acquire();
 		
 		startDownloadChecking();
+		showPendingNotification();
 		}
 		return super.onStartCommand(intent, flags, startId);
 	}
 	
 	public void onDestroy() {
 		wl.release();
+		mNotificationManager.cancelAll();
 		super.onDestroy();
 	}
 	
@@ -90,6 +101,14 @@ public class DownloadService extends Service {
 	    handler.post(updaterText);
 	}
 	
+	private void showPendingNotification(){
+	    not = new Notification(R.drawable.ic_menu_download, getResources().getString(R.string.service_running), System.currentTimeMillis());
+	    contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(this, MusicListActivity.class), Notification.FLAG_ONGOING_EVENT);        
+	    not.flags = Notification.FLAG_ONGOING_EVENT;
+	    not.setLatestEventInfo(getApplicationContext(), getResources().getString(R.string.app_name), getResources().getString(R.string.service_running), contentIntent);
+	    mNotificationManager.notify(1, not);
+	}
+	
 	public void startDownloadChecking(){
 		new Thread(new Runnable() {
 			@Override
@@ -97,6 +116,8 @@ public class DownloadService extends Service {
 				int index = 0;
 				for (MusicCollection oneItem : musicCollection){
 					if (oneItem.checked == 1 && oneItem.exist == 0) {
+						not.setLatestEventInfo(getApplicationContext(), getResources().getString(R.string.downloading), oneItem.artist+" - "+oneItem.title, contentIntent);
+						mNotificationManager.notify(1, not);
 						Intent i = new Intent("DOWNLOADED");
 						i.putExtra("index", index);
 						i.putExtra("successfully", DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", "")));

@@ -9,5 +9,7 @@
     <string name="quan_songs">songs</string>
     <string name="download_selected">Download selected</string>
     <string name="app_slogan">Sync automatically,\nanywhere,\nanytime,\nwith all cover art!</string>
+    <string name="service_running">Download service is in work state, please wait till download is continue!</string>
+    <string name="downloading">Downloading</string>
 
 </resources>

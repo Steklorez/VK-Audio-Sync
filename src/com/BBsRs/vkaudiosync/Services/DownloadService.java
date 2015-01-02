@@ -1,12 +1,14 @@
 package com.BBsRs.vkaudiosync.Services;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import org.apache.http.util.ByteArrayBuffer;
@@ -14,17 +16,30 @@ import org.apache.http.util.ByteArrayBuffer;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 
+import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.collection.MusicCollection;
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.ID3v24Tag;
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.NotSupportedException;
+import com.mpatric.mp3agic.UnsupportedTagException;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class DownloadService extends Service {
 	
 	String LOG_TAG = "DownloadService";
+	String google = "https://www.google.ru/search?&safe=off&tbm=isch&tbs=isz:m&q=";
+	String charset = "UTF-8";
 	ArrayList<MusicCollection> musicCollection = new ArrayList<MusicCollection>();
 	
 	PowerManager pm;
@@ -79,9 +94,10 @@ public class DownloadService extends Service {
 				int index = 0;
 				for (MusicCollection oneItem : musicCollection){
 					if (oneItem.checked == 1 && oneItem.exist == 0) {
+						boolean successfully = DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", ""));
 						Intent i = new Intent("DOWNLOADED");
 						i.putExtra("index", index);
-						i.putExtra("successfully", DownloadFromUrl(oneItem.url, (oneItem.artist+" - "+oneItem.title+".mp3").replaceAll("[\\/:*?\"<>|]", "")));
+						i.putExtra("successfully", successfully);
 						sendBroadcast(i);
 					}
 					index++;
@@ -91,7 +107,8 @@ public class DownloadService extends Service {
 		}).start();
 	}
 	
-	public boolean DownloadFromUrl(String DownloadUrl, String fileName) {
+	public boolean DownloadFromUrl(MusicCollection oneItem, String fileName) {
+		File file = null;
 
 		   try {
 		           File root = android.os.Environment.getExternalStorageDirectory();               
@@ -101,8 +118,8 @@ public class DownloadService extends Service {
 		                dir.mkdirs();
 		           }
 
-		           URL url = new URL(DownloadUrl); //you can write here any link
-		           File file = new File(dir, fileName);
+		           URL url = new URL(oneItem.url); //you can write here any link
+		           file = new File(dir, fileName);
 
 		           long startTime = System.currentTimeMillis();
 		           Log.d("DownloadManager", "download begining");
@@ -134,10 +151,139 @@ public class DownloadService extends Service {
 		           fos.flush();
 		           fos.close();
 		           Log.d("DownloadManager", "download ready in" + ((System.currentTimeMillis() - startTime) / 1000) + " sec");
+		           
+		           /*setting up cover art and fix tags so far as we can!*/
+		           
+		           Log.d("DownloadManager", "download cover art");
+		           //download bitmap from web
+		           Bitmap bmp = ImageLoader.getInstance().loadImageSync(google + URLEncoder.encode(oneItem.artist+" - "+oneItem.title, charset), true);
+		           if (bmp==null) 
+		        	   bmp = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.ic_music_stub);
+		           
+		           
+		           ByteArrayOutputStream stream = new ByteArrayOutputStream();
+					bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+					byte[] byteArray = stream.toByteArray();
+					
+					Mp3File mp3file = new Mp3File(file.getAbsolutePath());
+					
+					
+					Log.d("DownloadManager", "setting tags with cover art");
+					
+					Log.d("DownloadManager", "create new tags");
+					ID3v2 id3v2Tag = new ID3v24Tag();
+					
+					if (mp3file.hasId3v2Tag()){
+						Log.d("DownloadManager", "setting up new tags from existing tags, if they are correct");
+						if (mp3file.getId3v2Tag().getAlbum() !=null && !mp3file.getId3v2Tag().getAlbum().contains("vk.com"))
+						id3v2Tag.setAlbum(mp3file.getId3v2Tag().getAlbum());
+						if (mp3file.getId3v2Tag().getAlbumArtist() !=null && !mp3file.getId3v2Tag().getAlbumArtist().contains("vk.com"))
+						id3v2Tag.setAlbumArtist(mp3file.getId3v2Tag().getAlbumArtist());
+						if (mp3file.getId3v2Tag().getArtist() !=null && !mp3file.getId3v2Tag().getArtist().contains("vk.com"))
+						id3v2Tag.setArtist(mp3file.getId3v2Tag().getArtist());
+						if (mp3file.getId3v2Tag().getChapters() !=null && !mp3file.getId3v2Tag().getChapters().contains("vk.com"))
+						id3v2Tag.setChapters(mp3file.getId3v2Tag().getChapters());
+						if (mp3file.getId3v2Tag().getChapterTOC() !=null && !mp3file.getId3v2Tag().getChapterTOC().contains("vk.com"))
+						id3v2Tag.setChapterTOC(mp3file.getId3v2Tag().getChapterTOC());
+						if (mp3file.getId3v2Tag().getComment() !=null && !mp3file.getId3v2Tag().getComment().contains("vk.com"))
+						id3v2Tag.setComment(mp3file.getId3v2Tag().getComment());
+						if (mp3file.getId3v2Tag().getComposer() !=null && !mp3file.getId3v2Tag().getComposer().contains("vk.com"))
+						id3v2Tag.setComposer(mp3file.getId3v2Tag().getComposer());
+						if (mp3file.getId3v2Tag().getCopyright() !=null && !mp3file.getId3v2Tag().getCopyright().contains("vk.com"))
+						id3v2Tag.setCopyright(mp3file.getId3v2Tag().getCopyright());
+						if (mp3file.getId3v2Tag().getEncoder() !=null && !mp3file.getId3v2Tag().getEncoder().contains("vk.com"))
+						id3v2Tag.setEncoder(mp3file.getId3v2Tag().getEncoder());
+//						if (mp3file.getId3v2Tag().getGenre() !=null)
+						id3v2Tag.setGenre(mp3file.getId3v2Tag().getGenre());
+						if (mp3file.getId3v2Tag().getGenreDescription() !=null && !mp3file.getId3v2Tag().getGenreDescription().contains("vk.com"))
+						id3v2Tag.setGenreDescription(mp3file.getId3v2Tag().getGenreDescription());
+						if (mp3file.getId3v2Tag().getItunesComment() !=null && !mp3file.getId3v2Tag().getItunesComment().contains("vk.com"))
+						id3v2Tag.setItunesComment(mp3file.getId3v2Tag().getItunesComment());
+						if (mp3file.getId3v2Tag().getOriginalArtist() !=null && !mp3file.getId3v2Tag().getOriginalArtist().contains("vk.com"))
+						id3v2Tag.setOriginalArtist(mp3file.getId3v2Tag().getOriginalArtist());
+//						if (mp3file.getId3v2Tag().getPadding() !=null)
+						id3v2Tag.setPadding(mp3file.getId3v2Tag().getPadding());
+						if (mp3file.getId3v2Tag().getPartOfSet() !=null && !mp3file.getId3v2Tag().getPartOfSet().contains("vk.com"))
+						id3v2Tag.setPartOfSet(mp3file.getId3v2Tag().getPartOfSet());
+						if (mp3file.getId3v2Tag().getPublisher() !=null && !mp3file.getId3v2Tag().getPublisher().contains("vk.com"))
+						id3v2Tag.setPublisher(mp3file.getId3v2Tag().getPublisher());
+						if (mp3file.getId3v2Tag().getTitle() !=null && !mp3file.getId3v2Tag().getTitle().contains("vk.com"))
+						id3v2Tag.setTitle(mp3file.getId3v2Tag().getTitle());
+						if (mp3file.getId3v2Tag().getTrack() !=null && !mp3file.getId3v2Tag().getTrack().contains("vk.com"))
+						id3v2Tag.setTrack(mp3file.getId3v2Tag().getTrack());
+						if (mp3file.getId3v2Tag().getUrl() !=null)
+						id3v2Tag.setUrl(mp3file.getId3v2Tag().getUrl());
+						if (mp3file.getId3v2Tag().getYear() !=null && !mp3file.getId3v2Tag().getYear().contains("vk.com"))
+						id3v2Tag.setYear(mp3file.getId3v2Tag().getYear());
+					}
+					
+					Log.d("DownloadManager", "set new tags (image, artist if still not exist, and title if still not exist)");
+					id3v2Tag.setAlbumImage(byteArray, "image/png");
+					id3v2Tag.setArtist(id3v2Tag.getArtist()==null ? oneItem.artist : id3v2Tag.getArtist());
+					id3v2Tag.setTitle(id3v2Tag.getTitle()==null ? oneItem.title : id3v2Tag.getTitle());
+					id3v2Tag.setAlbum(id3v2Tag.getAlbum()==null ? oneItem.title : id3v2Tag.getAlbum());
+						
+					//fix tags error when try to save (remove unsupported old tags)
+					mp3file.removeCustomTag();
+					mp3file.removeId3v1Tag();
+					mp3file.removeId3v2Tag();
+					
+					//setting up new tags
+					mp3file.setId3v2Tag(id3v2Tag);
+					
+
+					
+					Log.d("DownloadManager", "save .mp3 file");
+					mp3file.save(file.getAbsolutePath()+".mp3");
+					
+					Log.d("DownloadManager", "sent intent that new mp3 file added to library");
+					Intent intent =new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+					intent.setData(Uri.fromFile(new File(file.getAbsolutePath()+".mp3")));
+					sendBroadcast(intent);
+					
+					Log.d("DownloadManager", "delete downloaded file");
+					file.delete();
+					
 		           return true;
 		   } catch (IOException e) {
 		       Log.d("DownloadManager", "Error: " + e);
+		       if (file!=null) {
+		    	   File mp3 = new File(file.getAbsolutePath()+".mp3");
+		    	   if (mp3!=null)
+		    	   mp3.delete();
+		    	   file.delete();
+		       }
 		       return false;
+		   } catch (NotSupportedException e) {
+			   // TODO Auto-generated catch block
+			   e.printStackTrace();
+		       if (file!=null) {
+		    	   File mp3 = new File(file.getAbsolutePath()+".mp3");
+		    	   if (mp3!=null)
+		    	   mp3.delete();
+		    	   file.delete();
+		       }
+			   return false;
+		   } catch (UnsupportedTagException e) {
+			   // TODO Auto-generated catch block
+			   e.printStackTrace();
+		       if (file!=null) {
+		    	   File mp3 = new File(file.getAbsolutePath()+".mp3");
+		    	   if (mp3!=null)
+		    	   mp3.delete();
+		    	   file.delete();
+		       }
+			   return false;
+		   } catch (InvalidDataException e) {
+			   // TODO Auto-generated catch block
+			   e.printStackTrace();
+		       if (file!=null) {
+		    	   File mp3 = new File(file.getAbsolutePath()+".mp3");
+		    	   if (mp3!=null)
+		    	   mp3.delete();
+		    	   file.delete();
+		       }
+			   return false;
 		   }
 
 		}

@@ -199,17 +199,22 @@ public class MusicListActivity extends Activity {
 
 	    @Override
 	    public void onReceive(Context context, Intent intent) {
-	    	if (musicAdapter!=null){
-	    		musicAdapter.getItem(intent.getExtras().getInt("index")).checked = intent.getExtras().getBoolean("successfully") ? 1 : 0;
-	    		musicAdapter.getItem(intent.getExtras().getInt("index")).exist = intent.getExtras().getBoolean("successfully") ? 1 : 0;
-	    		musicAdapter.notifyDataSetChanged();
-	    	}
 	    	if (intent.getExtras().getBoolean("service_stopped")){
 	    		//stop task animation
 	    		mPullToRefreshLayout.setRefreshing(false);
 	    		if (mainMenu!=null){
 	    			mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
 	    			mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
+	    		}
+	    	} else {
+	    		if (musicAdapter!=null){
+	    			musicAdapter.getItem(intent.getExtras().getInt("index")).checked = intent.getExtras().getBoolean("successfully") ? 1 : 0;
+	    			musicAdapter.getItem(intent.getExtras().getInt("index")).exist = intent.getExtras().getBoolean("successfully") ? 1 : 0;
+	    			musicAdapter.notifyDataSetChanged();
+	    		}
+	    		if (musicCollection!=null){
+	    			musicCollection.get(intent.getExtras().getInt("index")).checked = intent.getExtras().getBoolean("successfully") ? 1 : 0;
+	    			musicCollection.get(intent.getExtras().getInt("index")).exist = intent.getExtras().getBoolean("successfully") ? 1 : 0;
 	    		}
 	    	}
 	    }
@@ -223,7 +228,7 @@ public class MusicListActivity extends Activity {
 			new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
-                	if (mainMenu !=null && mainMenu.findItem(R.id.menu_start_download_service).isEnabled()){
+                	if ((mainMenu != null && mainMenu.findItem(R.id.menu_start_download_service).isEnabled()) || mainMenu == null){
                             try {
                             	error=true;
                             	musicCollection = new ArrayList<MusicCollection>();

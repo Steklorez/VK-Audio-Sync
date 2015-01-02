@@ -17,6 +17,8 @@ public class LoaderAcrivity extends Activity {
 
 	// for timer
 	private timer CountDownTimer;
+	
+	private final int REQUEST_LOGIN=1;
 
 	public class timer extends CountDownTimer {
 		public timer(long millisInFuture, long countDownInterval) {
@@ -32,11 +34,9 @@ public class LoaderAcrivity extends Activity {
 			    // stop curr activity
 			    finish();
 	        }else{
-	            Intent refresh = new Intent(getApplicationContext(), LoginActivity.class);
-				//restart activity
-			    startActivity(refresh);   
-			    // stop curr activity
-			    finish();
+	        	Intent intent = new Intent();
+	            intent.setClass(getApplicationContext(), LoginActivity.class);
+	            startActivityForResult(intent, REQUEST_LOGIN);
 	        }
 		}
 
@@ -62,5 +62,18 @@ public class LoaderAcrivity extends Activity {
 		CountDownTimer.start(); // start timer
 		// TODO Auto-generated method stub
 	}
+	
+	@Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_LOGIN) {
+            if (resultCode == RESULT_OK) {
+                //авторизовались успешно 
+                account.access_token=data.getStringExtra("token");
+                account.user_id=data.getLongExtra("user_id", 0);
+                account.save(LoaderAcrivity.this);
+                api=new Api(account.access_token, Constants.API_ID);
+            }
+        }
+    }
 
 }

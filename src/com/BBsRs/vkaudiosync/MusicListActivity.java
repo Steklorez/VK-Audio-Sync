@@ -15,6 +15,8 @@ import org.holoeverywhere.widget.TextView;
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -167,6 +169,11 @@ public class MusicListActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
 		mainMenu = menu;
+		if (isMyServiceRunning(DownloadService.class)){
+			mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download_disabled);
+			mainMenu.findItem(R.id.menu_start_download_service).setEnabled(false);
+			mPullToRefreshLayout.setRefreshing(true);
+		} 
 		return true;
 	}
 	
@@ -275,6 +282,7 @@ public class MusicListActivity extends Activity {
                 @Override
                 protected void onPostExecute(Void result) {
                     super.onPostExecute(result);
+                    if (!isMyServiceRunning(DownloadService.class))
                     mPullToRefreshLayout.setRefreshing(false);
                     if (!error){
                     	listViewMusic.setVisibility(View.VISIBLE);
@@ -310,6 +318,15 @@ public class MusicListActivity extends Activity {
                 }
             }.execute();
 		}
-         
+    }
+    
+    private boolean isMyServiceRunning(Class<?> serviceClass) {			//returns true is service running
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -184,9 +184,9 @@ public class DownloadService extends Service {
 		           if (bmp==null) 
 		        	   bmp = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.ic_music_stub);
 		           
-		           
+		           Log.d("DownloadManager", "crop and compress bitmap to png");
 		           ByteArrayOutputStream stream = new ByteArrayOutputStream();
-					bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+		           centerCrop(bmp).compress(Bitmap.CompressFormat.PNG, 100, stream);
 					byte[] byteArray = stream.toByteArray();
 					
 					Mp3File mp3file = new Mp3File(file.getAbsolutePath());
@@ -311,5 +311,30 @@ public class DownloadService extends Service {
 		   }
 
 		}
+	
+	public Bitmap centerCrop(Bitmap srcBmp) {
+		Bitmap dstBmp;
+		if (srcBmp.getWidth() >= srcBmp.getHeight()){
+
+			  dstBmp = Bitmap.createBitmap(
+			     srcBmp, 
+			     srcBmp.getWidth()/2 - srcBmp.getHeight()/2,
+			     0,
+			     srcBmp.getHeight(), 
+			     srcBmp.getHeight()
+			     );
+
+			}else{
+
+			  dstBmp = Bitmap.createBitmap(
+			     srcBmp,
+			     0, 
+			     srcBmp.getHeight()/2 - srcBmp.getWidth()/2,
+			     srcBmp.getWidth(),
+			     srcBmp.getWidth() 
+			     );
+			}
+		return dstBmp;
+	}
 
 }

@@ -25,7 +25,7 @@
         <activity android:name="MusicListActivity" >
         </activity>
         <activity
-            android:name="LoaderAcrivity"
+            android:name="LoaderActivity"
             android:theme="@style/Holo.Theme.Custom.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

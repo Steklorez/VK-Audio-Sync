@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/cover_art"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:layout_alignParentLeft="true"
         android:scaleType="centerCrop"
         android:src="@drawable/avatar_small" />

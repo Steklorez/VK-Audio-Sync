@@ -28,7 +28,7 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 
-import com.BBsRs.vkaudiosync.MusicListActivity;
+import com.BBsRs.vkaudiosync.ContentShowActivity;
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.collection.MusicCollection;
 import com.mpatric.mp3agic.ID3v2;
@@ -103,7 +103,7 @@ public class DownloadService extends Service {
 	
 	private void showPendingNotification(){
 	    not = new Notification(R.drawable.ic_menu_download, getResources().getString(R.string.service_running), System.currentTimeMillis());
-	    contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(this, MusicListActivity.class), Notification.FLAG_ONGOING_EVENT);        
+	    contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(this, ContentShowActivity.class), Notification.FLAG_ONGOING_EVENT);        
 	    not.flags = Notification.FLAG_ONGOING_EVENT;
 	    not.setLatestEventInfo(getApplicationContext(), getResources().getString(R.string.app_name), getResources().getString(R.string.service_running), contentIntent);
 	    mNotificationManager.notify(1, not);

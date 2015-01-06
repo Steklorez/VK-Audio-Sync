@@ -6,6 +6,7 @@
     <dimen name="simple_music_one">16dp</dimen>
     <dimen name="simple_music_two">10dp</dimen>
     <dimen name="simple_music_three">3dp</dimen>
+    <dimen name="slider_menu_custom_padding">8dp</dimen>
     
 
 </resources>

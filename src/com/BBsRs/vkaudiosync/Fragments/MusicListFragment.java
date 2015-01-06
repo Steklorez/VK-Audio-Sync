@@ -1,4 +1,4 @@
-package com.BBsRs.vkaudiosync;
+package com.BBsRs.vkaudiosync.Fragments;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.holoeverywhere.LayoutInflater;
-import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.app.Fragment;
 import org.holoeverywhere.widget.Button;
 import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.RelativeLayout;
@@ -26,11 +26,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.BBsRs.vkaudiosync.MusicAdapter;
+import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.Services.DownloadService;
 import com.BBsRs.vkaudiosync.VKApiThings.Account;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
@@ -40,26 +44,37 @@ import com.perm.kate.api.Api;
 import com.perm.kate.api.Audio;
 import com.perm.kate.api.User;
 
-public class MusicListActivity extends Activity {
+public class MusicListFragment extends Fragment {
 	
+	//android views where shows content
 	private PullToRefreshLayout mPullToRefreshLayout;
 	ListView listViewMusic;
+	View headerView = null;
+	RelativeLayout relativeErrorLayout;
+	TextView errorMessage;
+	Button errorRetryButton;
+	
     //custom refresh listener where in new thread will load job doing, need to customize for all kind of data
     CustomOnRefreshListener customOnRefreshListener = new CustomOnRefreshListener();
     
+    /*----------------------------VK API-----------------------------*/
     Account account=new Account();
     Api api;
+    /*----------------------------VK API-----------------------------*/
     
+    //user name
     String UserName = "";
-    String UserAvatarUrl = "";
     
-    View headerView = null;
-    
+    //with this options we will load images
     DisplayImageOptions options ;
     
+    //music collection
     ArrayList<MusicCollection> musicCollection = new ArrayList<MusicCollection>();
     
+    //menu settings
     Menu mainMenu = null;
+    
+    //adapter to listview
     MusicAdapter musicAdapter;
     
     //flag for error
@@ -68,34 +83,37 @@ public class MusicListActivity extends Activity {
     //LOG_TAG for log
     String LOG_TAG = "MusicListActivity";
     
-    RelativeLayout relativeErrorLayout;
-    TextView errorMessage;
-    Button errorRetryButton;
+    //with this file we check if music file already exist
     File f;
 
-	/** Called when the activity is first created. */
+	
 	@SuppressWarnings("deprecation")
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-	    super.onCreate(savedInstanceState);
-	    this.setContentView(R.layout.music_list);
-	    
-	    //init all views
-	    listViewMusic = (ListView)this.findViewById(R.id.listViewMusic);
-	    mPullToRefreshLayout = (PullToRefreshLayout)findViewById(R.id.ptr_layout);
-    	relativeErrorLayout = (RelativeLayout)findViewById(R.id.errorLayout);
-    	errorMessage = (TextView)findViewById(R.id.errorMessage);
-    	errorRetryButton = (Button)findViewById(R.id.errorRetryButton);
-	    
-	    //retrieve old session
-        account.restore(this);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+		View contentView = inflater.inflate(R.layout.music_list);
+		
+		//enable menu
+    	setHasOptionsMenu(true);
+		
+		//init all views
+	    listViewMusic = (ListView)contentView.findViewById(R.id.listViewMusic);
+	    mPullToRefreshLayout = (PullToRefreshLayout)contentView.findViewById(R.id.ptr_layout);
+    	relativeErrorLayout = (RelativeLayout)contentView.findViewById(R.id.errorLayout);
+    	errorMessage = (TextView)contentView.findViewById(R.id.errorMessage);
+    	errorRetryButton = (Button)contentView.findViewById(R.id.errorRetryButton);
+    	
+    	/*----------------------------VK API-----------------------------*/
+    	//retrieve old session
+        account.restore(getActivity());
         
         //create new session
         if(account.access_token!=null)
             api=new Api(account.access_token, Constants.API_ID);
-	    
-	    //init pull to refresh module
-        ActionBarPullToRefresh.from(this)
+        /*----------------------------VK API-----------------------------*/
+        
+        //init pull to refresh module
+        ActionBarPullToRefresh.from(getActivity())
           .allChildrenArePullable()
           .listener(customOnRefreshListener)
           .setup(mPullToRefreshLayout);
@@ -108,7 +126,7 @@ public class MusicListActivity extends Activity {
         .cacheInMemory(true)					
         .build();
         
-      //refresh on open to load data when app first time started
+        //refresh on open to load data when app first time started
 	    if(savedInstanceState == null) {
 	    	 mPullToRefreshLayout.setRefreshing(true);
 	         customOnRefreshListener.onRefreshStarted(null);
@@ -117,9 +135,8 @@ public class MusicListActivity extends Activity {
 	    	musicCollection = savedInstanceState.getParcelableArrayList("musicCollection");
 	    	error = savedInstanceState.getBoolean("error");
 	    	if ((musicCollection.size()>1)) {
-	    		musicAdapter = new MusicAdapter(getApplicationContext(), musicCollection, options);
+	    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options);
 	    		
-	    		LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 if (headerView==null)
                 headerView = inflater.inflate(R.layout.ic_simple_music_header);
                 TextView name = (TextView) headerView.findViewById(R.id.name);
@@ -153,8 +170,16 @@ public class MusicListActivity extends Activity {
 		});
         
         //turn up download receiver
-        registerReceiver(musicDownloaded, new IntentFilter("DOWNLOADED"));
+        getActivity().registerReceiver(musicDownloaded, new IntentFilter("DOWNLOADED"));
+		
+		return contentView;
 	}
+	
+    @Override
+    public void onResume() {
+        super.onResume();
+        getSupportActionBar().setTitle(R.string.app_name);
+    }
 	
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
@@ -166,15 +191,15 @@ public class MusicListActivity extends Activity {
 	}
 	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.main, menu);
 		mainMenu = menu;
 		if (isMyServiceRunning(DownloadService.class)){
 			mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download_disabled);
 			mainMenu.findItem(R.id.menu_start_download_service).setEnabled(false);
 			mPullToRefreshLayout.setRefreshing(true);
 		} 
-		return true;
+		return;
 	}
 	
 	@Override
@@ -188,9 +213,9 @@ public class MusicListActivity extends Activity {
 	    	  item.setIcon(R.drawable.ic_menu_download_disabled);
 	    	  //disable pull to refresh
 	    	  //start service
-	    	  Intent serviceIntent = new Intent(this, DownloadService.class); 
+	    	  Intent serviceIntent = new Intent(getActivity(), DownloadService.class); 
 	    	  serviceIntent.putExtra("musicCollection", musicCollection);
-	    	  startService(serviceIntent);
+	    	  getActivity().startService(serviceIntent);
 	    	  break;
 	      }
 		return true;
@@ -199,7 +224,7 @@ public class MusicListActivity extends Activity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		unregisterReceiver(musicDownloaded);
+		getActivity().unregisterReceiver(musicDownloaded);
 	}
 	
 	private BroadcastReceiver musicDownloaded = new BroadcastReceiver() {
@@ -292,10 +317,10 @@ public class MusicListActivity extends Activity {
                     	if (headerView!=null)
                     		listViewMusic.removeHeaderView(headerView);
                     
-                    	musicAdapter = new MusicAdapter(getApplicationContext(), musicCollection, options);
+                    	musicAdapter = new MusicAdapter(getActivity(), musicCollection, options);
 
                     	// setting up list
-                    	LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    	LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     	if (headerView==null)
                     		headerView = inflater.inflate(R.layout.ic_simple_music_header);
                     	TextView name = (TextView) headerView.findViewById(R.id.name);
@@ -308,7 +333,7 @@ public class MusicListActivity extends Activity {
                     
                     	listViewMusic.setAdapter(musicAdapter);
                     
-                    	Animation flyUpAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fly_up_anim);
+                    	Animation flyUpAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fly_up_anim);
                     	listViewMusic.startAnimation(flyUpAnimation);
                     } else {
                     	listViewMusic.setVisibility(View.GONE);

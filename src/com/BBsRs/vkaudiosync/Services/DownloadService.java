@@ -32,7 +32,7 @@ import com.BBsRs.vkaudiosync.ContentShowActivity;
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.collection.MusicCollection;
 import com.mpatric.mp3agic.ID3v2;
-import com.mpatric.mp3agic.ID3v24Tag;
+import com.mpatric.mp3agic.ID3v23Tag;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.NotSupportedException;
@@ -195,7 +195,7 @@ public class DownloadService extends Service {
 					Log.d("DownloadManager", "setting tags with cover art");
 					
 					Log.d("DownloadManager", "create new tags");
-					ID3v2 id3v2Tag = new ID3v24Tag();
+					ID3v2 id3v2Tag = new ID3v23Tag();
 					
 					if (mp3file.hasId3v2Tag()){
 						Log.d("DownloadManager", "setting up new tags from existing tags, if they are correct");

@@ -85,6 +85,9 @@ public class MusicListFragment extends Fragment {
     
     //with this file we check if music file already exist
     File f;
+    
+    //for retrieve data from activity
+    Bundle bundle;
 
 	
 	@SuppressWarnings("deprecation")
@@ -92,6 +95,9 @@ public class MusicListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 		View contentView = inflater.inflate(R.layout.music_list);
+		
+		//retrieve bundle
+		bundle = this.getArguments();
 		
 		//enable menu
     	setHasOptionsMenu(true);
@@ -260,12 +266,25 @@ public class MusicListFragment extends Fragment {
 			new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
-                	if ((mainMenu != null && mainMenu.findItem(R.id.menu_start_download_service).isEnabled()) || mainMenu == null){
+                	if (bundle != null && ((mainMenu != null && mainMenu.findItem(R.id.menu_start_download_service).isEnabled()) || mainMenu == null)){
                             try {
                             	error=true;
                             	musicCollection = new ArrayList<MusicCollection>();
+                            	ArrayList<Audio> musicList = new ArrayList<Audio>();
                             	
-                            	for (Audio one : api.getAudio(account.user_id, null, null, null, null, null)){
+                            	switch (bundle.getInt(Constants.BUNDLE_MUSIC_TYPE)){
+                            	case Constants.MY_MUSIC:
+                            		musicList = api.getAudio(bundle.getLong(Constants.BUNDLE_USER_ID), null, null, null, null, null);
+                            		break;
+                            	case Constants.RECOMMENDATIONS:
+                            		musicList = api.getAudioRecommendations();
+                            		break;
+                            	case Constants.POPULAR:
+                            		musicList = api.getAudioPopular();
+                            		break;
+                            	}
+                            	
+                            	for (Audio one : musicList){
                             		f = new File(android.os.Environment.getExternalStorageDirectory()+"/Music/"+(one.artist+" - "+one.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
                             		if (f.exists())
                             			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 1, 1));
@@ -274,12 +293,11 @@ public class MusicListFragment extends Fragment {
                             	}
                             	
                                 Collection<Long> u = new ArrayList<Long>();
-                                u.add(account.user_id);
+                                u.add(bundle.getLong(Constants.BUNDLE_USER_ID));
                                 Collection<String> d = new ArrayList<String>();
                                 d.add("");
-                                
+
                                 User userOne = api.getProfiles(u, d, "", "", "", "").get(0);
-                                
         						UserName = userOne.first_name+" "+userOne.last_name;
         						
         						error=false;

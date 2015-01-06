@@ -1,16 +1,17 @@
 package com.BBsRs.vkaudiosync;
 
 import org.holoeverywhere.addon.AddonSlider;
-import org.holoeverywhere.addon.AddonSlider.AddonSliderA;
 import org.holoeverywhere.addon.Addons;
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.slider.SliderMenu;
-import org.holoeverywhere.widget.Toast;
 
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.BBsRs.vkaudiosync.Fragments.MusicListFragment;
+import com.BBsRs.vkaudiosync.VKApiThings.Account;
+import com.BBsRs.vkaudiosync.VKApiThings.Constants;
+import com.perm.kate.api.Api;
 
 @Addons(AddonSlider.class)
 public class ContentShowActivity extends Activity {
@@ -20,17 +21,43 @@ public class ContentShowActivity extends Activity {
 	
 	SliderMenu sliderMenu;
 	
+    /*----------------------------VK API-----------------------------*/
+    Account account=new Account();
+    Api api;
+    /*----------------------------VK API-----------------------------*/
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    
+	   	/*----------------------------VK API-----------------------------*/
+    	//retrieve old session
+        account.restore(getApplicationContext());
+        /*----------------------------VK API-----------------------------*/
+        
 	    //init slider menu
         sliderMenu = addonSlider().obtainDefaultSliderMenu(R.layout.menu);
         addonSlider().setOverlayActionBar(false);
         
+        Bundle bundleMyMusic = new Bundle();
+        bundleMyMusic.putLong(Constants.BUNDLE_USER_ID, account.user_id);
+        bundleMyMusic.putInt(Constants.BUNDLE_MUSIC_TYPE, Constants.MY_MUSIC);
+        
+        Bundle bundlePopular = new Bundle();
+        bundlePopular.putLong(Constants.BUNDLE_USER_ID, account.user_id);
+        bundlePopular.putInt(Constants.BUNDLE_MUSIC_TYPE, Constants.POPULAR);
+        
+        Bundle bundleRecommendations = new Bundle();
+        bundleRecommendations.putLong(Constants.BUNDLE_USER_ID, account.user_id);
+        bundleRecommendations.putInt(Constants.BUNDLE_MUSIC_TYPE, Constants.RECOMMENDATIONS);
+        
         sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[0].toUpperCase()).setCustomLayout(R.layout.custom_slider_menu_item).clickable(false).setTextAppereance(1);
-        sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[1], MusicListFragment.class, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
+        sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[1], MusicListFragment.class, bundleMyMusic, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
+        sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[2], MusicListFragment.class, bundleRecommendations, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
+        sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[3], MusicListFragment.class, bundlePopular, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
+        
+//        sliderMenu.add(label, fragmentClass, fragmentArguments, colors)
         
         if (savedInstanceState == null)
         sliderMenu.setCurrentPage(1);

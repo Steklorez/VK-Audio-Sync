@@ -33,8 +33,8 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.BBsRs.vkaudiosync.MusicAdapter;
 import com.BBsRs.vkaudiosync.R;
+import com.BBsRs.vkaudiosync.Adapters.MusicAdapter;
 import com.BBsRs.vkaudiosync.Services.DownloadService;
 import com.BBsRs.vkaudiosync.VKApiThings.Account;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
@@ -49,7 +49,6 @@ public class MusicListFragment extends Fragment {
 	//android views where shows content
 	private PullToRefreshLayout mPullToRefreshLayout;
 	ListView listViewMusic;
-	View headerView = null;
 	RelativeLayout relativeErrorLayout;
 	TextView errorMessage;
 	Button errorRetryButton;
@@ -63,7 +62,7 @@ public class MusicListFragment extends Fragment {
     /*----------------------------VK API-----------------------------*/
     
     //user name
-    String UserName = "";
+    String PlaceName = "";
     
     //with this options we will load images
     DisplayImageOptions options ;
@@ -136,6 +135,9 @@ public class MusicListFragment extends Fragment {
 	    if(savedInstanceState == null) {
 	    	 mPullToRefreshLayout.setRefreshing(true);
 	         customOnRefreshListener.onRefreshStarted(null);
+	      // set action bar
+         	getSupportActionBar().setTitle("");
+         	getSupportActionBar().setSubtitle("");
 	    }
 	    else{
 	    	musicCollection = savedInstanceState.getParcelableArrayList("musicCollection");
@@ -143,17 +145,11 @@ public class MusicListFragment extends Fragment {
 	    	if ((musicCollection.size()>1)) {
 	    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options);
 	    		
-                if (headerView==null)
-                headerView = inflater.inflate(R.layout.ic_simple_music_header);
-                TextView name = (TextView) headerView.findViewById(R.id.name);
-                TextView quanSongs = (TextView) headerView.findViewById(R.id.quanSongs);
+	    		PlaceName = savedInstanceState.getString("PlaceName");
                 
-                UserName = savedInstanceState.getString("UserName");
-                
-                name.setText(UserName);
-                quanSongs.setText(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
-                
-                listViewMusic.addHeaderView(headerView);
+                // set action bar
+            	getSupportActionBar().setTitle(PlaceName);
+            	getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
                 
                 listViewMusic.setAdapter(musicAdapter);
                 listViewMusic.setSelection(savedInstanceState.getInt("posX"));
@@ -162,6 +158,9 @@ public class MusicListFragment extends Fragment {
 	    	else {
 	    		mPullToRefreshLayout.setRefreshing(true);
 	         	customOnRefreshListener.onRefreshStarted(null);	
+	         	 // set action bar
+	         	getSupportActionBar().setTitle("");
+	         	getSupportActionBar().setSubtitle("");
 	    	}
 	    }
 	    
@@ -172,6 +171,9 @@ public class MusicListFragment extends Fragment {
 				mPullToRefreshLayout.setRefreshing(true);
 		        customOnRefreshListener.onRefreshStarted(null);
 		        errorRetryButton.setEnabled(false);
+		        // set action bar
+	         	getSupportActionBar().setTitle("");
+	         	getSupportActionBar().setSubtitle("");
 			}
 		});
         
@@ -181,18 +183,12 @@ public class MusicListFragment extends Fragment {
 		return contentView;
 	}
 	
-    @Override
-    public void onResume() {
-        super.onResume();
-        getSupportActionBar().setTitle(R.string.app_name);
-    }
-	
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		 outState.putParcelableArrayList("musicCollection", musicCollection);
 		 outState.putInt("posX",  listViewMusic.getFirstVisiblePosition());
-		 outState.putString("UserName",  UserName);
+		 outState.putString("PlaceName",  PlaceName);
 		 outState.putBoolean("error", error);
 	}
 	
@@ -275,12 +271,22 @@ public class MusicListFragment extends Fragment {
                             	switch (bundle.getInt(Constants.BUNDLE_MUSIC_TYPE)){
                             	case Constants.MY_MUSIC:
                             		musicList = api.getAudio(bundle.getLong(Constants.BUNDLE_USER_ID), null, null, null, null, null);
+                            		
+                            		 Collection<Long> u = new ArrayList<Long>();
+                                     u.add(bundle.getLong(Constants.BUNDLE_USER_ID));
+                                     Collection<String> d = new ArrayList<String>();
+                                     d.add("");
+
+                                     User userOne = api.getProfiles(u, d, "", "", "", "").get(0);
+                                     PlaceName = userOne.first_name+" "+userOne.last_name;
                             		break;
                             	case Constants.RECOMMENDATIONS:
                             		musicList = api.getAudioRecommendations();
+                            		PlaceName = getActivity().getResources().getStringArray(R.array.slider_menu)[2];
                             		break;
                             	case Constants.POPULAR:
                             		musicList = api.getAudioPopular();
+                            		PlaceName = getActivity().getResources().getStringArray(R.array.slider_menu)[3];
                             		break;
                             	}
                             	
@@ -292,14 +298,6 @@ public class MusicListFragment extends Fragment {
                             			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 0, 0));
                             	}
                             	
-                                Collection<Long> u = new ArrayList<Long>();
-                                u.add(bundle.getLong(Constants.BUNDLE_USER_ID));
-                                Collection<String> d = new ArrayList<String>();
-                                d.add("");
-
-                                User userOne = api.getProfiles(u, d, "", "", "", "").get(0);
-        						UserName = userOne.first_name+" "+userOne.last_name;
-        						
         						error=false;
                             } catch (NotFoundException e) {
                             	error=true;
@@ -331,23 +329,11 @@ public class MusicListFragment extends Fragment {
                     	listViewMusic.setVisibility(View.VISIBLE);
                     	relativeErrorLayout.setVisibility(View.GONE);
                     	
-                    	//reset list view
-                    	if (headerView!=null)
-                    		listViewMusic.removeHeaderView(headerView);
-                    
                     	musicAdapter = new MusicAdapter(getActivity(), musicCollection, options);
 
-                    	// setting up list
-                    	LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    	if (headerView==null)
-                    		headerView = inflater.inflate(R.layout.ic_simple_music_header);
-                    	TextView name = (TextView) headerView.findViewById(R.id.name);
-                    	TextView quanSongs = (TextView) headerView.findViewById(R.id.quanSongs);
-                    
-                    	name.setText(UserName);
-                    	quanSongs.setText(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
-                    
-                    	listViewMusic.addHeaderView(headerView);
+                    	// set action bar
+                    	getSupportActionBar().setTitle(PlaceName);
+                    	getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
                     
                     	listViewMusic.setAdapter(musicAdapter);
                     

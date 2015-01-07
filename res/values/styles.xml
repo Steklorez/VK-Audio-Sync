@@ -30,12 +30,11 @@
 
     <style name="TextAppearance.AppCompat.Widget.ActionBar.Title.Custom" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textStyle">italic</item>
-        <item name="android:textColor">#fff</item>
+        <item name="android:textColor">@color/apptheme_color</item>
     </style>
 
     <style name="TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Custom" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
-        <item name="android:textStyle">italic</item>
-        <item name="android:textColor">#fff</item>
+        <item name="android:textColor">@color/text_color_gray</item>
     </style>
 
     <style name="Holo.CompoundButton.CheckBox.Custom" parent="@style/Holo.CompoundButton.CheckBox">

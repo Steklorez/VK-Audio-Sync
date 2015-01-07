@@ -1,4 +1,4 @@
-package com.BBsRs.vkaudiosync;
+package com.BBsRs.vkaudiosync.Adapters;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.collection.MusicCollection;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;

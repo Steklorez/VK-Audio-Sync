@@ -9,7 +9,7 @@
     <color name="notBlackBg">#646464</color>
     <color name="red">#f00</color>
     <color name="apptheme_color">#ff8800</color>
-    <color name="slider_menu_custom_text_color">#999</color>
+    <color name="slider_menu_custom_text_color">#cdcdcd</color>
     <color name="slider_menu_custom_color_orange">#ff8800</color>
     <color name="slider_menu_custom_color_black">#000</color>
 

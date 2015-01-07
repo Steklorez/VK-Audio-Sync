@@ -16,6 +16,8 @@
         <item >My music</item>
         <item >Suggested music</item>
         <item >Popular music</item>
+        <item >Friends</item>
+        <item >Groups</item>
     </string-array>
 
 </resources>

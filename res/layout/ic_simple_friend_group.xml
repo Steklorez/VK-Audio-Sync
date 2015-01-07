@@ -1,0 +1,48 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/simple_music_two"
+    android:paddingLeft="@dimen/simple_music_one"
+    android:paddingRight="@dimen/simple_music_one"
+    android:paddingTop="@dimen/simple_music_two" >
+
+    <ImageView
+        android:id="@+id/cover_art"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_alignParentLeft="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/avatar_small" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/cover_art"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/cover_art"
+        android:layout_toRightOf="@+id/cover_art" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center_vertical"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:paddingLeft="@dimen/simple_music_two"
+                android:text="Roman Gaitbaev"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/text_color_white"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

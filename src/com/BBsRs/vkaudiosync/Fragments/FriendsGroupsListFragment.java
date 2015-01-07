@@ -1,9 +1,7 @@
 package com.BBsRs.vkaudiosync.Fragments;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Fragment;
@@ -17,38 +15,32 @@ import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Resources.NotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.BBsRs.vkaudiosync.R;
-import com.BBsRs.vkaudiosync.Adapters.MusicAdapter;
+import com.BBsRs.vkaudiosync.Adapters.FriendsGroupsAdapter;
 import com.BBsRs.vkaudiosync.Services.DownloadService;
 import com.BBsRs.vkaudiosync.VKApiThings.Account;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
-import com.BBsRs.vkaudiosync.collection.MusicCollection;
+import com.BBsRs.vkaudiosync.collection.FriendsGroupsCollection;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.perm.kate.api.Api;
-import com.perm.kate.api.Audio;
+import com.perm.kate.api.Group;
 import com.perm.kate.api.User;
 
-public class MusicListFragment extends Fragment {
+public class FriendsGroupsListFragment extends Fragment {
 	
 	//android views where shows content
 	private PullToRefreshLayout mPullToRefreshLayout;
-	ListView listViewMusic;
+	ListView listViewFriendsGroups;
 	RelativeLayout relativeErrorLayout;
 	TextView errorMessage;
 	Button errorRetryButton;
@@ -68,22 +60,16 @@ public class MusicListFragment extends Fragment {
     DisplayImageOptions options ;
     
     //music collection
-    ArrayList<MusicCollection> musicCollection = new ArrayList<MusicCollection>();
-    
-    //menu settings
-    Menu mainMenu = null;
+    ArrayList<FriendsGroupsCollection> friendsGroupsCollection = new ArrayList<FriendsGroupsCollection>();
     
     //adapter to listview
-    MusicAdapter musicAdapter;
+    FriendsGroupsAdapter friendsGroupsAdapter;
     
     //flag for error
     boolean error=false;
     
     //LOG_TAG for log
-    String LOG_TAG = "MusicListActivity";
-    
-    //with this file we check if music file already exist
-    File f;
+    String LOG_TAG = "FriendsGroupsFragment";
     
     //for retrieve data from activity
     Bundle bundle;
@@ -102,7 +88,7 @@ public class MusicListFragment extends Fragment {
     	setHasOptionsMenu(true);
 		
 		//init all views
-	    listViewMusic = (ListView)contentView.findViewById(R.id.listView);
+	    listViewFriendsGroups = (ListView)contentView.findViewById(R.id.listView);
 	    mPullToRefreshLayout = (PullToRefreshLayout)contentView.findViewById(R.id.ptr_layout);
     	relativeErrorLayout = (RelativeLayout)contentView.findViewById(R.id.errorLayout);
     	errorMessage = (TextView)contentView.findViewById(R.id.errorMessage);
@@ -140,19 +126,19 @@ public class MusicListFragment extends Fragment {
          	getSupportActionBar().setSubtitle("");
 	    }
 	    else{
-	    	musicCollection = savedInstanceState.getParcelableArrayList("musicCollection");
+	    	friendsGroupsCollection = savedInstanceState.getParcelableArrayList("friendsGroupsCollection");
 	    	error = savedInstanceState.getBoolean("error");
-	    	if ((musicCollection.size()>1)) {
-	    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options);
+	    	if ((friendsGroupsCollection.size()>1)) {
+	    		friendsGroupsAdapter = new FriendsGroupsAdapter(getActivity(), friendsGroupsCollection, options);
 	    		
 	    		PlaceName = savedInstanceState.getString("PlaceName");
                 
                 // set action bar
             	getSupportActionBar().setTitle(PlaceName);
-            	getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
+            	getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_songs));
                 
-                listViewMusic.setAdapter(musicAdapter);
-                listViewMusic.setSelection(savedInstanceState.getInt("posX"));
+                listViewFriendsGroups.setAdapter(friendsGroupsAdapter);
+                listViewFriendsGroups.setSelection(savedInstanceState.getInt("posX"));
 	    	}
 	    	
 	    	else {
@@ -177,82 +163,17 @@ public class MusicListFragment extends Fragment {
 			}
 		});
         
-        //turn up download receiver
-        getActivity().registerReceiver(musicDownloaded, new IntentFilter("DOWNLOADED"));
-		
 		return contentView;
 	}
 	
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		 outState.putParcelableArrayList("musicCollection", musicCollection);
-		 outState.putInt("posX",  listViewMusic.getFirstVisiblePosition());
+		 outState.putParcelableArrayList("friendsGroupsCollection", friendsGroupsCollection);
+		 outState.putInt("posX",  listViewFriendsGroups.getFirstVisiblePosition());
 		 outState.putString("PlaceName",  PlaceName);
 		 outState.putBoolean("error", error);
 	}
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.main, menu);
-		mainMenu = menu;
-		if (isMyServiceRunning(DownloadService.class)){
-			mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download_disabled);
-			mainMenu.findItem(R.id.menu_start_download_service).setEnabled(false);
-			mPullToRefreshLayout.setRefreshing(true);
-		} 
-		return;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	      switch (item.getItemId()) {
-	      case R.id.menu_start_download_service:
-	    	  //start task animation
-	    	  mPullToRefreshLayout.setRefreshing(true);
-	    	  //disable this menu button
-	    	  item.setEnabled(false); 
-	    	  item.setIcon(R.drawable.ic_menu_download_disabled);
-	    	  //disable pull to refresh
-	    	  //start service
-	    	  Intent serviceIntent = new Intent(getActivity(), DownloadService.class); 
-	    	  serviceIntent.putExtra("musicCollection", musicCollection);
-	    	  getActivity().startService(serviceIntent);
-	    	  break;
-	      }
-		return true;
-	}
-	
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		getActivity().unregisterReceiver(musicDownloaded);
-	}
-	
-	private BroadcastReceiver musicDownloaded = new BroadcastReceiver() {
-
-	    @Override
-	    public void onReceive(Context context, Intent intent) {
-	    	if (intent.getExtras().getBoolean("service_stopped")){
-	    		//stop task animation
-	    		mPullToRefreshLayout.setRefreshing(false);
-	    		if (mainMenu!=null){
-	    			mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
-	    			mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
-	    		}
-	    	} else {
-	    		if (musicAdapter!=null){
-	    			musicAdapter.getItem(intent.getExtras().getInt("index")).checked = intent.getExtras().getBoolean("successfully") ? 1 : 0;
-	    			musicAdapter.getItem(intent.getExtras().getInt("index")).exist = intent.getExtras().getBoolean("successfully") ? 1 : 0;
-	    			musicAdapter.notifyDataSetChanged();
-	    		}
-	    		if (musicCollection!=null){
-	    			musicCollection.get(intent.getExtras().getInt("index")).checked = intent.getExtras().getBoolean("successfully") ? 1 : 0;
-	    			musicCollection.get(intent.getExtras().getInt("index")).exist = intent.getExtras().getBoolean("successfully") ? 1 : 0;
-	    		}
-	    	}
-	    }
-	};
 	
     public class  CustomOnRefreshListener implements OnRefreshListener{
 
@@ -262,43 +183,37 @@ public class MusicListFragment extends Fragment {
 			new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
-                	if (bundle != null && ((mainMenu != null && mainMenu.findItem(R.id.menu_start_download_service).isEnabled()) || mainMenu == null)){
+                	if (bundle != null){
                             try {
                             	error=true;
-                            	musicCollection = new ArrayList<MusicCollection>();
-                            	ArrayList<Audio> musicList = new ArrayList<Audio>();
+                            	friendsGroupsCollection = new ArrayList<FriendsGroupsCollection>();
                             	
-                            	switch (bundle.getInt(Constants.BUNDLE_MUSIC_TYPE)){
-                            	case Constants.MY_MUSIC:
-                            		musicList = api.getAudio(bundle.getLong(Constants.BUNDLE_USER_ID), null, null, null, null, null);
+                            	
+                            	switch (bundle.getInt(Constants.BUNDLE_FRIENDS_GROUPS_TYPE)){
+                            	case Constants.FRIENDS:
+                            		ArrayList<User> FriendsList = new ArrayList<User>();
+                            		FriendsList = api.getFriends(bundle.getLong(Constants.BUNDLE_USER_ID), "photo_100", null, null, null);
+//                            		api.getFCriends(user_id, fields, lid, captcha_key, captcha_sid)
+//                            		api.getfr
+                            		PlaceName = getResources().getStringArray(R.array.slider_menu)[4];
                             		
-                            		 Collection<Long> u = new ArrayList<Long>();
-                                     u.add(bundle.getLong(Constants.BUNDLE_USER_ID));
-                                     Collection<String> d = new ArrayList<String>();
-                                     d.add("");
-
-                                     User userOne = api.getProfiles(u, d, "", "", "", "").get(0);
-                                     PlaceName = userOne.first_name+" "+userOne.last_name;
+                            		for (User one : FriendsList)
+                            		friendsGroupsCollection.add(new FriendsGroupsCollection(one.uid, one.first_name+" "+one.last_name, one.photo_medium_rec));
+                            		
+                            		error=false;
                             		break;
-                            	case Constants.RECOMMENDATIONS:
-                            		musicList = api.getAudioRecommendations();
-                            		PlaceName = getActivity().getResources().getStringArray(R.array.slider_menu)[2];
-                            		break;
-                            	case Constants.POPULAR:
-                            		musicList = api.getAudioPopular();
-                            		PlaceName = getActivity().getResources().getStringArray(R.array.slider_menu)[3];
+                            	case Constants.GROUPS:
+                            		ArrayList<Group> GroupsList = new ArrayList<Group>();
+                            		GroupsList = api.getUserGroups(bundle.getLong(Constants.BUNDLE_USER_ID));
+                            		
+                            		PlaceName = getResources().getStringArray(R.array.slider_menu)[5];
+                            		
+                            		for (Group one : GroupsList)
+                                		friendsGroupsCollection.add(new FriendsGroupsCollection(one.gid, one.name, one.photo_medium));
+                            		
+                            		error=false;
                             		break;
                             	}
-                            	
-                            	for (Audio one : musicList){
-                            		f = new File(android.os.Environment.getExternalStorageDirectory()+"/Music/"+(one.artist+" - "+one.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
-                            		if (f.exists())
-                            			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 1, 1));
-                            		else 
-                            			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 0, 0));
-                            	}
-                            	
-        						error=false;
                             } catch (NotFoundException e) {
                             	error=true;
             					Log.e(LOG_TAG, "data Error");
@@ -326,21 +241,21 @@ public class MusicListFragment extends Fragment {
                     if (!isMyServiceRunning(DownloadService.class))
                     mPullToRefreshLayout.setRefreshing(false);
                     if (!error){
-                    	listViewMusic.setVisibility(View.VISIBLE);
+                    	listViewFriendsGroups.setVisibility(View.VISIBLE);
                     	relativeErrorLayout.setVisibility(View.GONE);
                     	
-                    	musicAdapter = new MusicAdapter(getActivity(), musicCollection, options);
+                    	friendsGroupsAdapter = new FriendsGroupsAdapter(getActivity(), friendsGroupsCollection, options);
 
                     	// set action bar
                     	getSupportActionBar().setTitle(PlaceName);
-                    	getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
+                    	getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_songs));
                     
-                    	listViewMusic.setAdapter(musicAdapter);
+                    	listViewFriendsGroups.setAdapter(friendsGroupsAdapter);
                     
                     	Animation flyUpAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fly_up_anim);
-                    	listViewMusic.startAnimation(flyUpAnimation);
+                    	listViewFriendsGroups.startAnimation(flyUpAnimation);
                     } else {
-                    	listViewMusic.setVisibility(View.GONE);
+                    	listViewFriendsGroups.setVisibility(View.GONE);
                     	relativeErrorLayout.setVisibility(View.VISIBLE);
                     	errorRetryButton.setEnabled(true);
                     }

@@ -111,7 +111,7 @@ public class FriendsGroupsListFragment extends Fragment {
         
         //init image loader
         options = new DisplayImageOptions.Builder()
-        .showStubImage(R.drawable.ic_music_stub)
+        .showStubImage(R.drawable.deactivated_100)
         //.showImageForEmptyUri(R.drawable.logo)
         .cacheOnDisc(true)	
         .cacheInMemory(true)					

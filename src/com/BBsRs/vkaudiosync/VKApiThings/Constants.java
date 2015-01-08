@@ -22,5 +22,8 @@ public class Constants {
 	
 	public static final int FRIENDS = 0;
 	public static final int GROUPS = 1;
+	
+	public static final String FRIENDS_FRAGMENT = "friends_fragment";
+	public static final String GROUPS_FRAGMENT = "groups_fragment";
 
 }

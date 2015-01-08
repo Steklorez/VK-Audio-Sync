@@ -335,27 +335,31 @@ public class MusicListFragment extends Fragment {
                 @Override
                 protected void onPostExecute(Void result) {
                     super.onPostExecute(result);
-                    if (!isMyServiceRunning(DownloadService.class))
-                    mPullToRefreshLayout.setRefreshing(false);
-                    if (!error){
-                    	listViewMusic.setVisibility(View.VISIBLE);
-                    	relativeErrorLayout.setVisibility(View.GONE);
+                    try {
+                    	if (!isMyServiceRunning(DownloadService.class))
+                    		mPullToRefreshLayout.setRefreshing(false);
+                    		if (!error){
+                    			listViewMusic.setVisibility(View.VISIBLE);
+                    			relativeErrorLayout.setVisibility(View.GONE);
                     	
-                    	musicAdapter = new MusicAdapter(getActivity(), musicCollection, options);
+                    			musicAdapter = new MusicAdapter(getActivity(), musicCollection, options);
 
-                    	// set action bar
-                    	getSupportActionBar().setTitle(PlaceName);
-                    	getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
+                    			// set action bar
+                    			getSupportActionBar().setTitle(PlaceName);
+                    			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
                     
-                    	listViewMusic.setAdapter(musicAdapter);
+                    			listViewMusic.setAdapter(musicAdapter);
                     
-                    	Animation flyUpAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fly_up_anim);
-                    	listViewMusic.startAnimation(flyUpAnimation);
-                    } else {
-                    	listViewMusic.setVisibility(View.GONE);
-                    	relativeErrorLayout.setVisibility(View.VISIBLE);
-                    	errorRetryButton.setEnabled(true);
-                    }
+                    			Animation flyUpAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fly_up_anim);
+                    			listViewMusic.startAnimation(flyUpAnimation);
+                    		} else {
+                    			listViewMusic.setVisibility(View.GONE);
+                    			relativeErrorLayout.setVisibility(View.VISIBLE);
+                    			errorRetryButton.setEnabled(true);
+                    		}
+                   } catch (NullPointerException e){
+                	   e.printStackTrace();
+                   }
                 }
             }.execute();
 		}

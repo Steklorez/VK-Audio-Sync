@@ -179,25 +179,27 @@ public class FriendsGroupsListFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				Bundle bundleMusic = new Bundle();
+				final FragmentTransaction ft = getFragmentManager().beginTransaction();
 				
 	           	switch (bundle.getInt(Constants.BUNDLE_FRIENDS_GROUPS_TYPE)){
             	case Constants.FRIENDS:
             		bundleMusic.putLong(Constants.BUNDLE_USER_ID, friendsGroupsCollection.get(position).gfid);
             		bundleMusic.putInt(Constants.BUNDLE_MUSIC_TYPE, Constants.MAIN_MUSIC_USER);
+            		ft.addToBackStack(Constants.FRIENDS_FRAGMENT);
             		break;
             	case Constants.GROUPS:
             		bundleMusic.putLong(Constants.BUNDLE_USER_ID, bundle.getLong(Constants.BUNDLE_USER_ID));
             		bundleMusic.putLong(Constants.BUNDLE_GROUP_ID, friendsGroupsCollection.get(position).gfid);
             		bundleMusic.putInt(Constants.BUNDLE_MUSIC_TYPE, Constants.MAIN_MUSIC_GROUP);
+            		ft.addToBackStack(Constants.GROUPS_FRAGMENT);
             		break;
             	}
 				
 	           	MusicListFragment musicListFragment = new MusicListFragment();
 	           	
 	           	musicListFragment.setArguments(bundleMusic);
-				
-				final FragmentTransaction ft = getFragmentManager().beginTransaction();
-				ft.addToBackStack(null);
+	           	
+				//replace fragment
 				ft.replace(R.id.contentView, musicListFragment); 
 				ft.commit(); 
 			}

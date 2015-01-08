@@ -65,8 +65,8 @@ public class ContentShowActivity extends Activity {
         sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[1], MusicListFragment.class, bundleMyMusic, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
         sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[2], MusicListFragment.class, bundleRecommendations, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
         sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[3], MusicListFragment.class, bundlePopular, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
-        sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[4], FriendsGroupsListFragment.class, bundleFriends, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
-        sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[5], FriendsGroupsListFragment.class, bundleGroups, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
+        sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[4], FriendsGroupsListFragment.class, bundleFriends, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1).setTag(Constants.FRIENDS_FRAGMENT);
+        sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[5], FriendsGroupsListFragment.class, bundleGroups, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1).setTag(Constants.GROUPS_FRAGMENT);
         
 //        sliderMenu.add(label, fragmentClass, fragmentArguments, colors)
         

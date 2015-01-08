@@ -186,10 +186,12 @@ public class MusicListFragment extends Fragment {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
+		if (musicCollection !=null && listViewMusic!=null && PlaceName != null){
 		 outState.putParcelableArrayList("musicCollection", musicCollection);
 		 outState.putInt("posX",  listViewMusic.getFirstVisiblePosition());
 		 outState.putString("PlaceName",  PlaceName);
 		 outState.putBoolean("error", error);
+		}
 	}
 	
 	@Override
@@ -224,8 +226,8 @@ public class MusicListFragment extends Fragment {
 	}
 	
 	@Override
-	public void onDestroy() {
-		super.onDestroy();
+	public void onPause() {
+		super.onPause();
 		getActivity().unregisterReceiver(musicDownloaded);
 	}
 	

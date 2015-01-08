@@ -176,10 +176,12 @@ public class FriendsGroupsListFragment extends Fragment {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
+		if (friendsGroupsCollection !=null && listViewFriendsGroups!=null && PlaceName != null){
 		 outState.putParcelableArrayList("friendsGroupsCollection", friendsGroupsCollection);
 		 outState.putInt("posX",  listViewFriendsGroups.getFirstVisiblePosition());
 		 outState.putString("PlaceName",  PlaceName);
 		 outState.putBoolean("error", error);
+		}
 	}
 	
     public class  CustomOnRefreshListener implements OnRefreshListener{

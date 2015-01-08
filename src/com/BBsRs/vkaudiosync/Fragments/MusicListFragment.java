@@ -178,9 +178,6 @@ public class MusicListFragment extends Fragment {
 			}
 		});
         
-        //turn up download receiver
-        getActivity().registerReceiver(musicDownloaded, new IntentFilter("DOWNLOADED"));
-		
 		return contentView;
 	}
 	
@@ -230,6 +227,13 @@ public class MusicListFragment extends Fragment {
 	public void onPause() {
 		super.onPause();
 		getActivity().unregisterReceiver(musicDownloaded);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		//turn up download receiver
+        getActivity().registerReceiver(musicDownloaded, new IntentFilter("DOWNLOADED"));
 	}
 	
 	private BroadcastReceiver musicDownloaded = new BroadcastReceiver() {

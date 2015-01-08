@@ -198,7 +198,7 @@ public class FriendsGroupsListFragment extends Fragment {
 				
 				final FragmentTransaction ft = getFragmentManager().beginTransaction();
 				ft.addToBackStack(null);
-				ft.replace(R.id.contentView, musicListFragment, "NewFragmentTag"); 
+				ft.replace(R.id.contentView, musicListFragment); 
 				ft.commit(); 
 			}
         });

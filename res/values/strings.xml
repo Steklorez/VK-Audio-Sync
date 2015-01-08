@@ -7,6 +7,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="quan_songs">songs</string>
+    <string name="quan_people">people</string>
+    <string name="quan_groups">communities</string>
     <string name="download_selected">Download selected</string>
     <string name="app_slogan">Sync automatically,\nanywhere,\nanytime,\nwith all cover art!</string>
     <string name="service_running">Download service is in work state, please wait till download is continue!</string>

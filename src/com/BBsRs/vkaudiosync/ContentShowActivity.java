@@ -43,7 +43,7 @@ public class ContentShowActivity extends Activity {
         
         Bundle bundleMyMusic = new Bundle();
         bundleMyMusic.putLong(Constants.BUNDLE_USER_ID, account.user_id);
-        bundleMyMusic.putInt(Constants.BUNDLE_MUSIC_TYPE, Constants.MY_MUSIC);
+        bundleMyMusic.putInt(Constants.BUNDLE_MUSIC_TYPE, Constants.MAIN_MUSIC_USER);
         
         Bundle bundlePopular = new Bundle();
         bundlePopular.putLong(Constants.BUNDLE_USER_ID, account.user_id);

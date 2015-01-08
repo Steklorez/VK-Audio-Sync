@@ -19,11 +19,14 @@ import android.content.Context;
 import android.content.res.Resources.NotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.Adapters.FriendsGroupsAdapter;
@@ -169,6 +172,36 @@ public class FriendsGroupsListFragment extends Fragment {
 	         	getSupportActionBar().setSubtitle("");
 			}
 		});
+        
+        //programing on item click listener
+        listViewFriendsGroups.setOnItemClickListener(new OnItemClickListener(){
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Bundle bundleMusic = new Bundle();
+				
+	           	switch (bundle.getInt(Constants.BUNDLE_FRIENDS_GROUPS_TYPE)){
+            	case Constants.FRIENDS:
+            		bundleMusic.putLong(Constants.BUNDLE_USER_ID, friendsGroupsCollection.get(position).gfid);
+            		bundleMusic.putInt(Constants.BUNDLE_MUSIC_TYPE, Constants.MAIN_MUSIC_USER);
+            		break;
+            	case Constants.GROUPS:
+            		bundleMusic.putLong(Constants.BUNDLE_USER_ID, bundle.getLong(Constants.BUNDLE_USER_ID));
+            		bundleMusic.putLong(Constants.BUNDLE_GROUP_ID, friendsGroupsCollection.get(position).gfid);
+            		bundleMusic.putInt(Constants.BUNDLE_MUSIC_TYPE, Constants.MAIN_MUSIC_GROUP);
+            		break;
+            	}
+				
+	           	MusicListFragment musicListFragment = new MusicListFragment();
+	           	
+	           	musicListFragment.setArguments(bundleMusic);
+				
+				final FragmentTransaction ft = getFragmentManager().beginTransaction();
+				ft.addToBackStack(null);
+				ft.replace(R.id.contentView, musicListFragment, "NewFragmentTag"); 
+				ft.commit(); 
+			}
+        });
         
 		return contentView;
 	}

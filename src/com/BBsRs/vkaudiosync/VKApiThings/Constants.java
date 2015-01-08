@@ -6,12 +6,14 @@ public class Constants {
     //VK API
     
     //FIRST
-    public static final String BUNDLE_USER_ID = "id";
+    public static final String BUNDLE_USER_ID = "user_id";
+    public static final String BUNDLE_GROUP_ID = "group_id";
 	public static final String BUNDLE_MUSIC_TYPE = "type";
 	
-	public static final int MY_MUSIC = 0;
-	public static final int RECOMMENDATIONS = 1;
-	public static final int POPULAR = 2;
+	public static final int MAIN_MUSIC_USER = 0;
+	public static final int MAIN_MUSIC_GROUP = 1;
+	public static final int RECOMMENDATIONS = 2;
+	public static final int POPULAR = 3;
 	
 	//SECOND
 	public static final String BUNDLE_FRIENDS_GROUPS_TYPE = "friends_groups";

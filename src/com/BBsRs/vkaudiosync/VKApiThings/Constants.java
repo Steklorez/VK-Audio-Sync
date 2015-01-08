@@ -25,5 +25,9 @@ public class Constants {
 	
 	public static final String FRIENDS_FRAGMENT = "friends_fragment";
 	public static final String GROUPS_FRAGMENT = "groups_fragment";
+	
+	//BROADCAST RECEIVER
+	
+	public static final String OPEN_MENU_DRAWER = "open_menu_drawer";
 
 }

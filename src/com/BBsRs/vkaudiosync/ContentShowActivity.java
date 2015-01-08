@@ -5,6 +5,10 @@ import org.holoeverywhere.addon.Addons;
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.slider.SliderMenu;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -76,16 +80,27 @@ public class ContentShowActivity extends Activity {
 	}
 	
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	      switch (item.getItemId()) {
-	      case android.R.id.home:
-	    	  if (addonSlider().isDrawerOpen(addonSlider().getLeftView()))
+	public void onPause() {
+		super.onPause();
+		unregisterReceiver(openMenuDrawer);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		//turn up download receiver
+        registerReceiver(openMenuDrawer, new IntentFilter(Constants.OPEN_MENU_DRAWER));
+	}
+	
+	private BroadcastReceiver openMenuDrawer = new BroadcastReceiver() {
+
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	    	if (addonSlider().isDrawerOpen(addonSlider().getLeftView()))
 	    		  addonSlider().closeLeftView();
 	    	  else 
 	    		  addonSlider().openLeftView();
-	    	  break;
-	      }
-		return true;
-	}
+	    }
+	};
 
 }

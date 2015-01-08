@@ -207,6 +207,10 @@ public class MusicListFragment extends Fragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	      switch (item.getItemId()) {
+	      case android.R.id.home:
+	    	  Intent i = new Intent(Constants.OPEN_MENU_DRAWER);
+	    	  getActivity().sendBroadcast(i);
+	    	  break;
 	      case R.id.menu_start_download_service:
 	    	  //start task animation
 	    	  mPullToRefreshLayout.setRefreshing(true);

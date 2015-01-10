@@ -258,12 +258,12 @@ public class MusicListFragment extends Fragment {
 	    			mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
 	    		}
 	    	} else {
-	    		if (musicAdapter!=null){
+	    		if (musicAdapter!=null && musicAdapter.getCount()>=intent.getExtras().getInt(Constants.MUSIC_INDEX_DOWNLOADED)){
 	    			musicAdapter.getItem(intent.getExtras().getInt(Constants.MUSIC_INDEX_DOWNLOADED)).checked = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
 	    			musicAdapter.getItem(intent.getExtras().getInt(Constants.MUSIC_INDEX_DOWNLOADED)).exist = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
 	    			musicAdapter.notifyDataSetChanged();
 	    		}
-	    		if (musicCollection!=null){
+	    		if (musicCollection!=null && musicCollection.size()>=intent.getExtras().getInt(Constants.MUSIC_INDEX_DOWNLOADED)){
 	    			musicCollection.get(intent.getExtras().getInt(Constants.MUSIC_INDEX_DOWNLOADED)).checked = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
 	    			musicCollection.get(intent.getExtras().getInt(Constants.MUSIC_INDEX_DOWNLOADED)).exist = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
 	    		}

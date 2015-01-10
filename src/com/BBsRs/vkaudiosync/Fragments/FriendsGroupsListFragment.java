@@ -13,10 +13,6 @@ import org.holoeverywhere.widget.TextView;
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
-import android.content.Context;
-import android.content.IntentFilter;
 import android.content.res.Resources.NotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,7 +27,6 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.Adapters.FriendsGroupsAdapter;
-import com.BBsRs.vkaudiosync.Services.DownloadService;
 import com.BBsRs.vkaudiosync.VKApiThings.Account;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 import com.BBsRs.vkaudiosync.collection.FriendsGroupsCollection;

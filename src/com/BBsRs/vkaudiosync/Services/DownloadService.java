@@ -74,7 +74,7 @@ public class DownloadService extends Service {
 			this.stopSelf();
 		else
 		{
-		musicCollection = (ArrayList<MusicCollection>) extras.get("musicCollection");
+		musicCollection = (ArrayList<MusicCollection>) extras.get(Constants.EXTRA_MUSIC_COLLECTION);
 		UserGroupId = String.valueOf(extras.getLong(Constants.BUNDLE_USER_ID))+String.valueOf(extras.getLong(Constants.BUNDLE_GROUP_ID));
 		pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Constants.PARTIAL_WAKE_LOCK_TAG);

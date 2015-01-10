@@ -141,7 +141,7 @@ public class MusicListFragment extends Fragment {
          	getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
 	    }
 	    else{
-	    	musicCollection = savedInstanceState.getParcelableArrayList("musicCollection");
+	    	musicCollection = savedInstanceState.getParcelableArrayList(Constants.EXTRA_MUSIC_COLLECTION);
 	    	error = savedInstanceState.getBoolean("error");
 	    	if ((musicCollection.size()>1)) {
 	    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options);
@@ -185,7 +185,7 @@ public class MusicListFragment extends Fragment {
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		if (musicCollection !=null && listViewMusic!=null && PlaceName != null){
-		 outState.putParcelableArrayList("musicCollection", musicCollection);
+		 outState.putParcelableArrayList(Constants.EXTRA_MUSIC_COLLECTION, musicCollection);
 		 outState.putInt("posX",  listViewMusic.getFirstVisiblePosition());
 		 outState.putString("PlaceName",  PlaceName);
 		 outState.putBoolean("error", error);
@@ -220,7 +220,7 @@ public class MusicListFragment extends Fragment {
 	    	  //disable pull to refresh
 	    	  //start service
 	    	  Intent serviceIntent = new Intent(getActivity(), DownloadService.class); 
-	    	  serviceIntent.putExtra("musicCollection", musicCollection);
+	    	  serviceIntent.putExtra(Constants.EXTRA_MUSIC_COLLECTION, musicCollection);
 	    	  serviceIntent.putExtra(Constants.BUNDLE_USER_ID, bundle.getLong(Constants.BUNDLE_USER_ID));
 	    	  serviceIntent.putExtra(Constants.BUNDLE_GROUP_ID, bundle.getLong(Constants.BUNDLE_GROUP_ID));
 	    	  getActivity().startService(serviceIntent);

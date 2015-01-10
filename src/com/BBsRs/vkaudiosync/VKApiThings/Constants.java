@@ -42,6 +42,6 @@ public class Constants {
 	public static final String DEFAULT_CHARSET = "UTF-8";
 	
 	//DOWNLOAD SERVICE
-	public static final String EXTRA_MUSIC_COLLECTION "musicCollection";
+	public static final String EXTRA_MUSIC_COLLECTION = "musicCollection";
 
 }

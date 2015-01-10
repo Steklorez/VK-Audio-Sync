@@ -16,6 +16,7 @@ import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.content.res.Resources.NotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -125,8 +126,15 @@ public class FriendsGroupsListFragment extends Fragment {
 	    	 mPullToRefreshLayout.setRefreshing(true);
 	         customOnRefreshListener.onRefreshStarted(null);
 	      // set action bar
-         	getSupportActionBar().setTitle("");
-         	getSupportActionBar().setSubtitle("");
+         	getSupportActionBar().setTitle(PlaceName);
+         	switch (bundle.getInt(Constants.BUNDLE_FRIENDS_GROUPS_TYPE)){
+         	case Constants.FRIENDS:
+         		getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_people));
+         		break;
+         	case Constants.GROUPS:
+         		getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_groups));
+         		break;
+         	}
 	    }
 	    else{
 	    	friendsGroupsCollection = savedInstanceState.getParcelableArrayList("friendsGroupsCollection");
@@ -154,9 +162,16 @@ public class FriendsGroupsListFragment extends Fragment {
 	    	else {
 	    		mPullToRefreshLayout.setRefreshing(true);
 	         	customOnRefreshListener.onRefreshStarted(null);	
-	         	 // set action bar
-	         	getSupportActionBar().setTitle("");
-	         	getSupportActionBar().setSubtitle("");
+	         // set action bar
+            	getSupportActionBar().setTitle(PlaceName);
+            	switch (bundle.getInt(Constants.BUNDLE_FRIENDS_GROUPS_TYPE)){
+            	case Constants.FRIENDS:
+            		getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_people));
+            		break;
+            	case Constants.GROUPS:
+            		getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_groups));
+            		break;
+            	}
 	    	}
 	    }
 	    
@@ -206,6 +221,21 @@ public class FriendsGroupsListFragment extends Fragment {
         });
         
 		return contentView;
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		// set action bar
+    	getSupportActionBar().setTitle(PlaceName);
+    	switch (bundle.getInt(Constants.BUNDLE_FRIENDS_GROUPS_TYPE)){
+    	case Constants.FRIENDS:
+    		getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_people));
+    		break;
+    	case Constants.GROUPS:
+    		getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_groups));
+    		break;
+    	}
 	}
 	
 	@Override
@@ -282,7 +312,6 @@ public class FriendsGroupsListFragment extends Fragment {
                 @Override
                 protected void onPostExecute(Void result) {
                     super.onPostExecute(result);
-                    if (!isMyServiceRunning(DownloadService.class))
                     mPullToRefreshLayout.setRefreshing(false);
                     if (!error){
                     	listViewFriendsGroups.setVisibility(View.VISIBLE);
@@ -314,15 +343,5 @@ public class FriendsGroupsListFragment extends Fragment {
                 }
             }.execute();
 		}
-    }
-    
-    private boolean isMyServiceRunning(Class<?> serviceClass) {			//returns true is service running
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
     }
 }

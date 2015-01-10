@@ -30,6 +30,7 @@ import android.util.Log;
 
 import com.BBsRs.vkaudiosync.ContentShowActivity;
 import com.BBsRs.vkaudiosync.R;
+import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 import com.BBsRs.vkaudiosync.collection.MusicCollection;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.ID3v24Tag;
@@ -42,8 +43,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class DownloadService extends Service {
 	
 	String LOG_TAG = "DownloadService";
-	String google = "https://www.google.ru/search?&safe=off&tbm=isch&tbs=isz:m&q=";
-	String charset = "UTF-8";
+	
+	String UserGroupId = "";
+
 	ArrayList<MusicCollection> musicCollection = new ArrayList<MusicCollection>();
 	
 	PowerManager pm;
@@ -73,8 +75,9 @@ public class DownloadService extends Service {
 		else
 		{
 		musicCollection = (ArrayList<MusicCollection>) extras.get("musicCollection");
+		UserGroupId = String.valueOf(extras.getLong(Constants.BUNDLE_USER_ID))+String.valueOf(extras.getLong(Constants.BUNDLE_GROUP_ID));
 		pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-		wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "My Tag");
+		wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Constants.PARTIAL_WAKE_LOCK_TAG);
 		wl.acquire();
 		
 		startDownloadChecking();
@@ -92,8 +95,8 @@ public class DownloadService extends Service {
 	public void stopServiceCustom(){
 		final Runnable updaterText = new Runnable() {
 	        public void run() {
-				Intent i = new Intent("DOWNLOADED");
-				i.putExtra("service_stopped", true);
+				Intent i = new Intent(Constants.MUSIC_DOWNLOADED+UserGroupId);
+				i.putExtra(Constants.DOWNLOAD_SERVICE_STOPPED, true);
 				sendBroadcast(i);
 	        	stopSelf();
 	        }
@@ -118,10 +121,10 @@ public class DownloadService extends Service {
 					if (oneItem.checked == 1 && oneItem.exist == 0) {
 						not.setLatestEventInfo(getApplicationContext(), getResources().getString(R.string.downloading), oneItem.artist+" - "+oneItem.title, contentIntent);
 						mNotificationManager.notify(1, not);
-						Intent i = new Intent("DOWNLOADED");
-						i.putExtra("index", index);
-						i.putExtra("successfully", DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", "")));
-						i.putExtra("service_stopped", false);
+						Intent i = new Intent(Constants.MUSIC_DOWNLOADED+UserGroupId);
+						i.putExtra(Constants.MUSIC_INDEX_DOWNLOADED, index);
+						i.putExtra(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED, DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", "")));
+						i.putExtra(Constants.DOWNLOAD_SERVICE_STOPPED, false);
 						sendBroadcast(i);
 					}
 					index++;
@@ -180,7 +183,7 @@ public class DownloadService extends Service {
 		           
 		           Log.d("DownloadManager", "download cover art");
 		           //download bitmap from web
-		           Bitmap bmp = ImageLoader.getInstance().loadImageSync(google + URLEncoder.encode(oneItem.artist+" - "+oneItem.title, charset), true);
+		           Bitmap bmp = ImageLoader.getInstance().loadImageSync(Constants.GOOGLE_IMAGE_REQUEST_URL + URLEncoder.encode(oneItem.artist+" - "+oneItem.title, Constants.DEFAULT_CHARSET), true);
 		           if (bmp==null) 
 		        	   bmp = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.ic_music_stub);
 		           

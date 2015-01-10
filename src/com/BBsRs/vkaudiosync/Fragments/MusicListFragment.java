@@ -137,8 +137,8 @@ public class MusicListFragment extends Fragment {
 	    	 mPullToRefreshLayout.setRefreshing(true);
 	         customOnRefreshListener.onRefreshStarted(null);
 	      // set action bar
-         	getSupportActionBar().setTitle("");
-         	getSupportActionBar().setSubtitle("");
+         	getSupportActionBar().setTitle(PlaceName);
+         	getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
 	    }
 	    else{
 	    	musicCollection = savedInstanceState.getParcelableArrayList("musicCollection");
@@ -160,8 +160,8 @@ public class MusicListFragment extends Fragment {
 	    		mPullToRefreshLayout.setRefreshing(true);
 	         	customOnRefreshListener.onRefreshStarted(null);	
 	         	 // set action bar
-	         	getSupportActionBar().setTitle("");
-	         	getSupportActionBar().setSubtitle("");
+            	getSupportActionBar().setTitle(PlaceName);
+            	getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
 	    	}
 	    }
 	    
@@ -221,6 +221,8 @@ public class MusicListFragment extends Fragment {
 	    	  //start service
 	    	  Intent serviceIntent = new Intent(getActivity(), DownloadService.class); 
 	    	  serviceIntent.putExtra("musicCollection", musicCollection);
+	    	  serviceIntent.putExtra(Constants.BUNDLE_USER_ID, bundle.getLong(Constants.BUNDLE_USER_ID));
+	    	  serviceIntent.putExtra(Constants.BUNDLE_GROUP_ID, bundle.getLong(Constants.BUNDLE_GROUP_ID));
 	    	  getActivity().startService(serviceIntent);
 	    	  break;
 	      }
@@ -237,14 +239,18 @@ public class MusicListFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		//turn up download receiver
-        getActivity().registerReceiver(musicDownloaded, new IntentFilter("DOWNLOADED"));
+        getActivity().registerReceiver(musicDownloaded, new IntentFilter(Constants.MUSIC_DOWNLOADED + String.valueOf(bundle.getLong(Constants.BUNDLE_USER_ID) + String.valueOf(bundle.getLong(Constants.BUNDLE_GROUP_ID)))));
+        
+    	 // set action bar
+    	getSupportActionBar().setTitle(PlaceName);
+    	getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
 	}
 	
 	private BroadcastReceiver musicDownloaded = new BroadcastReceiver() {
 
 	    @Override
 	    public void onReceive(Context context, Intent intent) {
-	    	if (intent.getExtras().getBoolean("service_stopped")){
+	    	if (intent.getExtras().getBoolean(Constants.DOWNLOAD_SERVICE_STOPPED)){
 	    		//stop task animation
 	    		mPullToRefreshLayout.setRefreshing(false);
 	    		if (mainMenu!=null){
@@ -253,13 +259,13 @@ public class MusicListFragment extends Fragment {
 	    		}
 	    	} else {
 	    		if (musicAdapter!=null){
-	    			musicAdapter.getItem(intent.getExtras().getInt("index")).checked = intent.getExtras().getBoolean("successfully") ? 1 : 0;
-	    			musicAdapter.getItem(intent.getExtras().getInt("index")).exist = intent.getExtras().getBoolean("successfully") ? 1 : 0;
+	    			musicAdapter.getItem(intent.getExtras().getInt(Constants.MUSIC_INDEX_DOWNLOADED)).checked = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
+	    			musicAdapter.getItem(intent.getExtras().getInt(Constants.MUSIC_INDEX_DOWNLOADED)).exist = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
 	    			musicAdapter.notifyDataSetChanged();
 	    		}
 	    		if (musicCollection!=null){
-	    			musicCollection.get(intent.getExtras().getInt("index")).checked = intent.getExtras().getBoolean("successfully") ? 1 : 0;
-	    			musicCollection.get(intent.getExtras().getInt("index")).exist = intent.getExtras().getBoolean("successfully") ? 1 : 0;
+	    			musicCollection.get(intent.getExtras().getInt(Constants.MUSIC_INDEX_DOWNLOADED)).checked = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
+	    			musicCollection.get(intent.getExtras().getInt(Constants.MUSIC_INDEX_DOWNLOADED)).exist = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
 	    		}
 	    	}
 	    }

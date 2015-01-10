@@ -27,7 +27,18 @@ public class Constants {
 	public static final String GROUPS_FRAGMENT = "groups_fragment";
 	
 	//BROADCAST RECEIVER
-	
 	public static final String OPEN_MENU_DRAWER = "open_menu_drawer";
+	public static final String MUSIC_DOWNLOADED = "downloaded";
+	
+	public static final String MUSIC_INDEX_DOWNLOADED = "index";
+	public static final String MUSIC_SUCCESSFULLY_DOWNLOADED = "successfully";
+	public static final String DOWNLOAD_SERVICE_STOPPED= "stopped";
+	
+	//wake lock tag
+	public static final String PARTIAL_WAKE_LOCK_TAG = "my tag";
+	
+	//connection data
+	public static final String GOOGLE_IMAGE_REQUEST_URL = "https://www.google.ru/search?&safe=off&tbm=isch&tbs=isz:m&q=";
+	public static final String DEFAULT_CHARSET = "UTF-8";
 
 }

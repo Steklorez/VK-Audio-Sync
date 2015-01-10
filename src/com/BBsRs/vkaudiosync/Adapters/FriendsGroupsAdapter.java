@@ -22,8 +22,6 @@ public class FriendsGroupsAdapter extends BaseAdapter {
 	Context context;
 	LayoutInflater inflater;
 	DisplayImageOptions options;
-	String google = "https://www.google.ru/search?&safe=off&tbm=isch&tbs=isz:m&q=";
-	String charset = "UTF-8";
 	
 	public FriendsGroupsAdapter (Context _context, ArrayList<FriendsGroupsCollection> _friendsGroupsCollection, DisplayImageOptions _options){
 		friendsGroupsCollection = _friendsGroupsCollection;

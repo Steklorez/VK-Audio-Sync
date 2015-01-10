@@ -15,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.BBsRs.vkaudiosync.R;
+import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 import com.BBsRs.vkaudiosync.collection.MusicCollection;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -25,8 +26,6 @@ public class MusicAdapter extends BaseAdapter {
 	Context context;
 	LayoutInflater inflater;
 	DisplayImageOptions options;
-	String google = "https://www.google.ru/search?&safe=off&tbm=isch&tbs=isz:m&q=";
-	String charset = "UTF-8";
 	
 	public MusicAdapter (Context _context, ArrayList<MusicCollection> _musicCollection, DisplayImageOptions _options){
 		musicCollection = _musicCollection;
@@ -85,7 +84,7 @@ public class MusicAdapter extends BaseAdapter {
         holder.checkDownload.setEnabled(musicCollection.get(position).exist == 0 ? true : false);
         
         try {
-        	ImageLoader.getInstance().displayImage(google + URLEncoder.encode(musicCollection.get(position).artist+ " - "+musicCollection.get(position).title, charset), holder.albumArt, options, true);
+        	ImageLoader.getInstance().displayImage(Constants.GOOGLE_IMAGE_REQUEST_URL + URLEncoder.encode(musicCollection.get(position).artist+ " - "+musicCollection.get(position).title, Constants.DEFAULT_CHARSET), holder.albumArt, options, true);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

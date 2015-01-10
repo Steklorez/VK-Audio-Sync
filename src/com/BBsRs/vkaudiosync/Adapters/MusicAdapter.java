@@ -45,6 +45,11 @@ public class MusicAdapter extends BaseAdapter {
 	  public MusicCollection getItem(int position) {
 	    return musicCollection.get(position);
 	  }
+	  
+	  // object
+	  public ArrayList<MusicCollection> getObject() {
+	    return musicCollection;
+	  }
 
 	  // id по позиции
 	  @Override

@@ -244,6 +244,27 @@ public class MusicListFragment extends Fragment {
     	 // set action bar
     	getSupportActionBar().setTitle(PlaceName);
     	getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
+    	
+    	//check if audio downloaded
+    	try {
+    		int index = 0;
+        	if (isMyServiceRunning(DownloadService.class) && musicAdapter != null && musicAdapter.getCount()>0)
+        		for (MusicCollection one : musicAdapter.getObject()){
+        			f = new File(android.os.Environment.getExternalStorageDirectory()+"/Music/"+(one.artist+" - "+one.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
+        			if (f.exists()) {
+        				musicAdapter.getItem(index).checked = 1;
+        				musicAdapter.getItem(index).exist = 1;
+        				musicAdapter.notifyDataSetChanged();
+        				if (musicCollection!=null && musicCollection.size()>=index){
+        	    			musicCollection.get(index).checked = 1;
+        	    			musicCollection.get(index).exist = 1;
+        	    		}
+        			}
+        			index++;
+        		}
+    	} catch (NullPointerException e){
+    		e.printStackTrace();
+    	}
 	}
 	
 	private BroadcastReceiver musicDownloaded = new BroadcastReceiver() {

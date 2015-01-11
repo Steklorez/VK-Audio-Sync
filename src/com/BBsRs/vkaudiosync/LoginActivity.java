@@ -36,7 +36,7 @@ public class LoginActivity extends Activity {
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.removeAllCookie();
         
-        String url=Auth.getUrl(Constants.API_ID, Auth.getSettings());
+        String url=Auth.getUrl(Constants.API_ID, Constants.RIGHTS_REQUEST);
         webview.loadUrl(url);
     }
     

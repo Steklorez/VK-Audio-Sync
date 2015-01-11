@@ -3,6 +3,7 @@ package com.BBsRs.vkaudiosync.VKApiThings;
 public class Constants {
     //VK API
     public static String API_ID="4701734";
+    public static String RIGHTS_REQUEST = "friends,audio,groups,offline,wall";
     //VK API
     
     

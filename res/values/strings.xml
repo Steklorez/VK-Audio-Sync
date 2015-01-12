@@ -13,6 +13,9 @@
     <string name="app_slogan">Sync automatically,\nanywhere,\nanytime,\nwith all cover art!</string>
     <string name="service_running">Download service is in work state, please wait till download is continue!</string>
     <string name="downloading">Downloading</string>
+    <string name="wallmain">Main music | Wall music</string>
+    <string name="main">Main music</string>
+    <string name="wall">Wall music</string>
     <string-array name="slider_menu">
         <item >MUSIC</item>
         <item >My music</item>

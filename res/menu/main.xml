@@ -1,6 +1,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-	<item android:id="@+id/menu_start_download_service"
-          android:title="@string/download_selected"
-          android:showAsAction="always"
-          android:icon="@drawable/ic_menu_download"/>
+
+    <item
+        android:id="@+id/menu_start_download_service"
+        android:icon="@drawable/ic_menu_download"
+        android:showAsAction="always"
+        android:title="@string/download_selected"/>
+    <item
+        android:id="@+id/submenu"
+        android:icon="@drawable/ic_menu_moreover"
+        android:showAsAction="always"
+        android:title="@string/wallmain">
+        <menu>
+            <item
+                android:id="@+id/menu_main"
+                android:icon="@drawable/ic_menu_main"
+                android:title="@string/main"/>
+            <item
+                android:id="@+id/menu_wall"
+                android:icon="@drawable/ic_menu_wall"
+                android:title="@string/wall"/>
+        </menu>
+    </item>
+
 </menu>

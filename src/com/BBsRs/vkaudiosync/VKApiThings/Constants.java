@@ -24,6 +24,12 @@ public class Constants {
 	public static final int FRIENDS = 0;
 	public static final int GROUPS = 1;
 	
+	//THIRD
+	public static final String BUNDLE_MAIN_WALL_TYPE = "main_wall_type";
+	
+	public static final int MAIN_MUSIC = 0;
+	public static final int WALL_MUSIC = 1;
+	
 	public static final String FRIENDS_FRAGMENT = "friends_fragment";
 	public static final String GROUPS_FRAGMENT = "groups_fragment";
 	

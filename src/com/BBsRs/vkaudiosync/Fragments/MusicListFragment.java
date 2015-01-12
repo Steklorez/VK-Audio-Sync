@@ -306,33 +306,40 @@ public class MusicListFragment extends Fragment {
                             	musicCollection = new ArrayList<MusicCollection>();
                             	ArrayList<Audio> musicList = new ArrayList<Audio>();
                             	
-                            	switch (bundle.getInt(Constants.BUNDLE_MUSIC_TYPE)){
-                            	case Constants.MAIN_MUSIC_USER:
-                            		musicList = api.getAudio(bundle.getLong(Constants.BUNDLE_USER_ID), null, null, null, null, null);
-                            		
-                            		 Collection<Long> u = new ArrayList<Long>();
-                                     u.add(bundle.getLong(Constants.BUNDLE_USER_ID));
-                                     Collection<String> d = new ArrayList<String>();
-                                     d.add("");
+                            	switch (bundle.getInt(Constants.BUNDLE_MAIN_WALL_TYPE)){
+                            	case Constants.MAIN_MUSIC:
+                            		switch (bundle.getInt(Constants.BUNDLE_MUSIC_TYPE)){
+                                	case Constants.MAIN_MUSIC_USER:
+                                		musicList = api.getAudio(bundle.getLong(Constants.BUNDLE_USER_ID), null, null, null, null, null);
+                                		
+                                		 Collection<Long> u = new ArrayList<Long>();
+                                         u.add(bundle.getLong(Constants.BUNDLE_USER_ID));
+                                         Collection<String> d = new ArrayList<String>();
+                                         d.add("");
 
-                                     User userOne = api.getProfiles(u, d, "", "", "", "").get(0);
-                                     PlaceName = userOne.first_name+" "+userOne.last_name;
+                                         User userOne = api.getProfiles(u, d, "", "", "", "").get(0);
+                                         PlaceName = userOne.first_name+" "+userOne.last_name;
+                                		break;
+                                	case Constants.MAIN_MUSIC_GROUP:
+                                		musicList = api.getAudio(null, bundle.getLong(Constants.BUNDLE_GROUP_ID), null, null, null, null);
+                                        for (Group one :  api.getUserGroups(bundle.getLong(Constants.BUNDLE_USER_ID)))
+                                        	if (one.gid == bundle.getLong(Constants.BUNDLE_GROUP_ID))
+                                        		PlaceName = one.name;
+                                		break;
+                                	case Constants.RECOMMENDATIONS:
+                                		musicList = api.getAudioRecommendations();
+                                		PlaceName = getActivity().getResources().getStringArray(R.array.slider_menu)[2];
+                                		break;
+                                	case Constants.POPULAR:
+                                		musicList = api.getAudioPopular();
+                                		PlaceName = getActivity().getResources().getStringArray(R.array.slider_menu)[3];
+                                		break;
+                                	}
                             		break;
-                            	case Constants.MAIN_MUSIC_GROUP:
-                            		musicList = api.getAudio(null, bundle.getLong(Constants.BUNDLE_GROUP_ID), null, null, null, null);
-                                    for (Group one :  api.getUserGroups(bundle.getLong(Constants.BUNDLE_USER_ID)))
-                                    	if (one.gid == bundle.getLong(Constants.BUNDLE_GROUP_ID))
-                                    		PlaceName = one.name;
-                            		break;
-                            	case Constants.RECOMMENDATIONS:
-                            		musicList = api.getAudioRecommendations();
-                            		PlaceName = getActivity().getResources().getStringArray(R.array.slider_menu)[2];
-                            		break;
-                            	case Constants.POPULAR:
-                            		musicList = api.getAudioPopular();
-                            		PlaceName = getActivity().getResources().getStringArray(R.array.slider_menu)[3];
+                            	case Constants.WALL_MUSIC:
                             		break;
                             	}
+                            	
                             	for (Audio one : musicList){
                             		f = new File(android.os.Environment.getExternalStorageDirectory()+"/Music/"+(one.artist+" - "+one.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
                             		if (f.exists())

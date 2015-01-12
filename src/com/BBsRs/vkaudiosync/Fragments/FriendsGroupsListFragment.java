@@ -204,6 +204,8 @@ public class FriendsGroupsListFragment extends Fragment {
             		ft.addToBackStack(Constants.GROUPS_FRAGMENT);
             		break;
             	}
+	           	
+	            bundleMusic.putInt(Constants.BUNDLE_MAIN_WALL_TYPE, Constants.MAIN_MUSIC);
 				
 	           	MusicListFragment musicListFragment = new MusicListFragment();
 	           	

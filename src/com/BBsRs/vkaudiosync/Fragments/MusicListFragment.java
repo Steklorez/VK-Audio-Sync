@@ -42,9 +42,11 @@ import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 import com.BBsRs.vkaudiosync.collection.MusicCollection;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.perm.kate.api.Api;
+import com.perm.kate.api.Attachment;
 import com.perm.kate.api.Audio;
 import com.perm.kate.api.Group;
 import com.perm.kate.api.User;
+import com.perm.kate.api.WallMessage;
 
 public class MusicListFragment extends Fragment {
 	
@@ -372,6 +374,27 @@ public class MusicListFragment extends Fragment {
                                 	}
                             		break;
                             	case Constants.WALL_MUSIC:
+                            		switch (bundle.getInt(Constants.BUNDLE_MUSIC_TYPE)){
+                                	case Constants.MAIN_MUSIC_USER:
+                                		ArrayList<WallMessage> wallMessageList = new ArrayList<WallMessage>();
+                                		wallMessageList = api.getWallMessages(bundle.getLong(Constants.BUNDLE_USER_ID), 10, 0, null);
+                                		for (WallMessage one : wallMessageList){
+                                			for (Attachment oneA : one.attachments)
+                                				try {
+                                					if (oneA.audio.artist != null)
+                                					musicList.add(oneA.audio);
+                                				} catch (NullPointerException e){
+                                					e.printStackTrace();
+                                				}
+                                		}
+                                		break;
+                                	case Constants.MAIN_MUSIC_GROUP:
+                                		break;
+                                	case Constants.RECOMMENDATIONS:
+                                		break;
+                                	case Constants.POPULAR:
+                                		break;
+                                	}
                             		break;
                             	}
                             	

@@ -7,12 +7,10 @@ import java.util.Collection;
 
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Fragment;
-import org.holoeverywhere.widget.ArrayAdapter;
 import org.holoeverywhere.widget.Button;
 import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.RelativeLayout;
 import org.holoeverywhere.widget.TextView;
-import org.holoeverywhere.widget.Toast;
 
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
@@ -26,8 +24,6 @@ import android.content.IntentFilter;
 import android.content.res.Resources.NotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBar.TabListener;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,7 +45,7 @@ import com.perm.kate.api.Audio;
 import com.perm.kate.api.Group;
 import com.perm.kate.api.User;
 
-public class MusicListFragment extends Fragment implements ActionBar.OnNavigationListener{
+public class MusicListFragment extends Fragment {
 	
 	//android views where shows content
 	private PullToRefreshLayout mPullToRefreshLayout;
@@ -121,16 +117,6 @@ public class MusicListFragment extends Fragment implements ActionBar.OnNavigatio
         if(account.access_token!=null)
             api=new Api(account.access_token, Constants.API_ID);
         /*----------------------------VK API-----------------------------*/
-        
-        ActionBar bar = getSupportActionBar();
-        bar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        
-        String[] data = new String[] { "one", "two", "three" };
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-            android.R.layout.simple_spinner_item, data);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        bar.setListNavigationCallbacks(adapter, this);
         
         //init pull to refresh module
         ActionBarPullToRefresh.from(getActivity())
@@ -418,11 +404,5 @@ public class MusicListFragment extends Fragment implements ActionBar.OnNavigatio
             }
         }
         return false;
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-      Toast.makeText(getActivity(), "1", Toast.LENGTH_LONG).show();
-      return false;
     }
 }

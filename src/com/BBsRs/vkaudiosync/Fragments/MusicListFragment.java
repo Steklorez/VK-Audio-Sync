@@ -24,6 +24,7 @@ import android.content.IntentFilter;
 import android.content.res.Resources.NotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -224,6 +225,40 @@ public class MusicListFragment extends Fragment {
 	    	  serviceIntent.putExtra(Constants.BUNDLE_USER_ID, bundle.getLong(Constants.BUNDLE_USER_ID));
 	    	  serviceIntent.putExtra(Constants.BUNDLE_GROUP_ID, bundle.getLong(Constants.BUNDLE_GROUP_ID));
 	    	  getActivity().startService(serviceIntent);
+	    	  break;
+	      case R.id.menu_main:
+	    	  Bundle bundleMusic = new Bundle();
+	    	  final FragmentTransaction ft = getFragmentManager().beginTransaction();
+	    	  
+           	  bundleMusic.putInt(Constants.BUNDLE_MUSIC_TYPE, bundle.getInt(Constants.BUNDLE_MUSIC_TYPE));
+           	  bundleMusic.putLong(Constants.BUNDLE_USER_ID, bundle.getLong(Constants.BUNDLE_USER_ID));
+           	  bundleMusic.putLong(Constants.BUNDLE_GROUP_ID, bundle.getLong(Constants.BUNDLE_GROUP_ID));
+           	  bundleMusic.putInt(Constants.BUNDLE_MAIN_WALL_TYPE, Constants.MAIN_MUSIC);
+           		
+           	  MusicListFragment musicListFragment = new MusicListFragment();
+           	
+           	  musicListFragment.setArguments(bundleMusic);
+           	
+           	  //replace fragment
+           	  ft.replace(R.id.contentView, musicListFragment); 
+           	  ft.commit(); 
+	    	  break;
+	      case R.id.menu_wall:
+	    	  Bundle bundleMusic2 = new Bundle();
+	    	  final FragmentTransaction ft2 = getFragmentManager().beginTransaction();
+	    	  
+           	  bundleMusic2.putInt(Constants.BUNDLE_MUSIC_TYPE, bundle.getInt(Constants.BUNDLE_MUSIC_TYPE));
+           	  bundleMusic2.putLong(Constants.BUNDLE_USER_ID, bundle.getLong(Constants.BUNDLE_USER_ID));
+           	  bundleMusic2.putLong(Constants.BUNDLE_GROUP_ID, bundle.getLong(Constants.BUNDLE_GROUP_ID));
+           	  bundleMusic2.putInt(Constants.BUNDLE_MAIN_WALL_TYPE, Constants.WALL_MUSIC);
+           		
+           	  MusicListFragment musicListFragment2 = new MusicListFragment();
+           	
+           	  musicListFragment2.setArguments(bundleMusic2);
+           	
+           	  //replace fragment
+           	  ft2.replace(R.id.contentView, musicListFragment2); 
+           	  ft2.commit(); 
 	    	  break;
 	      }
 		return true;

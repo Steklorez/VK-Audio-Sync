@@ -33,6 +33,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.Adapters.MusicAdapter;
@@ -377,15 +379,17 @@ public class MusicListFragment extends Fragment {
                             		switch (bundle.getInt(Constants.BUNDLE_MUSIC_TYPE)){
                                 	case Constants.MAIN_MUSIC_USER:
                                 		ArrayList<WallMessage> wallMessageList = new ArrayList<WallMessage>();
-                                		wallMessageList = api.getWallMessages(bundle.getLong(Constants.BUNDLE_USER_ID), 10, 0, null);
+                                		
+                                		while (true){
+                                			ArrayList<WallMessage> wallMessageListTemp = api.getWallMessages(bundle.getLong(Constants.BUNDLE_USER_ID), 100, wallMessageList.size(), null);
+                                			wallMessageList.addAll(wallMessageListTemp);
+                                			if (wallMessageListTemp.size()<100)
+                                				break;
+                                		}
                                 		for (WallMessage one : wallMessageList){
                                 			for (Attachment oneA : one.attachments)
-                                				try {
-                                					if (oneA.audio.artist != null)
-                                					musicList.add(oneA.audio);
-                                				} catch (NullPointerException e){
-                                					e.printStackTrace();
-                                				}
+                                				if (oneA.audio != null)
+                                				musicList.add(oneA.audio);
                                 		}
                                 		break;
                                 	case Constants.MAIN_MUSIC_GROUP:

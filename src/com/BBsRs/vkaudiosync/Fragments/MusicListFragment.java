@@ -143,7 +143,14 @@ public class MusicListFragment extends Fragment {
 	         customOnRefreshListener.onRefreshStarted(null);
 	      // set action bar
          	getSupportActionBar().setTitle(PlaceName);
-         	getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
+         	switch (bundle.getInt(Constants.BUNDLE_MAIN_WALL_TYPE)){
+    		case Constants.MAIN_MUSIC:
+    			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_main));
+    			break;
+    		case Constants.WALL_MUSIC:
+    			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_wall));
+    			break;
+    		}
 	    }
 	    else{
 	    	musicCollection = savedInstanceState.getParcelableArrayList(Constants.EXTRA_MUSIC_COLLECTION);
@@ -155,7 +162,14 @@ public class MusicListFragment extends Fragment {
                 
                 // set action bar
             	getSupportActionBar().setTitle(PlaceName);
-            	getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
+            	switch (bundle.getInt(Constants.BUNDLE_MAIN_WALL_TYPE)){
+        		case Constants.MAIN_MUSIC:
+        			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_main));
+        			break;
+        		case Constants.WALL_MUSIC:
+        			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_wall));
+        			break;
+        		}
                 
                 listViewMusic.setAdapter(musicAdapter);
                 listViewMusic.setSelection(savedInstanceState.getInt("posX"));
@@ -166,7 +180,14 @@ public class MusicListFragment extends Fragment {
 	         	customOnRefreshListener.onRefreshStarted(null);	
 	         	 // set action bar
             	getSupportActionBar().setTitle(PlaceName);
-            	getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
+            	switch (bundle.getInt(Constants.BUNDLE_MAIN_WALL_TYPE)){
+        		case Constants.MAIN_MUSIC:
+        			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_main));
+        			break;
+        		case Constants.WALL_MUSIC:
+        			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_wall));
+        			break;
+        		}
 	    	}
 	    }
 	    
@@ -282,7 +303,14 @@ public class MusicListFragment extends Fragment {
         
     	 // set action bar
     	getSupportActionBar().setTitle(PlaceName);
-    	getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
+    	switch (bundle.getInt(Constants.BUNDLE_MAIN_WALL_TYPE)){
+		case Constants.MAIN_MUSIC:
+			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_main));
+			break;
+		case Constants.WALL_MUSIC:
+			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_wall));
+			break;
+		}
     	
     	//check if audio downloaded
     	try {
@@ -391,6 +419,13 @@ public class MusicListFragment extends Fragment {
                                 				if (oneA.audio != null)
                                 				musicList.add(oneA.audio);
                                 		}
+                                		Collection<Long> u = new ArrayList<Long>();
+                                        u.add(bundle.getLong(Constants.BUNDLE_USER_ID));
+                                        Collection<String> d = new ArrayList<String>();
+                                        d.add("");
+
+                                        User userOne = api.getProfiles(u, d, "", "", "", "").get(0);
+                                        PlaceName = userOne.first_name+" "+userOne.last_name;
                                 		break;
                                 	case Constants.MAIN_MUSIC_GROUP:
                                 		break;
@@ -446,7 +481,14 @@ public class MusicListFragment extends Fragment {
 
                     		// set action bar
                     		getSupportActionBar().setTitle(PlaceName);
-                    		getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs));
+                    		switch (bundle.getInt(Constants.BUNDLE_MAIN_WALL_TYPE)){
+                    		case Constants.MAIN_MUSIC:
+                    			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_main));
+                    			break;
+                    		case Constants.WALL_MUSIC:
+                    			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_wall));
+                    			break;
+                    		}
                     
                    			listViewMusic.setAdapter(musicAdapter);
                    

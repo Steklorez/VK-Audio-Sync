@@ -24,7 +24,6 @@ import android.content.IntentFilter;
 import android.content.res.Resources.NotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,8 +32,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.Adapters.MusicAdapter;
@@ -252,38 +249,14 @@ public class MusicListFragment extends Fragment {
 	    	  getActivity().startService(serviceIntent);
 	    	  break;
 	      case R.id.menu_main:
-	    	  Bundle bundleMusic = new Bundle();
-	    	  final FragmentTransaction ft = getFragmentManager().beginTransaction();
-	    	  
-           	  bundleMusic.putInt(Constants.BUNDLE_MUSIC_TYPE, bundle.getInt(Constants.BUNDLE_MUSIC_TYPE));
-           	  bundleMusic.putLong(Constants.BUNDLE_USER_ID, bundle.getLong(Constants.BUNDLE_USER_ID));
-           	  bundleMusic.putLong(Constants.BUNDLE_GROUP_ID, bundle.getLong(Constants.BUNDLE_GROUP_ID));
-           	  bundleMusic.putInt(Constants.BUNDLE_MAIN_WALL_TYPE, Constants.MAIN_MUSIC);
-           		
-           	  MusicListFragment musicListFragment = new MusicListFragment();
-           	
-           	  musicListFragment.setArguments(bundleMusic);
-           	
-           	  //replace fragment
-           	  ft.replace(R.id.contentView, musicListFragment); 
-           	  ft.commit(); 
+	    	  bundle.putInt(Constants.BUNDLE_MAIN_WALL_TYPE, Constants.MAIN_MUSIC);
+           	  mPullToRefreshLayout.setRefreshing(true);
+           	  customOnRefreshListener.onRefreshStarted(null);
 	    	  break;
 	      case R.id.menu_wall:
-	    	  Bundle bundleMusic2 = new Bundle();
-	    	  final FragmentTransaction ft2 = getFragmentManager().beginTransaction();
-	    	  
-           	  bundleMusic2.putInt(Constants.BUNDLE_MUSIC_TYPE, bundle.getInt(Constants.BUNDLE_MUSIC_TYPE));
-           	  bundleMusic2.putLong(Constants.BUNDLE_USER_ID, bundle.getLong(Constants.BUNDLE_USER_ID));
-           	  bundleMusic2.putLong(Constants.BUNDLE_GROUP_ID, bundle.getLong(Constants.BUNDLE_GROUP_ID));
-           	  bundleMusic2.putInt(Constants.BUNDLE_MAIN_WALL_TYPE, Constants.WALL_MUSIC);
-           		
-           	  MusicListFragment musicListFragment2 = new MusicListFragment();
-           	
-           	  musicListFragment2.setArguments(bundleMusic2);
-           	
-           	  //replace fragment
-           	  ft2.replace(R.id.contentView, musicListFragment2); 
-           	  ft2.commit(); 
+           	  bundle.putInt(Constants.BUNDLE_MAIN_WALL_TYPE, Constants.WALL_MUSIC);
+           	  mPullToRefreshLayout.setRefreshing(true);
+           	  customOnRefreshListener.onRefreshStarted(null);
 	    	  break;
 	      }
 		return true;

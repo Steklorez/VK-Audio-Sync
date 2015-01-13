@@ -404,14 +404,13 @@ public class MusicListFragment extends Fragment {
                                 	}
                             		break;
                             	case Constants.WALL_MUSIC:
+                            		ArrayList<WallMessage> wallMessageList = new ArrayList<WallMessage>();
                             		switch (bundle.getInt(Constants.BUNDLE_MUSIC_TYPE)){
                                 	case Constants.MAIN_MUSIC_USER:
-                                		ArrayList<WallMessage> wallMessageList = new ArrayList<WallMessage>();
-                                		
                                 		while (true){
                                 			ArrayList<WallMessage> wallMessageListTemp = api.getWallMessages(bundle.getLong(Constants.BUNDLE_USER_ID), 100, wallMessageList.size(), null);
                                 			wallMessageList.addAll(wallMessageListTemp);
-                                			if (wallMessageListTemp.size()<100)
+                                			if (wallMessageListTemp.size()<100 || wallMessageList.size()>=1000)
                                 				break;
                                 		}
                                 		for (WallMessage one : wallMessageList){
@@ -428,6 +427,20 @@ public class MusicListFragment extends Fragment {
                                         PlaceName = userOne.first_name+" "+userOne.last_name;
                                 		break;
                                 	case Constants.MAIN_MUSIC_GROUP:
+                                		while (true){
+                                			ArrayList<WallMessage> wallMessageListTemp = api.getWallMessages(-bundle.getLong(Constants.BUNDLE_GROUP_ID), 100, wallMessageList.size(), null);
+                                			wallMessageList.addAll(wallMessageListTemp);
+                                			if (wallMessageListTemp.size()<100 || wallMessageList.size()>=1000)
+                                				break;
+                                		}
+                                		for (WallMessage one : wallMessageList){
+                                			for (Attachment oneA : one.attachments)
+                                				if (oneA.audio != null)
+                                				musicList.add(oneA.audio);
+                                		}
+                                		for (Group one :  api.getUserGroups(bundle.getLong(Constants.BUNDLE_USER_ID)))
+                                        	if (one.gid == bundle.getLong(Constants.BUNDLE_GROUP_ID))
+                                        		PlaceName = one.name;
                                 		break;
                                 	case Constants.RECOMMENDATIONS:
                                 		break;

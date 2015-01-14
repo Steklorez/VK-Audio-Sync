@@ -111,6 +111,10 @@ public class MusicListFragment extends Fragment {
     	errorMessage = (TextView)contentView.findViewById(R.id.errorMessage);
     	errorRetryButton = (Button)contentView.findViewById(R.id.errorRetryButton);
     	
+    	//clean ab title and subtitle
+     	getSupportActionBar().setTitle("");
+     	getSupportActionBar().setSubtitle("");
+    	
     	/*----------------------------VK API-----------------------------*/
     	//retrieve old session
         account.restore(getActivity());
@@ -138,16 +142,6 @@ public class MusicListFragment extends Fragment {
 	    if(savedInstanceState == null) {
 	    	 mPullToRefreshLayout.setRefreshing(true);
 	         customOnRefreshListener.onRefreshStarted(null);
-	      // set action bar
-         	getSupportActionBar().setTitle(PlaceName);
-         	switch (bundle.getInt(Constants.BUNDLE_MAIN_WALL_TYPE)){
-    		case Constants.MAIN_MUSIC:
-    			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_main));
-    			break;
-    		case Constants.WALL_MUSIC:
-    			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_wall));
-    			break;
-    		}
 	    }
 	    else{
 	    	musicCollection = savedInstanceState.getParcelableArrayList(Constants.EXTRA_MUSIC_COLLECTION);
@@ -157,17 +151,6 @@ public class MusicListFragment extends Fragment {
 	    		
 	    		PlaceName = savedInstanceState.getString("PlaceName");
                 
-                // set action bar
-            	getSupportActionBar().setTitle(PlaceName);
-            	switch (bundle.getInt(Constants.BUNDLE_MAIN_WALL_TYPE)){
-        		case Constants.MAIN_MUSIC:
-        			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_main));
-        			break;
-        		case Constants.WALL_MUSIC:
-        			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_wall));
-        			break;
-        		}
-                
                 listViewMusic.setAdapter(musicAdapter);
                 listViewMusic.setSelection(savedInstanceState.getInt("posX"));
 	    	}
@@ -175,16 +158,6 @@ public class MusicListFragment extends Fragment {
 	    	else {
 	    		mPullToRefreshLayout.setRefreshing(true);
 	         	customOnRefreshListener.onRefreshStarted(null);	
-	         	 // set action bar
-            	getSupportActionBar().setTitle(PlaceName);
-            	switch (bundle.getInt(Constants.BUNDLE_MAIN_WALL_TYPE)){
-        		case Constants.MAIN_MUSIC:
-        			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_main));
-        			break;
-        		case Constants.WALL_MUSIC:
-        			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_wall));
-        			break;
-        		}
 	    	}
 	    }
 	    
@@ -195,9 +168,6 @@ public class MusicListFragment extends Fragment {
 				mPullToRefreshLayout.setRefreshing(true);
 		        customOnRefreshListener.onRefreshStarted(null);
 		        errorRetryButton.setEnabled(false);
-		        // set action bar
-	         	getSupportActionBar().setTitle("");
-	         	getSupportActionBar().setSubtitle("");
 			}
 		});
         
@@ -276,6 +246,7 @@ public class MusicListFragment extends Fragment {
         
     	 // set action bar
     	getSupportActionBar().setTitle(PlaceName);
+    	if (!customOnRefreshListener.isRefreshing)
     	switch (bundle.getInt(Constants.BUNDLE_MAIN_WALL_TYPE)){
 		case Constants.MAIN_MUSIC:
 			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_main));
@@ -334,9 +305,12 @@ public class MusicListFragment extends Fragment {
 	
     public class  CustomOnRefreshListener implements OnRefreshListener{
 
+    	public boolean isRefreshing = false;
+    	
 		@Override
 		public void onRefreshStarted(View view) {
-			// TODO Auto-generated method stub
+			isRefreshing = true;
+    		getSupportActionBar().setSubtitle(getResources().getString(R.string.refreshing));
 			new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
@@ -444,6 +418,7 @@ public class MusicListFragment extends Fragment {
                 @Override
                 protected void onPostExecute(Void result) {
                     super.onPostExecute(result);
+                    isRefreshing = false;
                     try {
                     	if (!isMyServiceRunning(DownloadService.class))
                     		mPullToRefreshLayout.setRefreshing(false);

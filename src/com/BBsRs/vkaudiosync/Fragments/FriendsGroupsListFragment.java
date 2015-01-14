@@ -93,6 +93,10 @@ public class FriendsGroupsListFragment extends Fragment {
     	errorMessage = (TextView)contentView.findViewById(R.id.errorMessage);
     	errorRetryButton = (Button)contentView.findViewById(R.id.errorRetryButton);
     	
+    	//clean ab title and subtitle
+     	getSupportActionBar().setTitle("");
+     	getSupportActionBar().setSubtitle("");
+    	
     	/*----------------------------VK API-----------------------------*/
     	//retrieve old session
         account.restore(getActivity());
@@ -120,16 +124,6 @@ public class FriendsGroupsListFragment extends Fragment {
 	    if(savedInstanceState == null) {
 	    	 mPullToRefreshLayout.setRefreshing(true);
 	         customOnRefreshListener.onRefreshStarted(null);
-	      // set action bar
-         	getSupportActionBar().setTitle(PlaceName);
-         	switch (bundle.getInt(Constants.BUNDLE_FRIENDS_GROUPS_TYPE)){
-         	case Constants.FRIENDS:
-         		getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_people));
-         		break;
-         	case Constants.GROUPS:
-         		getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_groups));
-         		break;
-         	}
 	    }
 	    else{
 	    	friendsGroupsCollection = savedInstanceState.getParcelableArrayList("friendsGroupsCollection");
@@ -139,17 +133,6 @@ public class FriendsGroupsListFragment extends Fragment {
 	    		
 	    		PlaceName = savedInstanceState.getString("PlaceName");
                 
-                // set action bar
-            	getSupportActionBar().setTitle(PlaceName);
-            	switch (bundle.getInt(Constants.BUNDLE_FRIENDS_GROUPS_TYPE)){
-            	case Constants.FRIENDS:
-            		getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_people));
-            		break;
-            	case Constants.GROUPS:
-            		getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_groups));
-            		break;
-            	}
-                
                 listViewFriendsGroups.setAdapter(friendsGroupsAdapter);
                 listViewFriendsGroups.setSelection(savedInstanceState.getInt("posX"));
 	    	}
@@ -157,16 +140,6 @@ public class FriendsGroupsListFragment extends Fragment {
 	    	else {
 	    		mPullToRefreshLayout.setRefreshing(true);
 	         	customOnRefreshListener.onRefreshStarted(null);	
-	         // set action bar
-            	getSupportActionBar().setTitle(PlaceName);
-            	switch (bundle.getInt(Constants.BUNDLE_FRIENDS_GROUPS_TYPE)){
-            	case Constants.FRIENDS:
-            		getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_people));
-            		break;
-            	case Constants.GROUPS:
-            		getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_groups));
-            		break;
-            	}
 	    	}
 	    }
 	    
@@ -177,9 +150,6 @@ public class FriendsGroupsListFragment extends Fragment {
 				mPullToRefreshLayout.setRefreshing(true);
 		        customOnRefreshListener.onRefreshStarted(null);
 		        errorRetryButton.setEnabled(false);
-		        // set action bar
-	         	getSupportActionBar().setTitle("");
-	         	getSupportActionBar().setSubtitle("");
 			}
 		});
         
@@ -223,8 +193,10 @@ public class FriendsGroupsListFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		
 		// set action bar
     	getSupportActionBar().setTitle(PlaceName);
+    	if (!customOnRefreshListener.isRefreshing)
     	switch (bundle.getInt(Constants.BUNDLE_FRIENDS_GROUPS_TYPE)){
     	case Constants.FRIENDS:
     		getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_people));
@@ -247,10 +219,13 @@ public class FriendsGroupsListFragment extends Fragment {
 	}
 	
     public class  CustomOnRefreshListener implements OnRefreshListener{
+    	
+    	public boolean isRefreshing = false;
 
 		@Override
 		public void onRefreshStarted(View view) {
-			// TODO Auto-generated method stub
+			isRefreshing = true;
+			getSupportActionBar().setSubtitle(getResources().getString(R.string.refreshing));
 			new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
@@ -264,8 +239,6 @@ public class FriendsGroupsListFragment extends Fragment {
                             	case Constants.FRIENDS:
                             		ArrayList<User> FriendsList = new ArrayList<User>();
                             		FriendsList = api.getFriends(bundle.getLong(Constants.BUNDLE_USER_ID), "photo_100", null, null, null);
-//                            		api.getFCriends(user_id, fields, lid, captcha_key, captcha_sid)
-//                            		api.getfr
                             		PlaceName = getResources().getStringArray(R.array.slider_menu)[2];
                             		
                             		for (User one : FriendsList)
@@ -309,6 +282,7 @@ public class FriendsGroupsListFragment extends Fragment {
                 @Override
                 protected void onPostExecute(Void result) {
                     super.onPostExecute(result);
+                    isRefreshing = false;
                     mPullToRefreshLayout.setRefreshing(false);
                     if (!error){
                     	listViewFriendsGroups.setVisibility(View.VISIBLE);

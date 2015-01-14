@@ -17,6 +17,7 @@
     <string name="wallmain">Main music | Wall music</string>
     <string name="main">Main music</string>
     <string name="wall">Wall music</string>
+    <string name="refreshing">Refreshing...</string>
     <string-array name="slider_menu">
         <item >MUSIC</item>
         <item >My music</item>

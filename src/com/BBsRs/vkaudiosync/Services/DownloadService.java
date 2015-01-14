@@ -185,7 +185,7 @@ public class DownloadService extends Service {
 		           //download bitmap from web
 		           Bitmap bmp = ImageLoader.getInstance().loadImageSync(Constants.GOOGLE_IMAGE_REQUEST_URL + URLEncoder.encode(oneItem.artist+" - "+oneItem.title, Constants.DEFAULT_CHARSET), true);
 		           if (bmp==null) 
-		        	   bmp = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.ic_music_stub);
+		        	   bmp = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.ic_simple_music_stub);
 		           
 		           Log.d("DownloadManager", "crop and compress bitmap to png");
 		           ByteArrayOutputStream stream = new ByteArrayOutputStream();

@@ -128,7 +128,7 @@ public class MusicListFragment extends Fragment {
         
         //init image loader
         options = new DisplayImageOptions.Builder()
-        .showStubImage(R.drawable.ic_music_stub)
+        .showStubImage(R.drawable.ic_simple_music_stub)
         //.showImageForEmptyUri(R.drawable.logo)
         .cacheOnDisc(true)	
         .cacheInMemory(true)					

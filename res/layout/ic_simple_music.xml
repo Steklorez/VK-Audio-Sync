@@ -11,8 +11,7 @@
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:layout_alignParentLeft="true"
-        android:scaleType="centerCrop"
-        android:src="@drawable/avatar_small" />
+        android:scaleType="centerCrop"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -41,7 +40,6 @@
             android:layout_toLeftOf="@+id/checlDownload"
             android:gravity="center_vertical"
             android:padding="@dimen/simple_music_three"
-            android:text="03:25"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/text_color_gray"
             android:textSize="16sp" />
@@ -62,7 +60,6 @@
                 android:layout_height="wrap_content"
                 android:lines="1"
                 android:paddingLeft="@dimen/simple_music_two"
-                android:text="Rihanna ft. Kesha"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/text_color_white"
                 android:textSize="16sp" />
@@ -73,7 +70,6 @@
                 android:layout_height="wrap_content"
                 android:lines="1"
                 android:paddingLeft="@dimen/simple_music_two"
-                android:text="Medium Text"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/text_color_gray"
                 android:textSize="15sp" />

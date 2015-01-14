@@ -366,14 +366,6 @@ public class MusicListFragment extends Fragment {
                                         	if (one.gid == bundle.getLong(Constants.BUNDLE_GROUP_ID))
                                         		PlaceName = one.name;
                                 		break;
-                                	case Constants.RECOMMENDATIONS:
-                                		musicList = api.getAudioRecommendations();
-                                		PlaceName = getActivity().getResources().getStringArray(R.array.slider_menu)[2];
-                                		break;
-                                	case Constants.POPULAR:
-                                		musicList = api.getAudioPopular();
-                                		PlaceName = getActivity().getResources().getStringArray(R.array.slider_menu)[3];
-                                		break;
                                 	}
                             		break;
                             	case Constants.WALL_MUSIC:
@@ -414,10 +406,6 @@ public class MusicListFragment extends Fragment {
                                 		for (Group one :  api.getUserGroups(bundle.getLong(Constants.BUNDLE_USER_ID)))
                                         	if (one.gid == bundle.getLong(Constants.BUNDLE_GROUP_ID))
                                         		PlaceName = one.name;
-                                		break;
-                                	case Constants.RECOMMENDATIONS:
-                                		break;
-                                	case Constants.POPULAR:
                                 		break;
                                 	}
                             		break;

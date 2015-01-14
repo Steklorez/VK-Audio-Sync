@@ -13,11 +13,9 @@
         <menu>
             <item
                 android:id="@+id/menu_main"
-                android:icon="@drawable/ic_menu_main"
                 android:title="@string/main"/>
             <item
                 android:id="@+id/menu_wall"
-                android:icon="@drawable/ic_menu_wall"
                 android:title="@string/wall"/>
         </menu>
     </item>

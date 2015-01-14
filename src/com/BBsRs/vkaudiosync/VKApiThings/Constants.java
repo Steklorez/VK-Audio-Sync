@@ -15,8 +15,6 @@ public class Constants {
 	
 	public static final int MAIN_MUSIC_USER = 0;
 	public static final int MAIN_MUSIC_GROUP = 1;
-	public static final int RECOMMENDATIONS = 2;
-	public static final int POPULAR = 3;
 	
 	//SECOND
 	public static final String BUNDLE_FRIENDS_GROUPS_TYPE = "friends_groups_type";

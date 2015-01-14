@@ -266,7 +266,7 @@ public class FriendsGroupsListFragment extends Fragment {
                             		FriendsList = api.getFriends(bundle.getLong(Constants.BUNDLE_USER_ID), "photo_100", null, null, null);
 //                            		api.getFCriends(user_id, fields, lid, captcha_key, captcha_sid)
 //                            		api.getfr
-                            		PlaceName = getResources().getStringArray(R.array.slider_menu)[4];
+                            		PlaceName = getResources().getStringArray(R.array.slider_menu)[2];
                             		
                             		for (User one : FriendsList)
                             		friendsGroupsCollection.add(new FriendsGroupsCollection(one.uid, one.first_name+" "+one.last_name, one.photo_medium_rec));
@@ -277,7 +277,7 @@ public class FriendsGroupsListFragment extends Fragment {
                             		ArrayList<Group> GroupsList = new ArrayList<Group>();
                             		GroupsList = api.getUserGroups(bundle.getLong(Constants.BUNDLE_USER_ID));
                             		
-                            		PlaceName = getResources().getStringArray(R.array.slider_menu)[5];
+                            		PlaceName = getResources().getStringArray(R.array.slider_menu)[3];
                             		
                             		for (Group one : GroupsList)
                                 		friendsGroupsCollection.add(new FriendsGroupsCollection(one.gid, one.name, one.photo_medium));

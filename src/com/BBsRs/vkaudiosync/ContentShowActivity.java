@@ -49,14 +49,6 @@ public class ContentShowActivity extends Activity {
         bundleMyMusic.putInt(Constants.BUNDLE_MUSIC_TYPE, Constants.MAIN_MUSIC_USER);
         bundleMyMusic.putInt(Constants.BUNDLE_MAIN_WALL_TYPE, Constants.MAIN_MUSIC);
         
-        Bundle bundlePopular = new Bundle();
-        bundlePopular.putLong(Constants.BUNDLE_USER_ID, account.user_id);
-        bundlePopular.putInt(Constants.BUNDLE_MUSIC_TYPE, Constants.POPULAR);
-        
-        Bundle bundleRecommendations = new Bundle();
-        bundleRecommendations.putLong(Constants.BUNDLE_USER_ID, account.user_id);
-        bundleRecommendations.putInt(Constants.BUNDLE_MUSIC_TYPE, Constants.RECOMMENDATIONS);
-        
         Bundle bundleFriends = new Bundle();
         bundleFriends.putLong(Constants.BUNDLE_USER_ID, account.user_id);
         bundleFriends.putInt(Constants.BUNDLE_FRIENDS_GROUPS_TYPE, Constants.FRIENDS);
@@ -67,12 +59,8 @@ public class ContentShowActivity extends Activity {
         
         sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[0].toUpperCase()).setCustomLayout(R.layout.custom_slider_menu_item).clickable(false).setTextAppereance(1);
         sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[1], MusicListFragment.class, bundleMyMusic, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
-//        sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[2], MusicListFragment.class, bundleRecommendations, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
-//        sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[3], MusicListFragment.class, bundlePopular, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
-        sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[4], FriendsGroupsListFragment.class, bundleFriends, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1).setTag(Constants.FRIENDS_FRAGMENT);
-        sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[5], FriendsGroupsListFragment.class, bundleGroups, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1).setTag(Constants.GROUPS_FRAGMENT);
-        
-//        sliderMenu.add(label, fragmentClass, fragmentArguments, colors)
+        sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[2], FriendsGroupsListFragment.class, bundleFriends, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1).setTag(Constants.FRIENDS_FRAGMENT);
+        sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[3], FriendsGroupsListFragment.class, bundleGroups, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1).setTag(Constants.GROUPS_FRAGMENT);
         
         if (savedInstanceState == null)
         sliderMenu.setCurrentPage(1);

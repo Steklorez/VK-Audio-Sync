@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceCategory android:title="@string/downloading" >
+        <Preference
+            android:id="@+id/preference_directory"
+            android:icon="@drawable/ic_settings_folder"
+            android:key="preference_name"
+            android:title="@string/download_direcotry" />
+        
+        </PreferenceCategory>
+
+</PreferenceScreen>

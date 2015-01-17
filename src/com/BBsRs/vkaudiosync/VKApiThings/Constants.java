@@ -35,7 +35,7 @@ public class Constants {
 	public static final String OPEN_MENU_DRAWER = "open_menu_drawer";
 	public static final String MUSIC_DOWNLOADED = "downloaded";
 	
-	public static final String MUSIC_INDEX_DOWNLOADED = "index";
+	public static final String MUSIC_AID_DOWNLOADED = "aid";
 	public static final String MUSIC_SUCCESSFULLY_DOWNLOADED = "successfully";
 	public static final String DOWNLOAD_SERVICE_STOPPED= "stopped";
 	

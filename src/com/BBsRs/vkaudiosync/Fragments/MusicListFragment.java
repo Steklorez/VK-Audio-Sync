@@ -210,12 +210,16 @@ public class MusicListFragment extends Fragment {
 	    	  //disable this menu button
 	    	  item.setEnabled(false); 
 	    	  item.setIcon(R.drawable.ic_menu_download_disabled);
-	    	  //disable pull to refresh
+	    	  //send only checked music
+	    	  ArrayList<MusicCollection> musicCollectionToDownload = new ArrayList<MusicCollection>();
+	    	  for (MusicCollection oneItem : musicCollection){
+					if (oneItem.checked == 1 && oneItem.exist == 0) {
+						musicCollectionToDownload.add(oneItem);
+					}
+				}
 	    	  //start service
 	    	  Intent serviceIntent = new Intent(getActivity(), DownloadService.class); 
-	    	  serviceIntent.putExtra(Constants.EXTRA_MUSIC_COLLECTION, musicCollection);
-	    	  serviceIntent.putExtra(Constants.BUNDLE_USER_ID, bundle.getLong(Constants.BUNDLE_USER_ID));
-	    	  serviceIntent.putExtra(Constants.BUNDLE_GROUP_ID, bundle.getLong(Constants.BUNDLE_GROUP_ID));
+	    	  serviceIntent.putExtra(Constants.EXTRA_MUSIC_COLLECTION, musicCollectionToDownload);
 	    	  getActivity().startService(serviceIntent);
 	    	  break;
 	      case R.id.menu_main:
@@ -242,7 +246,7 @@ public class MusicListFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		//turn up download receiver
-        getActivity().registerReceiver(musicDownloaded, new IntentFilter(Constants.MUSIC_DOWNLOADED + String.valueOf(bundle.getLong(Constants.BUNDLE_USER_ID) + String.valueOf(bundle.getLong(Constants.BUNDLE_GROUP_ID)))));
+        getActivity().registerReceiver(musicDownloaded, new IntentFilter(Constants.MUSIC_DOWNLOADED));
         
     	 // set action bar
     	getSupportActionBar().setTitle(PlaceName);
@@ -290,15 +294,17 @@ public class MusicListFragment extends Fragment {
 	    			mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
 	    		}
 	    	} else {
-	    		if (musicAdapter!=null && musicAdapter.getCount()>=intent.getExtras().getInt(Constants.MUSIC_INDEX_DOWNLOADED)){
-	    			musicAdapter.getItem(intent.getExtras().getInt(Constants.MUSIC_INDEX_DOWNLOADED)).checked = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
-	    			musicAdapter.getItem(intent.getExtras().getInt(Constants.MUSIC_INDEX_DOWNLOADED)).exist = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
-	    			musicAdapter.notifyDataSetChanged();
-	    		}
-	    		if (musicCollection!=null && musicCollection.size()>=intent.getExtras().getInt(Constants.MUSIC_INDEX_DOWNLOADED)){
-	    			musicCollection.get(intent.getExtras().getInt(Constants.MUSIC_INDEX_DOWNLOADED)).checked = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
-	    			musicCollection.get(intent.getExtras().getInt(Constants.MUSIC_INDEX_DOWNLOADED)).exist = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
-	    		}
+	    		int index = 0;
+	    		for (MusicCollection oneItem : musicCollection){
+	    			if (oneItem.aid == intent.getExtras().getLong(Constants.MUSIC_AID_DOWNLOADED)){
+	    				oneItem.checked = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
+	    				oneItem.exist = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
+	    				musicAdapter.getItem(index).checked = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
+		    			musicAdapter.getItem(index).exist = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
+		    			musicAdapter.notifyDataSetChanged();
+	    			}
+	    			index++;
+				}
 	    	}
 	    }
 	};

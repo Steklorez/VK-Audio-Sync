@@ -44,8 +44,6 @@ public class DownloadService extends Service {
 	
 	String LOG_TAG = "DownloadService";
 	
-	String UserGroupId = "";
-
 	ArrayList<MusicCollection> musicCollection = new ArrayList<MusicCollection>();
 	
 	PowerManager pm;
@@ -75,7 +73,6 @@ public class DownloadService extends Service {
 		else
 		{
 		musicCollection = (ArrayList<MusicCollection>) extras.get(Constants.EXTRA_MUSIC_COLLECTION);
-		UserGroupId = String.valueOf(extras.getLong(Constants.BUNDLE_USER_ID))+String.valueOf(extras.getLong(Constants.BUNDLE_GROUP_ID));
 		pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Constants.PARTIAL_WAKE_LOCK_TAG);
 		wl.acquire();
@@ -95,7 +92,7 @@ public class DownloadService extends Service {
 	public void stopServiceCustom(){
 		final Runnable updaterText = new Runnable() {
 	        public void run() {
-				Intent i = new Intent(Constants.MUSIC_DOWNLOADED+UserGroupId);
+				Intent i = new Intent(Constants.MUSIC_DOWNLOADED);
 				i.putExtra(Constants.DOWNLOAD_SERVICE_STOPPED, true);
 				sendBroadcast(i);
 	        	stopSelf();
@@ -116,18 +113,14 @@ public class DownloadService extends Service {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				int index = 0;
 				for (MusicCollection oneItem : musicCollection){
-					if (oneItem.checked == 1 && oneItem.exist == 0) {
-						not.setLatestEventInfo(getApplicationContext(), getResources().getString(R.string.downloading), oneItem.artist+" - "+oneItem.title, contentIntent);
-						mNotificationManager.notify(1, not);
-						Intent i = new Intent(Constants.MUSIC_DOWNLOADED+UserGroupId);
-						i.putExtra(Constants.MUSIC_INDEX_DOWNLOADED, index);
-						i.putExtra(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED, DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", "")));
-						i.putExtra(Constants.DOWNLOAD_SERVICE_STOPPED, false);
-						sendBroadcast(i);
-					}
-					index++;
+					not.setLatestEventInfo(getApplicationContext(), getResources().getString(R.string.downloading), oneItem.artist+" - "+oneItem.title, contentIntent);
+					mNotificationManager.notify(1, not);
+					Intent i = new Intent(Constants.MUSIC_DOWNLOADED);
+					i.putExtra(Constants.MUSIC_AID_DOWNLOADED, oneItem.aid);
+					i.putExtra(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED, DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", "")));
+					i.putExtra(Constants.DOWNLOAD_SERVICE_STOPPED, false);
+					sendBroadcast(i);
 				}
 				stopServiceCustom();
 			}

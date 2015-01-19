@@ -313,7 +313,7 @@ public class MusicListFragment extends Fragment {
     public class  CustomOnRefreshListener implements OnRefreshListener{
 
     	public boolean isRefreshing = false;
-    	public boolean isAudioDisabled = false;
+    	public byte isAudioDisabled = 0;
     	
 		@Override
 		public void onRefreshStarted(View view) {
@@ -401,7 +401,10 @@ public class MusicListFragment extends Fragment {
                             			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 0, 0));
                             	}
                             	
-        						error=false;
+                            	if (musicCollection.size() != 0)
+                            		error=false;
+                            	else 
+                            		isAudioDisabled = 2;
                             } catch (NotFoundException e) {
                             	error=true;
             					Log.e(LOG_TAG, "data Error");
@@ -416,7 +419,7 @@ public class MusicListFragment extends Fragment {
             					e.printStackTrace();
             				} catch (KException e) {
             					error=true;
-            					isAudioDisabled = true;
+            					isAudioDisabled = 1;
             	        		Log.e(LOG_TAG, "audio is disabled");
             					e.printStackTrace();
             				} catch (Exception e) {
@@ -435,22 +438,24 @@ public class MusicListFragment extends Fragment {
                     try {
                     	if (!isMyServiceRunning(DownloadService.class))
                     		mPullToRefreshLayout.setRefreshing(false);
+                    	
+                    	// set action bar
+                		getSupportActionBar().setTitle(PlaceName);
+                		switch (bundle.getInt(Constants.BUNDLE_MAIN_WALL_TYPE)){
+                		case Constants.MAIN_MUSIC:
+                			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_main));
+                			break;
+                		case Constants.WALL_MUSIC:
+                			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_wall));
+                			break;
+                		}
+                		
                     	if (!error){
                     		listViewMusic.setVisibility(View.VISIBLE);
                     		relativeErrorLayout.setVisibility(View.GONE);
                     	
                     		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options);
 
-                    		// set action bar
-                    		getSupportActionBar().setTitle(PlaceName);
-                    		switch (bundle.getInt(Constants.BUNDLE_MAIN_WALL_TYPE)){
-                    		case Constants.MAIN_MUSIC:
-                    			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_main));
-                    			break;
-                    		case Constants.WALL_MUSIC:
-                    			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_wall));
-                    			break;
-                    		}
                     
                    			listViewMusic.setAdapter(musicAdapter);
                    
@@ -462,14 +467,18 @@ public class MusicListFragment extends Fragment {
                    			errorRetryButton.setEnabled(true);
                    			// set action bar
                     		getSupportActionBar().setTitle(PlaceName);
-                    		switch (isAudioDisabled? 1 : 0){
+                    		switch (isAudioDisabled){
+                    		case 2:
+                    			errorMessage.setText(R.string.error_message_zero_count_audio);
+                    			errorRetryButton.setVisibility(View.GONE);
+                    			break;
                     		case 1:
-                    			getSupportActionBar().setSubtitle(R.string.error_message_audio_disabled);
                     			errorMessage.setText(R.string.error_message_audio_disabled);
+                    			errorRetryButton.setVisibility(View.GONE);
                     			break;
                     		case 0:
                     			errorMessage.setText(R.string.error_message);
-                    			getSupportActionBar().setSubtitle(R.string.error_message);
+                    			errorRetryButton.setVisibility(View.VISIBLE);
                     			break;
                     		}
                    		}

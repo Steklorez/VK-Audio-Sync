@@ -44,6 +44,7 @@ import com.perm.kate.api.Api;
 import com.perm.kate.api.Attachment;
 import com.perm.kate.api.Audio;
 import com.perm.kate.api.Group;
+import com.perm.kate.api.KException;
 import com.perm.kate.api.User;
 import com.perm.kate.api.WallMessage;
 
@@ -312,6 +313,7 @@ public class MusicListFragment extends Fragment {
     public class  CustomOnRefreshListener implements OnRefreshListener{
 
     	public boolean isRefreshing = false;
+    	public boolean isAudioDisabled = false;
     	
 		@Override
 		public void onRefreshStarted(View view) {
@@ -412,6 +414,11 @@ public class MusicListFragment extends Fragment {
             					error=true;
             	        		Log.e(LOG_TAG, "null Load Error"); 
             					e.printStackTrace();
+            				} catch (KException e) {
+            					error=true;
+            					isAudioDisabled = true;
+            	        		Log.e(LOG_TAG, "audio is disabled");
+            					e.printStackTrace();
             				} catch (Exception e) {
             					error=true;
             	        		Log.e(LOG_TAG, "other Load Error");
@@ -453,6 +460,18 @@ public class MusicListFragment extends Fragment {
                    			listViewMusic.setVisibility(View.GONE);
                    			relativeErrorLayout.setVisibility(View.VISIBLE);
                    			errorRetryButton.setEnabled(true);
+                   			// set action bar
+                    		getSupportActionBar().setTitle(PlaceName);
+                    		switch (isAudioDisabled? 1 : 0){
+                    		case 1:
+                    			getSupportActionBar().setSubtitle(R.string.error_message_audio_disabled);
+                    			errorMessage.setText(R.string.error_message_audio_disabled);
+                    			break;
+                    		case 0:
+                    			errorMessage.setText(R.string.error_message);
+                    			getSupportActionBar().setSubtitle(R.string.error_message);
+                    			break;
+                    		}
                    		}
                    } catch (NullPointerException e){
                 	   e.printStackTrace();

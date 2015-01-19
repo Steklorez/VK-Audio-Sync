@@ -9,7 +9,7 @@
         android:id="@+id/submenu"
         android:icon="@drawable/ic_menu_moreover"
         android:showAsAction="always"
-        android:title="@string/wallmain">
+        android:title="@string/moreover">
         <menu>
             <item
                 android:id="@+id/menu_main"

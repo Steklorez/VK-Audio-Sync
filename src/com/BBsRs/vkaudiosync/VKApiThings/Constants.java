@@ -48,5 +48,8 @@ public class Constants {
 	
 	//DOWNLOAD SERVICE
 	public static final String EXTRA_MUSIC_COLLECTION = "musicCollection";
+	
+	//shared preferences
+	public static final String DOWNLOAD_DIRECTORY = "download_directory";
 
 }

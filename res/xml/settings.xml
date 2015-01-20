@@ -4,7 +4,7 @@
         <Preference
             android:id="@+id/preference_directory"
             android:icon="@drawable/ic_settings_folder"
-            android:key="preference_name"
+            android:key="preference_folder"
             android:title="@string/download_direcotry" />
         
         </PreferenceCategory>

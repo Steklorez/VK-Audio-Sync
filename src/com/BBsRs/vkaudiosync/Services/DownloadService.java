@@ -12,6 +12,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import org.apache.http.util.ByteArrayBuffer;
+import org.holoeverywhere.preference.PreferenceManager;
+import org.holoeverywhere.preference.SharedPreferences;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -41,6 +43,9 @@ import com.mpatric.mp3agic.UnsupportedTagException;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class DownloadService extends Service {
+	
+	//preferences 
+    SharedPreferences sPref;
 	
 	String LOG_TAG = "DownloadService";
 	
@@ -76,6 +81,9 @@ public class DownloadService extends Service {
 		pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Constants.PARTIAL_WAKE_LOCK_TAG);
 		wl.acquire();
+		
+		//set up preferences
+        sPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		
 		startDownloadChecking();
 		showPendingNotification();
@@ -131,9 +139,9 @@ public class DownloadService extends Service {
 		File file = null;
 
 		   try {
-		           File root = android.os.Environment.getExternalStorageDirectory();               
+		           File root = new File (sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/");               
 
-		           File dir = new File (root.getAbsolutePath() + "/Music");
+		           File dir = new File (root.getAbsolutePath());
 		           if(dir.exists()==false) {
 		                dir.mkdirs();
 		           }

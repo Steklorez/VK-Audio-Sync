@@ -7,6 +7,8 @@ import java.util.Collection;
 
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Fragment;
+import org.holoeverywhere.preference.PreferenceManager;
+import org.holoeverywhere.preference.SharedPreferences;
 import org.holoeverywhere.widget.Button;
 import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.RelativeLayout;
@@ -49,6 +51,9 @@ import com.perm.kate.api.User;
 import com.perm.kate.api.WallMessage;
 
 public class MusicListFragment extends Fragment {
+	
+	//preferences 
+    SharedPreferences sPref;
 	
 	//android views where shows content
 	private PullToRefreshLayout mPullToRefreshLayout;
@@ -98,6 +103,9 @@ public class MusicListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 		View contentView = inflater.inflate(R.layout.list);
+		
+		//set up preferences
+        sPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		
 		//retrieve bundle
 		bundle = this.getArguments();
@@ -266,7 +274,7 @@ public class MusicListFragment extends Fragment {
     		int index = 0;
         	if (isMyServiceRunning(DownloadService.class) && musicAdapter != null && musicAdapter.getCount()>0)
         		for (MusicCollection one : musicAdapter.getObject()){
-        			f = new File(android.os.Environment.getExternalStorageDirectory()+"/Music/"+(one.artist+" - "+one.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
+        			f = new File(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/"+(one.artist+" - "+one.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
         			if (f.exists()) {
         				musicAdapter.getItem(index).checked = 1;
         				musicAdapter.getItem(index).exist = 1;
@@ -332,21 +340,22 @@ public class MusicListFragment extends Fragment {
                             	case Constants.MAIN_MUSIC:
                             		switch (bundle.getInt(Constants.BUNDLE_MUSIC_TYPE)){
                                 	case Constants.MAIN_MUSIC_USER:
-                                		musicList = api.getAudio(bundle.getLong(Constants.BUNDLE_USER_ID), null, null, null, null, null);
-                                		
-                                		 Collection<Long> u = new ArrayList<Long>();
-                                         u.add(bundle.getLong(Constants.BUNDLE_USER_ID));
-                                         Collection<String> d = new ArrayList<String>();
-                                         d.add("");
+                                		Collection<Long> u = new ArrayList<Long>();
+                                        u.add(bundle.getLong(Constants.BUNDLE_USER_ID));
+                                        Collection<String> d = new ArrayList<String>();
+                                        d.add("");
 
-                                         User userOne = api.getProfiles(u, d, "", "", "", "").get(0);
-                                         PlaceName = userOne.first_name+" "+userOne.last_name;
+                                        User userOne = api.getProfiles(u, d, "", "", "", "").get(0);
+                                        PlaceName = userOne.first_name+" "+userOne.last_name;
+                                        
+                                		musicList = api.getAudio(bundle.getLong(Constants.BUNDLE_USER_ID), null, null, null, null, null);
                                 		break;
                                 	case Constants.MAIN_MUSIC_GROUP:
-                                		musicList = api.getAudio(null, bundle.getLong(Constants.BUNDLE_GROUP_ID), null, null, null, null);
-                                        for (Group one :  api.getUserGroups(bundle.getLong(Constants.BUNDLE_USER_ID)))
+                                		for (Group one :  api.getUserGroups(bundle.getLong(Constants.BUNDLE_USER_ID)))
                                         	if (one.gid == bundle.getLong(Constants.BUNDLE_GROUP_ID))
                                         		PlaceName = one.name;
+                                		
+                                		musicList = api.getAudio(null, bundle.getLong(Constants.BUNDLE_GROUP_ID), null, null, null, null);
                                 		break;
                                 	}
                             		break;
@@ -354,6 +363,14 @@ public class MusicListFragment extends Fragment {
                             		ArrayList<WallMessage> wallMessageList = new ArrayList<WallMessage>();
                             		switch (bundle.getInt(Constants.BUNDLE_MUSIC_TYPE)){
                                 	case Constants.MAIN_MUSIC_USER:
+                                		Collection<Long> u = new ArrayList<Long>();
+                                        u.add(bundle.getLong(Constants.BUNDLE_USER_ID));
+                                        Collection<String> d = new ArrayList<String>();
+                                        d.add("");
+
+                                        User userOne = api.getProfiles(u, d, "", "", "", "").get(0);
+                                        PlaceName = userOne.first_name+" "+userOne.last_name;
+                                        
                                 		while (true){
                                 			ArrayList<WallMessage> wallMessageListTemp = api.getWallMessages(bundle.getLong(Constants.BUNDLE_USER_ID), 100, wallMessageList.size(), null);
                                 			wallMessageList.addAll(wallMessageListTemp);
@@ -365,15 +382,12 @@ public class MusicListFragment extends Fragment {
                                 				if (oneA.audio != null)
                                 				musicList.add(oneA.audio);
                                 		}
-                                		Collection<Long> u = new ArrayList<Long>();
-                                        u.add(bundle.getLong(Constants.BUNDLE_USER_ID));
-                                        Collection<String> d = new ArrayList<String>();
-                                        d.add("");
-
-                                        User userOne = api.getProfiles(u, d, "", "", "", "").get(0);
-                                        PlaceName = userOne.first_name+" "+userOne.last_name;
                                 		break;
                                 	case Constants.MAIN_MUSIC_GROUP:
+                                		for (Group one :  api.getUserGroups(bundle.getLong(Constants.BUNDLE_USER_ID)))
+                                        	if (one.gid == bundle.getLong(Constants.BUNDLE_GROUP_ID))
+                                        		PlaceName = one.name;
+                                		
                                 		while (true){
                                 			ArrayList<WallMessage> wallMessageListTemp = api.getWallMessages(-bundle.getLong(Constants.BUNDLE_GROUP_ID), 100, wallMessageList.size(), null);
                                 			wallMessageList.addAll(wallMessageListTemp);
@@ -385,16 +399,13 @@ public class MusicListFragment extends Fragment {
                                 				if (oneA.audio != null)
                                 				musicList.add(oneA.audio);
                                 		}
-                                		for (Group one :  api.getUserGroups(bundle.getLong(Constants.BUNDLE_USER_ID)))
-                                        	if (one.gid == bundle.getLong(Constants.BUNDLE_GROUP_ID))
-                                        		PlaceName = one.name;
                                 		break;
                                 	}
                             		break;
                             	}
                             	
                             	for (Audio one : musicList){
-                            		f = new File(android.os.Environment.getExternalStorageDirectory()+"/Music/"+(one.artist+" - "+one.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
+                            		f = new File(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/"+(one.artist+" - "+one.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
                             		if (f.exists())
                             			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 1, 1));
                             		else 

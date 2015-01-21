@@ -301,7 +301,7 @@ public class FriendsGroupsListFragment extends Fragment {
                     		break;
                     	}
                     	
-                    
+                    	
                     	listViewFriendsGroups.setAdapter(friendsGroupsAdapter);
                     
                     	Animation flyUpAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fly_up_anim);

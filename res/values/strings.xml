@@ -19,6 +19,7 @@
     <string name="download_direcotry">Download directory</string>
     <string name="moreover">moreover</string>
     <string name="main">Main music</string>
+    <string name="check_all">Check all</string>
     <string name="wall">Wall music</string>
     <string name="refreshing">Refreshing...</string>
     <string-array name="slider_menu">

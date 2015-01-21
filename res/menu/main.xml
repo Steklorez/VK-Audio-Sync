@@ -17,6 +17,9 @@
             <item
                 android:id="@+id/menu_wall"
                 android:title="@string/wall"/>
+            <item
+                android:id="@+id/menu_check_all"
+                android:title="@string/check_all"/>
         </menu>
     </item>
 

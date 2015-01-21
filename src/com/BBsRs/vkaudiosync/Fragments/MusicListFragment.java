@@ -241,6 +241,15 @@ public class MusicListFragment extends Fragment {
            	  mPullToRefreshLayout.setRefreshing(true);
            	  customOnRefreshListener.onRefreshStarted(null);
 	    	  break;
+	      case R.id.menu_check_all:
+	    	  int index=0;
+	    	  for (MusicCollection oneItem : musicCollection){
+	    		  oneItem.checked = 1;
+	    		  musicAdapter.getItem(index).checked = 1;
+	    		  index++;
+	    	  }
+	    	  musicAdapter.notifyDataSetChanged();
+	    	  break;
 	      }
 		return true;
 	}
@@ -469,7 +478,7 @@ public class MusicListFragment extends Fragment {
 
                     
                    			listViewMusic.setAdapter(musicAdapter);
-                   
+                   			
                    			Animation flyUpAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fly_up_anim);
                    			listViewMusic.startAnimation(flyUpAnimation);
                    		} else {

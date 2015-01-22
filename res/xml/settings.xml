@@ -2,11 +2,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceCategory android:title="@string/downloading" >
         <Preference
-            android:id="@+id/preference_directory"
             android:icon="@drawable/ic_settings_folder"
             android:key="preference_folder"
             android:title="@string/download_direcotry" />
         
+        </PreferenceCategory>
+        
+    <PreferenceCategory android:title="@string/account" >
+        <Preference
+            android:key="preference_logout"
+            android:title="@string/logout" />
         </PreferenceCategory>
 
 </PreferenceScreen>

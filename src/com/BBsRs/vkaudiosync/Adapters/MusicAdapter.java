@@ -10,7 +10,7 @@ import org.holoeverywhere.widget.TextView;
 import org.holoeverywhere.widget.Toast;
 
 import android.content.Context;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -29,12 +29,14 @@ public class MusicAdapter extends BaseAdapter {
 	LayoutInflater inflater;
 	DisplayImageOptions options;
 	public int checked = 0;
+	MenuItem checkAll;
 	
-	public MusicAdapter (Context _context, ArrayList<MusicCollection> _musicCollection, DisplayImageOptions _options){
+	public MusicAdapter (Context _context, ArrayList<MusicCollection> _musicCollection, DisplayImageOptions _options, MenuItem _checkAll){
 		musicCollection = _musicCollection;
 		context = _context;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		options = _options;
+		checkAll = _checkAll;
 	}
 	
 	// кол-во элементов
@@ -110,6 +112,12 @@ public class MusicAdapter extends BaseAdapter {
 					holder.checkDownload.setChecked(false);
 					musicCollection.get(position).checked = holder.checkDownload.isChecked() ? 1 : 0;
 					checked+=(holder.checkDownload.isChecked() ? +1 : -1);
+				}
+				
+				if (checked == 0){
+					checkAll.setTitle(context.getResources().getString(R.string.check_all));
+				} else {
+					checkAll.setTitle(context.getResources().getString(R.string.uncheck_all));
 				}
 			}
 		});

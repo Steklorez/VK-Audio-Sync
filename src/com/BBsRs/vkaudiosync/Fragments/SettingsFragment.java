@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.BBsRs.vkaudiosync.DirChooseActivity;
+import com.BBsRs.vkaudiosync.LoaderActivity;
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 
@@ -35,6 +36,18 @@ public class SettingsFragment extends PreferenceFragment {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				getActivity().startActivity(new Intent(getActivity(), DirChooseActivity.class));
+				return false;
+			}
+        });
+        
+        Preference logOut = (Preference) findPreference ("preference_logout");
+        logOut.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				sPref.edit().putString("access_token", null).commit();
+				sPref.edit().putString("user_id", null).commit();
+				getActivity().startActivity(new Intent(getActivity(), LoaderActivity.class));
+				getActivity().finish();
 				return false;
 			}
         });

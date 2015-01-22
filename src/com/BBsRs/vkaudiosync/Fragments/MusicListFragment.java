@@ -156,7 +156,7 @@ public class MusicListFragment extends Fragment {
 	    	musicCollection = savedInstanceState.getParcelableArrayList(Constants.EXTRA_MUSIC_COLLECTION);
 	    	error = savedInstanceState.getBoolean("error");
 	    	if ((musicCollection.size()>1)) {
-	    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options);
+	    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options, mainMenu.findItem(R.id.menu_check_all));
 	    		
 	    		PlaceName = savedInstanceState.getString("PlaceName");
                 
@@ -495,7 +495,7 @@ public class MusicListFragment extends Fragment {
                     		listViewMusic.setVisibility(View.VISIBLE);
                     		relativeErrorLayout.setVisibility(View.GONE);
                     	
-                    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options);
+                    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options, mainMenu.findItem(R.id.menu_check_all));
 
                     
                    			listViewMusic.setAdapter(musicAdapter);

@@ -16,6 +16,8 @@
     <string name="app_slogan">Sync automatically,\nanywhere,\nanytime,\nwith all cover art!</string>
     <string name="service_running">Download service is in work state, please wait till download is continue!</string>
     <string name="downloading">Downloading</string>
+    <string name="account">Account</string>
+    <string name="logout">Log out</string>
     <string name="download_direcotry">Download directory</string>
     <string name="moreover">moreover</string>
     <string name="main">Main music</string>

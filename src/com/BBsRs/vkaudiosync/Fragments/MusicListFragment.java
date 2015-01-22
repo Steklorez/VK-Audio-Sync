@@ -257,7 +257,7 @@ public class MusicListFragment extends Fragment {
 	    	  				musicAdapter.checked++;
 	    	  			}
 	    	  			index++;
-	    	  			if (musicAdapter.checked>99)
+	    	  			if (musicAdapter.checked>98)
 	    	  				break;
 	   	   		  	}
 	    	  		 item.setTitle(getResources().getString(R.string.uncheck_all));

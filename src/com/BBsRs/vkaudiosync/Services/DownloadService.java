@@ -86,7 +86,7 @@ public class DownloadService extends Service {
         sPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		
 		startDownloadChecking();
-		showPendingNotification();
+		setPendingNotification();
 		}
 		return super.onStartCommand(intent, flags, startId);
 	}
@@ -109,12 +109,10 @@ public class DownloadService extends Service {
 	    handler.post(updaterText);
 	}
 	
-	private void showPendingNotification(){
+	private void setPendingNotification(){
 	    not = new Notification(R.drawable.ic_menu_download, getResources().getString(R.string.service_running), System.currentTimeMillis());
 	    contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(this, ContentShowActivity.class), Notification.FLAG_ONGOING_EVENT);        
 	    not.flags = Notification.FLAG_ONGOING_EVENT;
-	    not.setLatestEventInfo(getApplicationContext(), getResources().getString(R.string.app_name), getResources().getString(R.string.service_running), contentIntent);
-	    mNotificationManager.notify(1, not);
 	}
 	
 	public void startDownloadChecking(){

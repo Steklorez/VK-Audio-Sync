@@ -138,8 +138,13 @@ public class FriendsGroupsListFragment extends Fragment {
 	    	}
 	    	
 	    	else {
-	    		mPullToRefreshLayout.setRefreshing(true);
-	         	customOnRefreshListener.onRefreshStarted(null);	
+	    		if (error){
+	    			errorMessage.setText(R.string.error_message);
+        			errorRetryButton.setVisibility(View.VISIBLE);
+	    		} else {
+	    			mPullToRefreshLayout.setRefreshing(true);
+	    			customOnRefreshListener.onRefreshStarted(null);	
+	    		}
 	    	}
 	    }
 	    

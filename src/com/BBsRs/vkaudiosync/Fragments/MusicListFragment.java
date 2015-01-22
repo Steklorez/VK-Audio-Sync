@@ -96,7 +96,7 @@ public class MusicListFragment extends Fragment {
     
     //for retrieve data from activity
     Bundle bundle;
-
+    
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -242,13 +242,34 @@ public class MusicListFragment extends Fragment {
            	  customOnRefreshListener.onRefreshStarted(null);
 	    	  break;
 	      case R.id.menu_check_all:
-	    	  int index=0;
-	    	  for (MusicCollection oneItem : musicCollection){
-	    		  oneItem.checked = 1;
-	    		  musicAdapter.getItem(index).checked = 1;
-	    		  index++;
+	    	  if (musicCollection !=null && musicAdapter !=null && musicCollection.size()>0){
+	    	  	 if (String.valueOf(item.getTitle()).equals(getResources().getString(R.string.check_all))){
+	    	  		int index=0;
+	    	  		for (MusicCollection oneItem : musicCollection){
+	    	  			if (oneItem.checked == 0 && oneItem.exist == 0){
+	    	  				oneItem.checked = 1;
+	    	  				musicAdapter.getItem(index).checked = 1;
+	    	  				musicAdapter.checked++;
+	    	  			}
+	    	  			index++;
+	    	  			if (musicAdapter.checked>99)
+	    	  				break;
+	   	   		  	}
+	    	  		 item.setTitle(getResources().getString(R.string.uncheck_all));
+	    	  	 } else	{
+	    	  		int index=0;
+	    	  		for (MusicCollection oneItem : musicCollection){
+	    	  			if (oneItem.checked == 1 && oneItem.exist == 0){
+	    	  				oneItem.checked = 0;
+	    	  				musicAdapter.getItem(index).checked = 0;
+	    	  				musicAdapter.checked--;
+	    	  			}
+	    	  			index++;
+	   	   		  	}
+	    	  		 item.setTitle(getResources().getString(R.string.check_all));
+	    	  	 }
+	    	  	musicAdapter.notifyDataSetChanged();
 	    	  }
-	    	  musicAdapter.notifyDataSetChanged();
 	    	  break;
 	      }
 		return true;

@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.widget.CheckBox;
 import org.holoeverywhere.widget.TextView;
+import org.holoeverywhere.widget.Toast;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -26,6 +28,7 @@ public class MusicAdapter extends BaseAdapter {
 	Context context;
 	LayoutInflater inflater;
 	DisplayImageOptions options;
+	public int checked = 0;
 	
 	public MusicAdapter (Context _context, ArrayList<MusicCollection> _musicCollection, DisplayImageOptions _options){
 		musicCollection = _musicCollection;
@@ -39,7 +42,7 @@ public class MusicAdapter extends BaseAdapter {
 	  public int getCount() {
 	    return musicCollection.size();
 	  }
-
+	  
 	  // элемент по позиции
 	  @Override
 	  public MusicCollection getItem(int position) {
@@ -100,6 +103,14 @@ public class MusicAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				musicCollection.get(position).checked = holder.checkDownload.isChecked() ? 1 : 0;
+				checked+=(holder.checkDownload.isChecked() ? +1 : -1);
+				
+				if (checked>99){
+					Toast.makeText(context, context.getResources().getString(R.string.more_than), Toast.LENGTH_LONG).show();
+					holder.checkDownload.setChecked(false);
+					musicCollection.get(position).checked = holder.checkDownload.isChecked() ? 1 : 0;
+					checked+=(holder.checkDownload.isChecked() ? +1 : -1);
+				}
 			}
 		});
         return rowView;

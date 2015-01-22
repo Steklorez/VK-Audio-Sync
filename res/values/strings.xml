@@ -19,7 +19,9 @@
     <string name="download_direcotry">Download directory</string>
     <string name="moreover">moreover</string>
     <string name="main">Main music</string>
-    <string name="check_all">Check all</string>
+    <string name="check_all">Check first 100</string>
+    <string name="uncheck_all">Uncheck all</string>
+    <string name="more_than">You can\'t check and download more that 100 songs per one time</string>
     <string name="wall">Wall music</string>
     <string name="refreshing">Refreshing...</string>
     <string-array name="slider_menu">

@@ -156,7 +156,7 @@ public class MusicListFragment extends Fragment {
 	    	musicCollection = savedInstanceState.getParcelableArrayList(Constants.EXTRA_MUSIC_COLLECTION);
 	    	error = savedInstanceState.getBoolean("error");
 	    	if ((musicCollection.size()>1)) {
-	    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options, mainMenu.findItem(R.id.menu_check_all));
+	    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options);
 	    		
 	    		PlaceName = savedInstanceState.getString("PlaceName");
                 
@@ -279,6 +279,7 @@ public class MusicListFragment extends Fragment {
 	public void onPause() {
 		super.onPause();
 		getActivity().unregisterReceiver(musicDownloaded);
+		getActivity().unregisterReceiver(someChecked);
 	}
 	
 	@Override
@@ -286,6 +287,7 @@ public class MusicListFragment extends Fragment {
 		super.onResume();
 		//turn up download receiver
         getActivity().registerReceiver(musicDownloaded, new IntentFilter(Constants.MUSIC_DOWNLOADED));
+        getActivity().registerReceiver(someChecked, new IntentFilter(Constants.SOME_CHECKED));
         
     	 // set action bar
     	getSupportActionBar().setTitle(PlaceName);
@@ -344,6 +346,19 @@ public class MusicListFragment extends Fragment {
 	    			}
 	    			index++;
 				}
+	    	}
+	    }
+	};
+	
+	private BroadcastReceiver someChecked = new BroadcastReceiver() {
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	    	if (intent.getExtras().getBoolean(Constants.SOME_CHECKED)){
+	    		if (mainMenu != null)
+	    			mainMenu.findItem(R.id.menu_check_all).setTitle(getResources().getString(R.string.uncheck_all));
+	    	} else {
+	    		if (mainMenu != null)
+	    			mainMenu.findItem(R.id.menu_check_all).setTitle(getResources().getString(R.string.check_all));
 	    	}
 	    }
 	};
@@ -495,7 +510,7 @@ public class MusicListFragment extends Fragment {
                     		listViewMusic.setVisibility(View.VISIBLE);
                     		relativeErrorLayout.setVisibility(View.GONE);
                     	
-                    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options, mainMenu.findItem(R.id.menu_check_all));
+                    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options);
 
                     
                    			listViewMusic.setAdapter(musicAdapter);

@@ -39,6 +39,8 @@ public class Constants {
 	public static final String MUSIC_SUCCESSFULLY_DOWNLOADED = "successfully";
 	public static final String DOWNLOAD_SERVICE_STOPPED= "stopped";
 	
+	public static final String SOME_CHECKED = "checked";
+	
 	//wake lock tag
 	public static final String PARTIAL_WAKE_LOCK_TAG = "my tag";
 	

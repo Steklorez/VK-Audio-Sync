@@ -9,12 +9,18 @@
 
 package com.BBsRs.vkaudiosync.collection;
 
+import java.io.Serializable;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class MusicCollection implements Parcelable {
+public class MusicCollection implements Parcelable, Serializable {
   
-    public long aid;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2332795218861808273L;
+	public long aid;
     public long owner_id;
     public String artist;
     public String title;

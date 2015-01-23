@@ -3,6 +3,8 @@ package com.BBsRs.vkaudiosync;
 import org.holoeverywhere.addon.AddonSlider;
 import org.holoeverywhere.addon.Addons;
 import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.preference.PreferenceManager;
+import org.holoeverywhere.preference.SharedPreferences;
 import org.holoeverywhere.slider.SliderMenu;
 
 import android.content.BroadcastReceiver;
@@ -11,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 
+import com.BBsRs.vkaudiosync.Fragments.DownloadManagerFragment;
 import com.BBsRs.vkaudiosync.Fragments.FriendsGroupsListFragment;
 import com.BBsRs.vkaudiosync.Fragments.MusicListFragment;
 import com.BBsRs.vkaudiosync.Fragments.SettingsFragment;
@@ -23,6 +26,9 @@ public class ContentShowActivity extends Activity {
 	public AddonSlider.AddonSliderA addonSlider() {
 	      return addon(AddonSlider.class);
 	}
+	
+	//preferences 
+    SharedPreferences sPref;
 	
 	SliderMenu sliderMenu;
 	
@@ -45,6 +51,9 @@ public class ContentShowActivity extends Activity {
         sliderMenu = addonSlider().obtainDefaultSliderMenu(R.layout.menu);
         addonSlider().setOverlayActionBar(false);
         
+        //set up preferences
+        sPref = PreferenceManager.getDefaultSharedPreferences(this);
+        
         Bundle bundleMyMusic = new Bundle();
         bundleMyMusic.putLong(Constants.BUNDLE_USER_ID, account.user_id);
         bundleMyMusic.putInt(Constants.BUNDLE_MUSIC_TYPE, Constants.MAIN_MUSIC_USER);
@@ -63,7 +72,8 @@ public class ContentShowActivity extends Activity {
         sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[2], FriendsGroupsListFragment.class, bundleFriends, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1).setTag(Constants.FRIENDS_FRAGMENT);
         sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[3], FriendsGroupsListFragment.class, bundleGroups, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1).setTag(Constants.GROUPS_FRAGMENT);
         sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[4].toUpperCase()).setCustomLayout(R.layout.custom_slider_menu_item).clickable(false).setTextAppereance(1);
-        sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[5], SettingsFragment.class, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
+        sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[5], DownloadManagerFragment.class, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
+        sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[6], SettingsFragment.class, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
         
         if (savedInstanceState == null)
         sliderMenu.setCurrentPage(1);
@@ -81,6 +91,13 @@ public class ContentShowActivity extends Activity {
 		super.onResume();
 		//turn up download receiver
         registerReceiver(openMenuDrawer, new IntentFilter(Constants.OPEN_MENU_DRAWER));
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		//clean download manager
+		sPref.edit().putString(Constants.DOWNLOAD_SELECTION, "").commit();
 	}
 	
 	private BroadcastReceiver openMenuDrawer = new BroadcastReceiver() {

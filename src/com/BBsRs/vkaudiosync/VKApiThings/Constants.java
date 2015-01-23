@@ -53,5 +53,8 @@ public class Constants {
 	
 	//shared preferences
 	public static final String DOWNLOAD_DIRECTORY = "download_directory";
+	public static final String DOWNLOAD_SELECTION = "download_selection";
+	public static final String ONE_AUDIO_ITEM = "one_audio_item";
+	
 
 }

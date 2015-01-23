@@ -11,6 +11,7 @@ import org.holoeverywhere.widget.Toast;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -102,17 +103,16 @@ public class MusicAdapter extends BaseAdapter {
         holder.checkDownload.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				musicCollection.get(position).checked = holder.checkDownload.isChecked() ? 1 : 0;
-				checked+=(holder.checkDownload.isChecked() ? +1 : -1);
-				
 				if (checked>99){
 					Toast.makeText(context, context.getResources().getString(R.string.more_than), Toast.LENGTH_LONG).show();
 					holder.checkDownload.setChecked(false);
-					musicCollection.get(position).checked = holder.checkDownload.isChecked() ? 1 : 0;
-					checked+=(holder.checkDownload.isChecked() ? +1 : -1);
 				}
+				musicCollection.get(position).checked = holder.checkDownload.isChecked() ? 1 : 0;
+				checked+=(holder.checkDownload.isChecked() ? +1 : -1);
+				
 				Intent i = new Intent(Constants.SOME_CHECKED);
 				i.putExtra(Constants.SOME_CHECKED, checked == 0 ? false : true);
+				i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)musicCollection.get(position));
 				context.sendBroadcast(i);
 			}
 		});

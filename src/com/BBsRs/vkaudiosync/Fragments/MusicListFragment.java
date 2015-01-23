@@ -37,6 +37,7 @@ import android.view.animation.AnimationUtils;
 
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.Adapters.MusicAdapter;
+import com.BBsRs.vkaudiosync.Application.ObjectSerializer;
 import com.BBsRs.vkaudiosync.Services.DownloadService;
 import com.BBsRs.vkaudiosync.VKApiThings.Account;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
@@ -254,6 +255,17 @@ public class MusicListFragment extends Fragment {
 	    	  			if (oneItem.checked == 0 && oneItem.exist == 0){
 	    	  				oneItem.checked = 1;
 	    	  				musicAdapter.getItem(index).checked = 1;
+	    	  				
+	    	  				//add music to global download manager
+	    	  				try {
+	    	  					ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+	    	  					musicCollectionTemp.add(oneItem);
+								sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
 	    	  				musicAdapter.checked++;
 	    	  			}
 	    	  			index++;
@@ -267,6 +279,17 @@ public class MusicListFragment extends Fragment {
 	    	  			if (oneItem.checked == 1 && oneItem.exist == 0){
 	    	  				oneItem.checked = 0;
 	    	  				musicAdapter.getItem(index).checked = 0;
+	    	  				
+	    	  				//remove music from glabal download manager
+	    	  				try {
+	    	  					ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+	    	  					musicCollectionTemp.remove(oneItem);
+								sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+	    	  				
 	    	  				musicAdapter.checked--;
 	    	  			}
 	    	  			index++;
@@ -358,6 +381,21 @@ public class MusicListFragment extends Fragment {
 	private BroadcastReceiver someChecked = new BroadcastReceiver() {
 	    @Override
 	    public void onReceive(Context context, Intent intent) {
+	    	
+	    	//remove or add music to global download manager
+			try {
+				ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+				if (((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).checked == 1){
+					musicCollectionTemp.add((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM));
+				} else {
+					musicCollectionTemp.remove((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM));
+				}
+				sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+				
 	    	if (intent.getExtras().getBoolean(Constants.SOME_CHECKED)){
 	    		if (mainMenu != null)
 	    			mainMenu.findItem(R.id.menu_check_all).setTitle(getResources().getString(R.string.uncheck_all));

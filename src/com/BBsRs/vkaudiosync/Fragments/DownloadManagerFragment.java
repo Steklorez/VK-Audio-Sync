@@ -33,6 +33,8 @@ public class DownloadManagerFragment extends Fragment {
         
         try {
         	musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+        	if (musicCollection==null)
+        		musicCollection = new ArrayList<MusicCollection>();
         } catch (IOException e) {
             e.printStackTrace();
         }

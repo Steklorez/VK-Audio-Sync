@@ -259,6 +259,8 @@ public class MusicListFragment extends Fragment {
 	    	  				//add music to global download manager
 	    	  				try {
 	    	  					ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+	    	  					if (musicCollectionTemp==null)
+                            		musicCollectionTemp = new ArrayList<MusicCollection>();
 	    	  					musicCollectionTemp.add(oneItem);
 								sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
 							} catch (IOException e) {
@@ -283,6 +285,8 @@ public class MusicListFragment extends Fragment {
 	    	  				//remove music from glabal download manager
 	    	  				try {
 	    	  					ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+	    	  					if (musicCollectionTemp==null)
+                            		musicCollectionTemp = new ArrayList<MusicCollection>();
 	    	  					musicCollectionTemp.remove(oneItem);
 								sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
 							} catch (IOException e) {
@@ -385,6 +389,8 @@ public class MusicListFragment extends Fragment {
 	    	//remove or add music to global download manager
 			try {
 				ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+				if (musicCollectionTemp==null)
+            		musicCollectionTemp = new ArrayList<MusicCollection>();
 				if (((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).checked == 1){
 					musicCollectionTemp.add((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM));
 				} else {
@@ -491,13 +497,19 @@ public class MusicListFragment extends Fragment {
                                 	}
                             		break;
                             	}
-                            	
+                            	ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+                            	if (musicCollectionTemp==null)
+                            		musicCollectionTemp = new ArrayList<MusicCollection>();
                             	for (Audio one : musicList){
                             		f = new File(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/"+(one.artist+" - "+one.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
                             		if (f.exists())
                             			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 1, 1));
                             		else 
                             			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 0, 0));
+                            		for (MusicCollection oneDM : musicCollectionTemp){
+                            			if (oneDM.aid == one.aid)
+                            				musicCollection.get(musicCollection.size()-1).checked = 1;
+                            		}
                             	}
                             	
                             	if (musicCollection.size() != 0)

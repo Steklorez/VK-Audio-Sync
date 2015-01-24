@@ -264,7 +264,6 @@ public class MusicListFragment extends Fragment {
 	    	  					musicCollectionTemp.add(oneItem);
 								sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 
@@ -287,10 +286,16 @@ public class MusicListFragment extends Fragment {
 	    	  					ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
 	    	  					if (musicCollectionTemp==null)
                             		musicCollectionTemp = new ArrayList<MusicCollection>();
-	    	  					musicCollectionTemp.remove(oneItem);
+	    	  					int indexTemp=0;
+	    	  					for (MusicCollection one: musicCollectionTemp){
+	    	  						if (one.aid==oneItem.aid){
+	    	  							musicCollectionTemp.remove(indexTemp);
+	    	  							break;
+	    	  						}
+	    	  						indexTemp++;
+	    	  					}
 								sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 	    	  				
@@ -394,11 +399,17 @@ public class MusicListFragment extends Fragment {
 				if (((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).checked == 1){
 					musicCollectionTemp.add((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM));
 				} else {
-					musicCollectionTemp.remove((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM));
+  					int indexTemp=0;
+  					for (MusicCollection one: musicCollectionTemp){
+  						if (one.aid==((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid){
+  							musicCollectionTemp.remove(indexTemp);
+  							break;
+  						}
+  						indexTemp++;
+  					}
 				}
 				sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 				

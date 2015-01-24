@@ -56,7 +56,7 @@ public class SettingsFragment extends PreferenceFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		getSupportActionBar().setTitle(getResources().getStringArray(R.array.slider_menu)[5]);
+		getSupportActionBar().setTitle(getResources().getStringArray(R.array.slider_menu)[6]);
 		getSupportActionBar().setSubtitle(null);
 		
 		sPref = PreferenceManager.getDefaultSharedPreferences(getActivity());

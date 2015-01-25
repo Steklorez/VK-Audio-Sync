@@ -69,7 +69,16 @@ public class DownloadManagerFragment extends Fragment {
         .cacheInMemory(true)					
         .build();
         
-        try {
+		return contentView;
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		getSupportActionBar().setTitle(getResources().getStringArray(R.array.slider_menu)[5]);
+		getSupportActionBar().setSubtitle(null);
+		
+		try {
         	musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
         	if (musicCollection==null)
         		musicCollection = new ArrayList<MusicCollection>();
@@ -79,15 +88,6 @@ public class DownloadManagerFragment extends Fragment {
         
         musicAdapter = new DownloadManagerMusicAdapter(getActivity(), musicCollection, options);
         listViewMusic.setAdapter(musicAdapter);
-        
-		return contentView;
-	}
-	
-	@Override
-	public void onResume() {
-		super.onResume();
-		getSupportActionBar().setTitle(getResources().getStringArray(R.array.slider_menu)[5]);
-		getSupportActionBar().setSubtitle(null);
 	}
 
 }

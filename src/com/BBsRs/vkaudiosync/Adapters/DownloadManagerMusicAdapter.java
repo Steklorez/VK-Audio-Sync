@@ -98,6 +98,9 @@ public class DownloadManagerMusicAdapter extends BaseAdapter {
         holder.deleteItem.setOnClickListener(new View.OnClickListener(){
 			@Override
 			public void onClick(View v) {
+				Intent i = new Intent(Constants.SOME_DELETED);
+				i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)musicCollection.get(position));
+				context.sendBroadcast(i);
 				removeItem(position);
 			}
         });

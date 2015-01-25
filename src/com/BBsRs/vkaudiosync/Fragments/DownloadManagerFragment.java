@@ -12,7 +12,12 @@ import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.RelativeLayout;
 import org.holoeverywhere.widget.TextView;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -88,6 +93,39 @@ public class DownloadManagerFragment extends Fragment {
         
         musicAdapter = new DownloadManagerMusicAdapter(getActivity(), musicCollection, options);
         listViewMusic.setAdapter(musicAdapter);
+        
+        //register delete receiver
+        getActivity().registerReceiver(someDeleted, new IntentFilter(Constants.SOME_DELETED));
 	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		getActivity().unregisterReceiver(someDeleted);
+	}
+	
+	private BroadcastReceiver someDeleted = new BroadcastReceiver() {
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	    	
+	    	//remove from global download manager
+			try {
+				ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+				if (musicCollectionTemp==null)
+            		musicCollectionTemp = new ArrayList<MusicCollection>();
+  					int indexTemp=0;
+  				for (MusicCollection one: musicCollectionTemp){
+  					if (one.aid==((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid){
+  						musicCollectionTemp.remove(indexTemp);
+  						break;
+  					}
+  					indexTemp++;
+  				}
+				sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	    }
+	};
 
 }

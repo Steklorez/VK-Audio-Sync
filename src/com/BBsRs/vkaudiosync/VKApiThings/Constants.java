@@ -40,6 +40,7 @@ public class Constants {
 	public static final String DOWNLOAD_SERVICE_STOPPED= "stopped";
 	
 	public static final String SOME_CHECKED = "checked";
+	public static final String SOME_DELETED = "deleted";
 	
 	//wake lock tag
 	public static final String PARTIAL_WAKE_LOCK_TAG = "my tag";

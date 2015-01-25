@@ -374,7 +374,7 @@ public class MusicListFragment extends Fragment {
 	    	} else {
 	    		int index = 0;
 	    		for (MusicCollection oneItem : musicCollection){
-	    			if (oneItem.aid == intent.getExtras().getLong(Constants.ONE_ITEM_AID)){
+	    			if (oneItem.aid == intent.getExtras().getLong(Constants.MUSIC_AID_DOWNLOADED)){
 	    				oneItem.checked = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
 	    				oneItem.exist = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
 	    				musicAdapter.getItem(index).checked = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
@@ -396,12 +396,12 @@ public class MusicListFragment extends Fragment {
 				ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
 				if (musicCollectionTemp==null)
             		musicCollectionTemp = new ArrayList<MusicCollection>();
-				if (((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_ITEM_AID)).checked == 1){
-					musicCollectionTemp.add((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_ITEM_AID));
+				if (((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).checked == 1){
+					musicCollectionTemp.add((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM));
 				} else {
   					int indexTemp=0;
   					for (MusicCollection one: musicCollectionTemp){
-  						if (one.aid==((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_ITEM_AID)).aid){
+  						if (one.aid==((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid){
   							musicCollectionTemp.remove(indexTemp);
   							break;
   						}

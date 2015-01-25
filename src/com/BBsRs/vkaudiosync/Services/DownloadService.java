@@ -123,7 +123,7 @@ public class DownloadService extends Service {
 					not.setLatestEventInfo(getApplicationContext(), getResources().getString(R.string.downloading), oneItem.artist+" - "+oneItem.title, contentIntent);
 					mNotificationManager.notify(1, not);
 					Intent i = new Intent(Constants.MUSIC_DOWNLOADED);
-					i.putExtra(Constants.ONE_ITEM_AID, oneItem.aid);
+					i.putExtra(Constants.MUSIC_AID_DOWNLOADED, oneItem.aid);
 					i.putExtra(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED, DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", "")));
 					i.putExtra(Constants.DOWNLOAD_SERVICE_STOPPED, false);
 					sendBroadcast(i);

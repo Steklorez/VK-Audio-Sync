@@ -35,7 +35,7 @@ public class Constants {
 	public static final String OPEN_MENU_DRAWER = "open_menu_drawer";
 	public static final String MUSIC_DOWNLOADED = "downloaded";
 	
-	public static final String MUSIC_AID_DOWNLOADED = "aid";
+	public static final String ONE_ITEM_AID = "aid";
 	public static final String MUSIC_SUCCESSFULLY_DOWNLOADED = "successfully";
 	public static final String DOWNLOAD_SERVICE_STOPPED= "stopped";
 	
@@ -55,7 +55,6 @@ public class Constants {
 	//shared preferences
 	public static final String DOWNLOAD_DIRECTORY = "download_directory";
 	public static final String DOWNLOAD_SELECTION = "download_selection";
-	public static final String ONE_AUDIO_ITEM = "one_audio_item";
 	
 
 }

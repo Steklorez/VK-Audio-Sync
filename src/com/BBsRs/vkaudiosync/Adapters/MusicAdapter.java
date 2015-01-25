@@ -112,7 +112,7 @@ public class MusicAdapter extends BaseAdapter {
 				
 				Intent i = new Intent(Constants.SOME_CHECKED);
 				i.putExtra(Constants.SOME_CHECKED, checked == 0 ? false : true);
-				i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)musicCollection.get(position));
+				i.putExtra(Constants.ONE_ITEM_AID, (Parcelable)musicCollection.get(position));
 				context.sendBroadcast(i);
 			}
 		});

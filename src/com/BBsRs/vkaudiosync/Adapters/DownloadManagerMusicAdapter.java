@@ -99,7 +99,7 @@ public class DownloadManagerMusicAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(Constants.SOME_DELETED);
-				i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)musicCollection.get(position));
+				i.putExtra(Constants.ONE_ITEM_AID, (Parcelable)musicCollection.get(position));
 				context.sendBroadcast(i);
 				removeItem(position);
 			}

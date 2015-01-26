@@ -98,6 +98,9 @@ public class MusicListFragment extends Fragment {
     //for retrieve data from activity
     Bundle bundle;
     
+    //rotate flag
+    boolean isAfterRotating = false;
+    
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -152,8 +155,10 @@ public class MusicListFragment extends Fragment {
 	    if(savedInstanceState == null) {
 	    	 mPullToRefreshLayout.setRefreshing(true);
 	         customOnRefreshListener.onRefreshStarted(null);
+	         isAfterRotating = false;
 	    }
 	    else{
+	    	isAfterRotating = true;
 	    	musicCollection = savedInstanceState.getParcelableArrayList(Constants.EXTRA_MUSIC_COLLECTION);
 	    	error = savedInstanceState.getBoolean("error");
 	    	if ((musicCollection.size()>1)) {
@@ -328,35 +333,19 @@ public class MusicListFragment extends Fragment {
         
     	 // set action bar
     	getSupportActionBar().setTitle(PlaceName);
-    	if (!customOnRefreshListener.isRefreshing)
-    	switch (bundle.getInt(Constants.BUNDLE_MAIN_WALL_TYPE)){
-		case Constants.MAIN_MUSIC:
-			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_main));
-			break;
-		case Constants.WALL_MUSIC:
-			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_wall));
-			break;
-		}
-    	
-    	//check if audio downloaded
-    	try {
-    		int index = 0;
-        	if (isMyServiceRunning(DownloadService.class) && musicAdapter != null && musicAdapter.getCount()>0)
-        		for (MusicCollection one : musicAdapter.getObject()){
-        			f = new File(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/"+(one.artist+" - "+one.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
-        			if (f.exists()) {
-        				musicAdapter.getItem(index).checked = 1;
-        				musicAdapter.getItem(index).exist = 1;
-        				musicAdapter.notifyDataSetChanged();
-        				if (musicCollection!=null && musicCollection.size()>=index){
-        	    			musicCollection.get(index).checked = 1;
-        	    			musicCollection.get(index).exist = 1;
-        	    		}
-        			}
-        			index++;
-        		}
-    	} catch (NullPointerException e){
-    		e.printStackTrace();
+    	if (!customOnRefreshListener.isRefreshing ){
+    		switch (bundle.getInt(Constants.BUNDLE_MAIN_WALL_TYPE)){
+    		case Constants.MAIN_MUSIC:
+    			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_main));
+    			break;
+    		case Constants.WALL_MUSIC:
+    			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_wall));
+    			break;
+    		}
+    		if (!isAfterRotating){
+    			mPullToRefreshLayout.setRefreshing(true);
+				customOnRefreshListener.onRefreshStarted(null);	
+    		}
     	}
 	}
 	

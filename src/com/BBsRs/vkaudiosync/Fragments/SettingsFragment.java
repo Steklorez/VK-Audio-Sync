@@ -44,8 +44,7 @@ public class SettingsFragment extends PreferenceFragment {
         logOut.setOnPreferenceClickListener(new OnPreferenceClickListener(){
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				sPref.edit().putString("access_token", null).commit();
-				sPref.edit().putString("user_id", null).commit();
+				sPref.edit().clear().commit();
 				getActivity().startActivity(new Intent(getActivity(), LoaderActivity.class));
 				getActivity().finish();
 				return false;

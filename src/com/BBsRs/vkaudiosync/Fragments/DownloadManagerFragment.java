@@ -168,6 +168,7 @@ public class DownloadManagerFragment extends Fragment {
 	  					if ((one.aid==intent.getExtras().getLong(Constants.MUSIC_AID_DOWNLOADED)) && intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED)){
 	  						musicAdapter.removeItem(indexTemp);
 	  						musicCollectionTemp.remove(indexTemp);
+	  						getSupportActionBar().setSubtitle(musicCollectionTemp.size()+" "+getResources().getString(R.string.quan_songs_dm));
 	  						break;
 	  					}
 	  					indexTemp++;
@@ -193,6 +194,7 @@ public class DownloadManagerFragment extends Fragment {
   				for (MusicCollection one: musicCollectionTemp){
   					if (one.aid==((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid){
   						musicCollectionTemp.remove(indexTemp);
+  						getSupportActionBar().setSubtitle(musicCollectionTemp.size()+" "+getResources().getString(R.string.quan_songs_dm));
   						break;
   					}
   					indexTemp++;

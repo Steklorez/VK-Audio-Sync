@@ -6,12 +6,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import org.apache.http.util.ByteArrayBuffer;
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
 
@@ -24,13 +24,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.BBsRs.vkaudiosync.ContentShowActivity;
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.Application.ObjectSerializer;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
@@ -60,6 +59,7 @@ public class DownloadService extends Service {
 	NotificationManager mNotificationManager;
 	Notification not;
 	PendingIntent contentIntent;
+	NotificationCompat.Builder mBuilder;
 	
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
@@ -111,9 +111,7 @@ public class DownloadService extends Service {
 	}
 	
 	private void setPendingNotification(){
-	    not = new Notification(R.drawable.ic_menu_download, getResources().getString(R.string.service_running), System.currentTimeMillis());
-	    contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(this, ContentShowActivity.class), Notification.FLAG_ONGOING_EVENT);        
-	    not.flags = Notification.FLAG_ONGOING_EVENT;
+		mBuilder = new NotificationCompat.Builder(this);
 	}
 	
 	public void startDownloadChecking(){
@@ -121,8 +119,16 @@ public class DownloadService extends Service {
 			@Override
 			public void run() {
 				for (MusicCollection oneItem : musicCollection){
-					not.setLatestEventInfo(getApplicationContext(), getResources().getString(R.string.downloading), oneItem.artist+" - "+oneItem.title, contentIntent);
-					mNotificationManager.notify(1, not);
+//					not.setLatestEventInfo(getApplicationContext(), getResources().getString(R.string.downloading), oneItem.artist+" - "+oneItem.title, contentIntent);
+//					mNotificationManager.notify(1, not);
+					
+					mBuilder.setContentTitle(getResources().getString(R.string.downloading)+" "+ oneItem.artist+" - "+oneItem.title)
+							.setContentText(getResources().getString(R.string.dm_inprogrees))
+							.setSmallIcon(R.drawable.ic_menu_download);
+					
+					mBuilder.setProgress(100, 0, false);
+					mNotificationManager.notify(0, mBuilder.build());
+					
 					Intent i = new Intent(Constants.MUSIC_DOWNLOADED);
 					i.putExtra(Constants.MUSIC_AID_DOWNLOADED, oneItem.aid);
 					i.putExtra(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED, DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", "")));
@@ -154,32 +160,44 @@ public class DownloadService extends Service {
 		           Log.d("DownloadManager", "downloaded file name:" + fileName);
 
 		           /* Open a connection to that URL. */
-		           URLConnection ucon = url.openConnection();
+		           URLConnection conexion = url.openConnection();
+		           conexion.connect();
+		           int lenghtOfFile = conexion.getContentLength();
+		       	   Log.d("DownloadManager", "Lenght of file: " + lenghtOfFile);
 
 		           /*
 		            * Define InputStreams to read from the URLConnection.
 		            */
-		           InputStream is = ucon.getInputStream();
-		           BufferedInputStream bis = new BufferedInputStream(is);
+		       	   InputStream input = new BufferedInputStream(url.openStream());
+		       	   OutputStream output = new FileOutputStream(file);
 
-		           /*
-		            * Read bytes to the Buffer until there is nothing more to read(-1).
-		            */
-		           ByteArrayBuffer baf = new ByteArrayBuffer(5000);
-		           int current = 0;
-		           while ((current = bis.read()) != -1) {
-		              baf.append((byte) current);
-		           }
+		       	   byte data[] = new byte[1024];
 
+		       	   long total = 0;
+		       	   int count;
 
-		           /* Convert the Bytes read to a String. */
-		           FileOutputStream fos = new FileOutputStream(file);
-		           fos.write(baf.toByteArray());
-		           fos.flush();
-		           fos.close();
+		    		while ((count = input.read(data)) != -1) {
+		    			total += count;
+		    			//set not
+		    			if ((int)((total*100)/lenghtOfFile) % 5 == 0){
+		    			mBuilder.setProgress(100, (int)((total*100)/lenghtOfFile), false);
+						mNotificationManager.notify(0, mBuilder.build());
+		    			}
+						
+		    			output.write(data, 0, count);
+		    		}
+
+		    		output.flush();
+		    		output.close();
+		    		input.close();
 		           Log.d("DownloadManager", "download ready in" + ((System.currentTimeMillis() - startTime) / 1000) + " sec");
 		           
 		           /*setting up cover art and fix tags so far as we can!*/
+		           mBuilder.setContentTitle(getResources().getString(R.string.downloading)+" "+ oneItem.artist+" - "+oneItem.title)
+					.setContentText(getResources().getString(R.string.dm_inprogrees_cover))
+					.setSmallIcon(R.drawable.ic_menu_download);
+		           mBuilder.setProgress(100, 100, false);
+		           mNotificationManager.notify(0, mBuilder.build());
 		           
 		           Log.d("DownloadManager", "download cover art");
 		           //download bitmap from web

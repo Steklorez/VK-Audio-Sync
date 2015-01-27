@@ -202,11 +202,9 @@ public class MusicListFragment extends Fragment {
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.main, menu);
+		inflater.inflate(R.menu.ml_menu, menu);
 		mainMenu = menu;
 		if (isMyServiceRunning(DownloadService.class)){
-			mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download_disabled);
-			mainMenu.findItem(R.id.menu_start_download_service).setEnabled(false);
 			mPullToRefreshLayout.setRefreshing(true);
 		} 
 		return;
@@ -218,24 +216,6 @@ public class MusicListFragment extends Fragment {
 	      case android.R.id.home:
 	    	  Intent i = new Intent(Constants.OPEN_MENU_DRAWER);
 	    	  getActivity().sendBroadcast(i);
-	    	  break;
-	      case R.id.menu_start_download_service:
-	    	  //start task animation
-	    	  mPullToRefreshLayout.setRefreshing(true);
-	    	  //disable this menu button
-	    	  item.setEnabled(false); 
-	    	  item.setIcon(R.drawable.ic_menu_download_disabled);
-	    	  //send only checked music
-	    	  ArrayList<MusicCollection> musicCollectionToDownload = new ArrayList<MusicCollection>();
-	    	  for (MusicCollection oneItem : musicCollection){
-					if (oneItem.checked == 1 && oneItem.exist == 0) {
-						musicCollectionToDownload.add(oneItem);
-					}
-				}
-	    	  //start service
-	    	  Intent serviceIntent = new Intent(getActivity(), DownloadService.class); 
-	    	  serviceIntent.putExtra(Constants.EXTRA_MUSIC_COLLECTION, musicCollectionToDownload);
-	    	  getActivity().startService(serviceIntent);
 	    	  break;
 	      case R.id.menu_main:
 	    	  bundle.putInt(Constants.BUNDLE_MAIN_WALL_TYPE, Constants.MAIN_MUSIC);
@@ -352,10 +332,6 @@ public class MusicListFragment extends Fragment {
 	    	if (intent.getExtras().getBoolean(Constants.DOWNLOAD_SERVICE_STOPPED)){
 	    		//stop task animation
 	    		mPullToRefreshLayout.setRefreshing(false);
-	    		if (mainMenu!=null){
-	    			mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
-	    			mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
-	    		}
 	    	} else {
 	    		int index = 0;
 	    		for (MusicCollection oneItem : musicCollection){
@@ -365,8 +341,28 @@ public class MusicListFragment extends Fragment {
 	    				musicAdapter.getItem(index).checked = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
 		    			musicAdapter.getItem(index).exist = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
 		    			musicAdapter.notifyDataSetChanged();
+		    			
+		    			break;
 	    			}
 	    			index++;
+				}
+	    		
+	    		//remove from global download manager
+				try {
+					ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+					if (musicCollectionTemp==null)
+	            		musicCollectionTemp = new ArrayList<MusicCollection>();
+	  					int indexTemp=0;
+	  				for (MusicCollection one: musicCollectionTemp){
+	  					if ((one.aid==intent.getExtras().getLong(Constants.MUSIC_AID_DOWNLOADED)) && intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED)){
+	  						musicCollectionTemp.remove(indexTemp);
+	  						break;
+	  					}
+	  					indexTemp++;
+	  				}
+					sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 	    	}
 	    }
@@ -420,7 +416,7 @@ public class MusicListFragment extends Fragment {
 			new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
-                	if (bundle != null && ((mainMenu != null && mainMenu.findItem(R.id.menu_start_download_service).isEnabled()) || mainMenu == null)){
+                	if (bundle != null){
                             try {
                             	error=true;
                             	musicCollection = new ArrayList<MusicCollection>();

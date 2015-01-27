@@ -32,6 +32,7 @@ import android.util.Log;
 
 import com.BBsRs.vkaudiosync.ContentShowActivity;
 import com.BBsRs.vkaudiosync.R;
+import com.BBsRs.vkaudiosync.Application.ObjectSerializer;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 import com.BBsRs.vkaudiosync.collection.MusicCollection;
 import com.mpatric.mp3agic.ID3v2;
@@ -72,22 +73,22 @@ public class DownloadService extends Service {
 	
 	@SuppressWarnings("unchecked")
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Bundle extras = intent.getExtras(); 
-		if(extras == null)
-			this.stopSelf();
-		else
-		{
-		musicCollection = (ArrayList<MusicCollection>) extras.get(Constants.EXTRA_MUSIC_COLLECTION);
+		//set up preferences
+        sPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        
+		try {
+	       	musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+	       	if (musicCollection==null)
+	       		musicCollection = new ArrayList<MusicCollection>();
+	    } catch (IOException e) {
+	    	e.printStackTrace();
+	    }
 		pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Constants.PARTIAL_WAKE_LOCK_TAG);
 		wl.acquire();
 		
-		//set up preferences
-        sPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		
+        setPendingNotification();
 		startDownloadChecking();
-		setPendingNotification();
-		}
 		return super.onStartCommand(intent, flags, startId);
 	}
 	

@@ -49,7 +49,7 @@ public class Constants {
 	public static final String GOOGLE_IMAGE_REQUEST_URL = "https://www.google.ru/search?&safe=off&tbm=isch&tbs=isz:m&q=";
 	public static final String DEFAULT_CHARSET = "UTF-8";
 	
-	//DOWNLOAD SERVICE
+	//SaveInstanceState
 	public static final String EXTRA_MUSIC_COLLECTION = "musicCollection";
 	
 	//shared preferences

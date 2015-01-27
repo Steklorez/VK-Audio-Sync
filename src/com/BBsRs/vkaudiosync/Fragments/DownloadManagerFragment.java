@@ -12,17 +12,23 @@ import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.RelativeLayout;
 import org.holoeverywhere.widget.TextView;
 
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.Adapters.DownloadManagerMusicAdapter;
 import com.BBsRs.vkaudiosync.Application.ObjectSerializer;
+import com.BBsRs.vkaudiosync.Services.DownloadService;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 import com.BBsRs.vkaudiosync.collection.MusicCollection;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -46,6 +52,9 @@ public class DownloadManagerFragment extends Fragment {
     
     //adapter to listview
     DownloadManagerMusicAdapter musicAdapter;
+    
+    //menu settings
+    Menu mainMenu = null;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,6 +63,9 @@ public class DownloadManagerFragment extends Fragment {
 		
 		//set up preferences
         sPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        
+        //enable menu
+    	setHasOptionsMenu(true);
         
         //init all views
 	    listViewMusic = (ListView)contentView.findViewById(R.id.listView);
@@ -95,6 +107,7 @@ public class DownloadManagerFragment extends Fragment {
         
         //register delete receiver
         getActivity().registerReceiver(someDeleted, new IntentFilter(Constants.SOME_DELETED));
+        getActivity().registerReceiver(musicDownloaded, new IntentFilter(Constants.MUSIC_DOWNLOADED));
         
         sPref.edit().putBoolean(Constants.OTHER_FRAGMENT, true).commit();
 	}
@@ -103,7 +116,67 @@ public class DownloadManagerFragment extends Fragment {
 	public void onPause() {
 		super.onPause();
 		getActivity().unregisterReceiver(someDeleted);
+		getActivity().unregisterReceiver(musicDownloaded);
 	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.dm_menu, menu);
+		mainMenu = menu;
+		if (isMyServiceRunning(DownloadService.class)){
+			mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download_disabled);
+			mainMenu.findItem(R.id.menu_start_download_service).setEnabled(false);
+		} 
+		return;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	      switch (item.getItemId()) {
+	      case android.R.id.home:
+	    	  Intent i = new Intent(Constants.OPEN_MENU_DRAWER);
+	    	  getActivity().sendBroadcast(i);
+	    	  break;
+	      case R.id.menu_start_download_service:
+	    	  //start service
+	    	  Intent serviceIntent = new Intent(getActivity(), DownloadService.class); 
+	    	  getActivity().startService(serviceIntent);
+	    	  break;
+	      }
+		return true;
+	}
+	
+	private BroadcastReceiver musicDownloaded = new BroadcastReceiver() {
+
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	    	if (intent.getExtras().getBoolean(Constants.DOWNLOAD_SERVICE_STOPPED)){
+	    		if (mainMenu!=null){
+	    			mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
+	    			mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
+	    		}
+	    	} else {
+	    		//remove from global download manager
+				try {
+					ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+					if (musicCollectionTemp==null)
+	            		musicCollectionTemp = new ArrayList<MusicCollection>();
+	  					int indexTemp=0;
+	  				for (MusicCollection one: musicCollectionTemp){
+	  					if ((one.aid==intent.getExtras().getLong(Constants.MUSIC_AID_DOWNLOADED)) && intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED)){
+	  						musicAdapter.removeItem(indexTemp);
+	  						musicCollectionTemp.remove(indexTemp);
+	  						break;
+	  					}
+	  					indexTemp++;
+	  				}
+					sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+	    	}
+	    }
+	};
 	
 	private BroadcastReceiver someDeleted = new BroadcastReceiver() {
 	    @Override
@@ -128,5 +201,15 @@ public class DownloadManagerFragment extends Fragment {
 			}
 	    }
 	};
+	
+    private boolean isMyServiceRunning(Class<?> serviceClass) {			//returns true is service running
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

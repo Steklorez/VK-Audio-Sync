@@ -10,6 +10,7 @@
     <string name="action_settings">Settings</string>
     <string name="quan_songs_main">songs in main list</string>
     <string name="quan_songs_wall">songs on wall</string>
+    <string name="quan_songs_dm">songs in dm list</string>
     <string name="quan_people">people</string>
     <string name="quan_groups">communities</string>
     <string name="download_selected">Download selected</string>

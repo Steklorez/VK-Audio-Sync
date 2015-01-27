@@ -91,9 +91,6 @@ public class DownloadManagerFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		getSupportActionBar().setTitle(getResources().getStringArray(R.array.slider_menu)[5]);
-		getSupportActionBar().setSubtitle(null);
-		
 		try {
         	musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
         	if (musicCollection==null)
@@ -110,6 +107,9 @@ public class DownloadManagerFragment extends Fragment {
         getActivity().registerReceiver(musicDownloaded, new IntentFilter(Constants.MUSIC_DOWNLOADED));
         
         sPref.edit().putBoolean(Constants.OTHER_FRAGMENT, true).commit();
+        
+        getSupportActionBar().setTitle(getResources().getStringArray(R.array.slider_menu)[5]);
+		getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_dm));
 	}
 	
 	@Override
@@ -138,6 +138,8 @@ public class DownloadManagerFragment extends Fragment {
 	    	  getActivity().sendBroadcast(i);
 	    	  break;
 	      case R.id.menu_start_download_service:
+	    	  mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download_disabled);
+	    	  mainMenu.findItem(R.id.menu_start_download_service).setEnabled(false);
 	    	  //start service
 	    	  Intent serviceIntent = new Intent(getActivity(), DownloadService.class); 
 	    	  getActivity().startService(serviceIntent);

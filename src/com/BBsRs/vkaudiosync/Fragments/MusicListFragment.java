@@ -318,6 +318,10 @@ public class MusicListFragment extends Fragment {
     			break;
     		}
     		if (sPref.getBoolean(Constants.OTHER_FRAGMENT, false)){
+    			musicCollection = new ArrayList<MusicCollection>();
+	    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options);
+	    		listViewMusic.setAdapter(musicAdapter);
+	    		
     			mPullToRefreshLayout.setRefreshing(true);
 				customOnRefreshListener.onRefreshStarted(null);	
 				sPref.edit().putBoolean(Constants.OTHER_FRAGMENT, false).commit();

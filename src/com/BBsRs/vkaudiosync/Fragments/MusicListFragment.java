@@ -98,9 +98,6 @@ public class MusicListFragment extends Fragment {
     //for retrieve data from activity
     Bundle bundle;
     
-    //rotate flag
-    boolean isAfterRotating = false;
-    
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -155,10 +152,8 @@ public class MusicListFragment extends Fragment {
 	    if(savedInstanceState == null) {
 	    	 mPullToRefreshLayout.setRefreshing(true);
 	         customOnRefreshListener.onRefreshStarted(null);
-	         isAfterRotating = false;
 	    }
 	    else{
-	    	isAfterRotating = true;
 	    	musicCollection = savedInstanceState.getParcelableArrayList(Constants.EXTRA_MUSIC_COLLECTION);
 	    	error = savedInstanceState.getBoolean("error");
 	    	if ((musicCollection.size()>1)) {
@@ -342,9 +337,10 @@ public class MusicListFragment extends Fragment {
     			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_wall));
     			break;
     		}
-    		if (!isAfterRotating){
+    		if (sPref.getBoolean(Constants.OTHER_FRAGMENT, false)){
     			mPullToRefreshLayout.setRefreshing(true);
 				customOnRefreshListener.onRefreshStarted(null);	
+				sPref.edit().putBoolean(Constants.OTHER_FRAGMENT, false).commit();
     		}
     	}
 	}

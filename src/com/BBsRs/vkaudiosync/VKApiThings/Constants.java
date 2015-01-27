@@ -56,6 +56,7 @@ public class Constants {
 	public static final String DOWNLOAD_DIRECTORY = "download_directory";
 	public static final String DOWNLOAD_SELECTION = "download_selection";
 	public static final String ONE_AUDIO_ITEM = "one_audio_item";
+	public static final String OTHER_FRAGMENT = "other_fragment";
 	
 
 }

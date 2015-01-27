@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Fragment;
+import org.holoeverywhere.preference.PreferenceManager;
+import org.holoeverywhere.preference.SharedPreferences;
 import org.holoeverywhere.widget.Button;
 import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.RelativeLayout;
@@ -36,6 +38,9 @@ import com.perm.kate.api.Group;
 import com.perm.kate.api.User;
 
 public class FriendsGroupsListFragment extends Fragment {
+	
+	//preferences 
+    SharedPreferences sPref;
 	
 	//android views where shows content
 	private PullToRefreshLayout mPullToRefreshLayout;
@@ -79,6 +84,9 @@ public class FriendsGroupsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 		View contentView = inflater.inflate(R.layout.list);
+		
+		//set up preferences
+        sPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		
 		//retrieve bundle
 		bundle = this.getArguments();
@@ -210,6 +218,8 @@ public class FriendsGroupsListFragment extends Fragment {
     		getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_groups));
     		break;
     	}
+    	
+    	sPref.edit().putBoolean(Constants.OTHER_FRAGMENT, true).commit();
 	}
 	
 	@Override

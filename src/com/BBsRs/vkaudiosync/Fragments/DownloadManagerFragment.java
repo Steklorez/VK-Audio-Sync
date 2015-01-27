@@ -95,6 +95,8 @@ public class DownloadManagerFragment extends Fragment {
         
         //register delete receiver
         getActivity().registerReceiver(someDeleted, new IntentFilter(Constants.SOME_DELETED));
+        
+        sPref.edit().putBoolean(Constants.OTHER_FRAGMENT, true).commit();
 	}
 	
 	@Override

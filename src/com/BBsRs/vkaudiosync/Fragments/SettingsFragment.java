@@ -60,6 +60,8 @@ public class SettingsFragment extends PreferenceFragment {
 		
 		sPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		chooseDir.setSummary(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/");
+		
+		sPref.edit().putBoolean(Constants.OTHER_FRAGMENT, true).commit();
 	}
 	
 

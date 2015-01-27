@@ -72,6 +72,7 @@ public class DownloadManagerFragment extends Fragment {
     	relativeErrorLayout = (RelativeLayout)contentView.findViewById(R.id.errorLayout);
     	errorMessage = (TextView)contentView.findViewById(R.id.errorMessage);
     	errorRetryButton = (Button)contentView.findViewById(R.id.errorRetryButton);
+    	errorRetryButton.setVisibility(View.GONE);
     	
     	//clean ab title and subtitle
      	getSupportActionBar().setTitle("");
@@ -109,7 +110,17 @@ public class DownloadManagerFragment extends Fragment {
         sPref.edit().putBoolean(Constants.OTHER_FRAGMENT, true).commit();
         
         getSupportActionBar().setTitle(getResources().getStringArray(R.array.slider_menu)[5]);
-		getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_dm));
+        if (musicCollection.size() == 0){
+        	errorMessage.setText(getResources().getString(R.string.message_zero_count_audio_dm));
+        	relativeErrorLayout.setVisibility(View.VISIBLE);
+        	listViewMusic.setVisibility(View.GONE);
+        	getSupportActionBar().setSubtitle(getResources().getString(R.string.message_zero_count_audio_dm));
+        } else {
+        	relativeErrorLayout.setVisibility(View.GONE);
+        	listViewMusic.setVisibility(View.VISIBLE);
+        	getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_dm));
+        }
+		
 	}
 	
 	@Override
@@ -168,11 +179,22 @@ public class DownloadManagerFragment extends Fragment {
 	  					if ((one.aid==intent.getExtras().getLong(Constants.MUSIC_AID_DOWNLOADED)) && intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED)){
 	  						musicAdapter.removeItem(indexTemp);
 	  						musicCollectionTemp.remove(indexTemp);
-	  						getSupportActionBar().setSubtitle(musicCollectionTemp.size()+" "+getResources().getString(R.string.quan_songs_dm));
 	  						break;
 	  					}
 	  					indexTemp++;
 	  				}
+	  				
+	  				if (musicCollectionTemp.size() == 0){
+	  		        	errorMessage.setText(getResources().getString(R.string.message_zero_count_audio_dm));
+	  		        	relativeErrorLayout.setVisibility(View.VISIBLE);
+	  		        	listViewMusic.setVisibility(View.GONE);
+	  		        	getSupportActionBar().setSubtitle(getResources().getString(R.string.message_zero_count_audio_dm));
+	  		        } else {
+	  		        	relativeErrorLayout.setVisibility(View.GONE);
+	  		        	listViewMusic.setVisibility(View.VISIBLE);
+	  		        	getSupportActionBar().setSubtitle(musicCollectionTemp.size()+" "+getResources().getString(R.string.quan_songs_dm));
+	  		        }
+	  				
 					sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -194,11 +216,22 @@ public class DownloadManagerFragment extends Fragment {
   				for (MusicCollection one: musicCollectionTemp){
   					if (one.aid==((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid){
   						musicCollectionTemp.remove(indexTemp);
-  						getSupportActionBar().setSubtitle(musicCollectionTemp.size()+" "+getResources().getString(R.string.quan_songs_dm));
   						break;
   					}
   					indexTemp++;
   				}
+  				
+  				if (musicCollectionTemp.size() == 0){
+  		        	errorMessage.setText(getResources().getString(R.string.message_zero_count_audio_dm));
+  		        	relativeErrorLayout.setVisibility(View.VISIBLE);
+  		        	listViewMusic.setVisibility(View.GONE);
+  		        	getSupportActionBar().setSubtitle(getResources().getString(R.string.message_zero_count_audio_dm));
+  		        } else {
+  		        	relativeErrorLayout.setVisibility(View.GONE);
+  		        	listViewMusic.setVisibility(View.VISIBLE);
+  		        	getSupportActionBar().setSubtitle(musicCollectionTemp.size()+" "+getResources().getString(R.string.quan_songs_dm));
+  		        }
+  				
 				sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
 			} catch (IOException e) {
 				e.printStackTrace();

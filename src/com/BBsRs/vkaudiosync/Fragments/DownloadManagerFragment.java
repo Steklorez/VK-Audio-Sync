@@ -176,7 +176,7 @@ public class DownloadManagerFragment extends Fragment {
 	            		musicCollectionTemp = new ArrayList<MusicCollection>();
 	  					int indexTemp=0;
 	  				for (MusicCollection one: musicCollectionTemp){
-	  					if ((one.aid==intent.getExtras().getLong(Constants.MUSIC_AID_DOWNLOADED)) && intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED)){
+	  					if ((one.aid==((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid || (one.title.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).title) && one.artist.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).artist))) && intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED)){
 	  						musicAdapter.removeItem(indexTemp);
 	  						musicCollectionTemp.remove(indexTemp);
 	  						break;

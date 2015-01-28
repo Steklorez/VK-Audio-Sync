@@ -339,7 +339,7 @@ public class MusicListFragment extends Fragment {
 	    	} else {
 	    		int index = 0;
 	    		for (MusicCollection oneItem : musicCollection){
-	    			if (oneItem.aid == intent.getExtras().getLong(Constants.MUSIC_AID_DOWNLOADED)){
+	    			if (oneItem.aid==((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid || (oneItem.title.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).title) && oneItem.artist.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).artist))){
 	    				oneItem.checked = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
 	    				oneItem.exist = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
 	    				musicAdapter.getItem(index).checked = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
@@ -358,7 +358,7 @@ public class MusicListFragment extends Fragment {
 	            		musicCollectionTemp = new ArrayList<MusicCollection>();
 	  					int indexTemp=0;
 	  				for (MusicCollection one: musicCollectionTemp){
-	  					if ((one.aid==intent.getExtras().getLong(Constants.MUSIC_AID_DOWNLOADED)) && intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED)){
+	  					if ((one.aid==((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid || (one.title.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).title) && one.artist.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).artist))) && intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED)){
 	  						musicCollectionTemp.remove(indexTemp);
 	  						break;
 	  					}

@@ -26,6 +26,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Parcelable;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -130,7 +131,7 @@ public class DownloadService extends Service {
 					mNotificationManager.notify(0, mBuilder.build());
 					
 					Intent i = new Intent(Constants.MUSIC_DOWNLOADED);
-					i.putExtra(Constants.MUSIC_AID_DOWNLOADED, oneItem.aid);
+					i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
 					i.putExtra(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED, DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", "")));
 					i.putExtra(Constants.DOWNLOAD_SERVICE_STOPPED, false);
 					sendBroadcast(i);

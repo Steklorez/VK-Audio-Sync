@@ -1,0 +1,8 @@
+<resources>
+
+    <style name="Holo.CompoundButton.CheckBox.Custom" parent="@style/Holo.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/apptheme_btn_check_holo_dark</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+</resources>

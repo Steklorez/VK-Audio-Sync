@@ -21,15 +21,13 @@
         android:layout_alignTop="@+id/cover_art"
         android:layout_toRightOf="@+id/cover_art" >
 
-        <org.holoeverywhere.widget.CheckBox
+        <CheckBox
             android:id="@+id/checlDownload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:background="@android:color/transparent"
-            android:button="@drawable/apptheme_btn_check_holo_dark" />
+            android:layout_alignParentTop="true"/>
 
         <TextView
             android:id="@+id/length"

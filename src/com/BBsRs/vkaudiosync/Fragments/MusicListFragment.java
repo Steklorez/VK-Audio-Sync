@@ -386,7 +386,7 @@ public class MusicListFragment extends Fragment {
 				} else {
   					int indexTemp=0;
   					for (MusicCollection one: musicCollectionTemp){
-  						if (one.aid==((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid){
+  						if (one.aid==((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid || (one.title.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).title) && one.artist.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).artist))){
   							musicCollectionTemp.remove(indexTemp);
   							break;
   						}
@@ -503,7 +503,7 @@ public class MusicListFragment extends Fragment {
                             		else 
                             			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 0, 0));
                             		for (MusicCollection oneDM : musicCollectionTemp){
-                            			if (oneDM.aid == one.aid)
+                            			if (oneDM.aid == one.aid || (oneDM.title.equals(one.title) && oneDM.artist.equals(one.artist)))
                             				musicCollection.get(musicCollection.size()-1).checked = 1;
                             		}
                             	}

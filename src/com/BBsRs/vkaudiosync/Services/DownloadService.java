@@ -122,7 +122,7 @@ public class DownloadService extends Service {
 //					not.setLatestEventInfo(getApplicationContext(), getResources().getString(R.string.downloading), oneItem.artist+" - "+oneItem.title, contentIntent);
 //					mNotificationManager.notify(1, not);
 					
-					mBuilder.setContentTitle(getResources().getString(R.string.downloading)+" "+ oneItem.artist+" - "+oneItem.title)
+					mBuilder.setContentTitle(oneItem.artist+" - "+oneItem.title)
 							.setContentText(getResources().getString(R.string.dm_inprogrees))
 							.setSmallIcon(R.drawable.ic_menu_download);
 					
@@ -174,14 +174,17 @@ public class DownloadService extends Service {
 		       	   byte data[] = new byte[1024];
 
 		       	   long total = 0;
-		       	   int count;
+		       	   int count, last=0;
+		       	   long shownIn = System.currentTimeMillis();
 
 		    		while ((count = input.read(data)) != -1) {
 		    			total += count;
 		    			//set not
-		    			if ((int)((total*100)/lenghtOfFile) % 5 == 0){
-		    			mBuilder.setProgress(100, (int)((total*100)/lenghtOfFile), false);
-						mNotificationManager.notify(0, mBuilder.build());
+		    			if (((int)((total*100)/lenghtOfFile) > last) && (System.currentTimeMillis() - shownIn) > 250){
+		    				last = (int)((total*100)/lenghtOfFile);
+		    				shownIn = System.currentTimeMillis();
+		    				mBuilder.setProgress(100, last, false);
+		    				mNotificationManager.notify(0, mBuilder.build());
 		    			}
 						
 		    			output.write(data, 0, count);
@@ -193,7 +196,7 @@ public class DownloadService extends Service {
 		           Log.d("DownloadManager", "download ready in" + ((System.currentTimeMillis() - startTime) / 1000) + " sec");
 		           
 		           /*setting up cover art and fix tags so far as we can!*/
-		           mBuilder.setContentTitle(getResources().getString(R.string.downloading)+" "+ oneItem.artist+" - "+oneItem.title)
+		           mBuilder.setContentTitle(oneItem.artist+" - "+oneItem.title)
 					.setContentText(getResources().getString(R.string.dm_inprogrees_cover))
 					.setSmallIcon(R.drawable.ic_menu_download);
 		           mBuilder.setProgress(100, 100, false);

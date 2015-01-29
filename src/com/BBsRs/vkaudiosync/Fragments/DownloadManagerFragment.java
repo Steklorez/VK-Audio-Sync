@@ -142,10 +142,13 @@ public class DownloadManagerFragment extends Fragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.dm_menu, menu);
 		mainMenu = menu;
-		if (isMyServiceRunning(DownloadService.class)){
+		if (isMyServiceRunning(DownloadService.class) || musicCollection.size() == 0){
 			mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download_disabled);
 			mainMenu.findItem(R.id.menu_start_download_service).setEnabled(false);
-		} 
+		} else {
+			mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
+	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
+		}
 		return;
 	}
 	

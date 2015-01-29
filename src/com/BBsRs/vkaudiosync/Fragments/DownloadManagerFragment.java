@@ -176,8 +176,8 @@ public class DownloadManagerFragment extends Fragment {
 	    public void onReceive(Context context, Intent intent) {
 	    	if (intent.getExtras().getBoolean(Constants.DOWNLOAD_SERVICE_STOPPED)){
 	    		if (mainMenu!=null){
-	    			mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
-	    			mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
+	    			mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download_disabled);
+  		  	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(false);
 	    		}
 	    	} else {
 	    		//remove from adapter

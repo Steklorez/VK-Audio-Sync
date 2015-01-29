@@ -6,6 +6,7 @@
     <string name="error_message_zero_count_audio">Here basically no songs, try wall | main page of this user | community. </string>
     <string name="message_zero_count_audio_dm">Here basically no songs, try add songs to download manager from own list, friends, and communities or their walls.</string>
     <string name="error_retry">Retry</string>
+    <string name="of">of</string>
     <string name="dm_inprogrees">Download in progress.</string>
     <string name="dm_inprogrees_cover">Download is complete, sett up cover art and fix tags.</string>
     <string name="app_name">VK Music Sync</string>

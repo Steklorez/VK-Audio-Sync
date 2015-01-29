@@ -121,14 +121,14 @@ public class DownloadService extends Service {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
+				int index = 0;
 				for (MusicCollection oneItem : musicCollection){
-					mBuilder.setContentTitle(oneItem.artist+" - "+oneItem.title)
+					mBuilder.setContentTitle("["+(index+1)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+musicCollection.size()+"] "+oneItem.artist+" - "+oneItem.title)
 							.setContentText(getResources().getString(R.string.dm_inprogrees))
 							.setSmallIcon(R.drawable.ic_menu_download)
 							.setContentIntent(contentIntent)
-							.setOngoing(true);
-					
-					mBuilder.setProgress(100, 0, false);
+							.setOngoing(true)
+							.setProgress(100, 0, false);
 					mNotificationManager.notify(0, mBuilder.build());
 					
 					boolean isSuccessfullyDownloaded = DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", ""));
@@ -141,6 +141,7 @@ public class DownloadService extends Service {
 					i.putExtra(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED, isSuccessfullyDownloaded);
 					i.putExtra(Constants.DOWNLOAD_SERVICE_STOPPED, false);
 					sendBroadcast(i);
+					index++;
 				}
 				stopServiceCustom();
 			}
@@ -223,12 +224,8 @@ public class DownloadService extends Service {
 		           Log.d("DownloadManager", "download ready in" + ((System.currentTimeMillis() - startTime) / 1000) + " sec");
 		           
 		           /*setting up cover art and fix tags so far as we can!*/
-		           mBuilder.setContentTitle(oneItem.artist+" - "+oneItem.title)
-					.setContentText(getResources().getString(R.string.dm_inprogrees_cover))
-					.setSmallIcon(R.drawable.ic_menu_download)
-					.setOngoing(true)
-					.setContentIntent(contentIntent);
-		           mBuilder.setProgress(100, 100, false);
+		           mBuilder.setContentText(getResources().getString(R.string.dm_inprogrees_cover))
+					.setProgress(100, 100, false);
 		           mNotificationManager.notify(0, mBuilder.build());
 		           
 		           Log.d("DownloadManager", "download cover art");

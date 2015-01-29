@@ -204,9 +204,6 @@ public class MusicListFragment extends Fragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.ml_menu, menu);
 		mainMenu = menu;
-		if (isMyServiceRunning(DownloadService.class)){
-			mPullToRefreshLayout.setRefreshing(true);
-		} 
 		return;
 	}
 	
@@ -334,8 +331,6 @@ public class MusicListFragment extends Fragment {
 	    @Override
 	    public void onReceive(Context context, Intent intent) {
 	    	if (intent.getExtras().getBoolean(Constants.DOWNLOAD_SERVICE_STOPPED)){
-	    		//stop task animation
-	    		mPullToRefreshLayout.setRefreshing(false);
 	    	} else {
 	    		int index = 0;
 	    		for (MusicCollection oneItem : musicCollection){
@@ -525,8 +520,7 @@ public class MusicListFragment extends Fragment {
                     super.onPostExecute(result);
                     isRefreshing = false;
                     try {
-                    	if (!isMyServiceRunning(DownloadService.class))
-                    		mPullToRefreshLayout.setRefreshing(false);
+                    	mPullToRefreshLayout.setRefreshing(false);
                     	
                     	// set action bar
                 		getSupportActionBar().setTitle(PlaceName);

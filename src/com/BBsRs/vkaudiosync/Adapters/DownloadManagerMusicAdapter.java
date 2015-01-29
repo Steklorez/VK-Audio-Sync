@@ -23,7 +23,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class DownloadManagerMusicAdapter extends BaseAdapter {
 
-	ArrayList<MusicCollection> musicCollection = new ArrayList<MusicCollection>();
+	public ArrayList<MusicCollection> musicCollection = new ArrayList<MusicCollection>();
 	Context context;
 	LayoutInflater inflater;
 	DisplayImageOptions options;

@@ -350,24 +350,6 @@ public class MusicListFragment extends Fragment {
 	    			}
 	    			index++;
 				}
-	    		
-	    		//remove from global download manager
-				try {
-					ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
-					if (musicCollectionTemp==null)
-	            		musicCollectionTemp = new ArrayList<MusicCollection>();
-	  					int indexTemp=0;
-	  				for (MusicCollection one: musicCollectionTemp){
-	  					if ((one.aid==((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid || (one.title.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).title) && one.artist.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).artist))) && intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED)){
-	  						musicCollectionTemp.remove(indexTemp);
-	  						break;
-	  					}
-	  					indexTemp++;
-	  				}
-					sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
 	    	}
 	    }
 	};

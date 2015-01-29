@@ -131,15 +131,40 @@ public class DownloadService extends Service {
 					mBuilder.setProgress(100, 0, false);
 					mNotificationManager.notify(0, mBuilder.build());
 					
+					boolean isSuccessfullyDownloaded = DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", ""));
+					
+					if (isSuccessfullyDownloaded)
+						removeFromDM(oneItem);
+					
 					Intent i = new Intent(Constants.MUSIC_DOWNLOADED);
 					i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
-					i.putExtra(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED, DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", "")));
+					i.putExtra(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED, isSuccessfullyDownloaded);
 					i.putExtra(Constants.DOWNLOAD_SERVICE_STOPPED, false);
 					sendBroadcast(i);
 				}
 				stopServiceCustom();
 			}
 		}).start();
+	}
+	
+	public void removeFromDM (MusicCollection itemToRemove){
+		//remove from global download manager
+		try {
+			ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+			if (musicCollectionTemp==null)
+        		musicCollectionTemp = new ArrayList<MusicCollection>();
+					int indexTemp=0;
+				for (MusicCollection one: musicCollectionTemp){
+					if ((one.aid==itemToRemove.aid || (one.title.equals(itemToRemove.title) && one.artist.equals(itemToRemove.artist)))){
+						musicCollectionTemp.remove(indexTemp);
+						break;
+					}
+					indexTemp++;
+				}
+			sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public boolean DownloadFromUrl(MusicCollection oneItem, String fileName) {

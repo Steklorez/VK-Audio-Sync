@@ -169,16 +169,15 @@ public class DownloadManagerFragment extends Fragment {
 	    			mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
 	    		}
 	    	} else {
-	    		//remove from global download manager
+	    		//remove from adapter
 				try {
-					ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+					ArrayList<MusicCollection> musicCollectionTemp = musicAdapter.musicCollection;
 					if (musicCollectionTemp==null)
 	            		musicCollectionTemp = new ArrayList<MusicCollection>();
 	  					int indexTemp=0;
 	  				for (MusicCollection one: musicCollectionTemp){
 	  					if ((one.aid==((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid || (one.title.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).title) && one.artist.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).artist))) && intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED)){
 	  						musicAdapter.removeItem(indexTemp);
-	  						musicCollectionTemp.remove(indexTemp);
 	  						break;
 	  					}
 	  					indexTemp++;
@@ -194,9 +193,7 @@ public class DownloadManagerFragment extends Fragment {
 	  		        	listViewMusic.setVisibility(View.VISIBLE);
 	  		        	getSupportActionBar().setSubtitle(musicCollectionTemp.size()+" "+getResources().getString(R.string.quan_songs_dm));
 	  		        }
-	  				
-					sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
-				} catch (IOException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 	    	}

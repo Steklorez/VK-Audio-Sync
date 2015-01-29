@@ -31,6 +31,7 @@ import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.BBsRs.vkaudiosync.ContentShowActivity;
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.Application.ObjectSerializer;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
@@ -113,6 +114,7 @@ public class DownloadService extends Service {
 	
 	private void setPendingNotification(){
 		mBuilder = new NotificationCompat.Builder(this);
+		contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(this, ContentShowActivity.class), Notification.FLAG_ONGOING_EVENT);        
 	}
 	
 	public void startDownloadChecking(){
@@ -120,12 +122,11 @@ public class DownloadService extends Service {
 			@Override
 			public void run() {
 				for (MusicCollection oneItem : musicCollection){
-//					not.setLatestEventInfo(getApplicationContext(), getResources().getString(R.string.downloading), oneItem.artist+" - "+oneItem.title, contentIntent);
-//					mNotificationManager.notify(1, not);
-					
 					mBuilder.setContentTitle(oneItem.artist+" - "+oneItem.title)
 							.setContentText(getResources().getString(R.string.dm_inprogrees))
-							.setSmallIcon(R.drawable.ic_menu_download);
+							.setSmallIcon(R.drawable.ic_menu_download)
+							.setContentIntent(contentIntent)
+							.setOngoing(true);
 					
 					mBuilder.setProgress(100, 0, false);
 					mNotificationManager.notify(0, mBuilder.build());
@@ -199,7 +200,9 @@ public class DownloadService extends Service {
 		           /*setting up cover art and fix tags so far as we can!*/
 		           mBuilder.setContentTitle(oneItem.artist+" - "+oneItem.title)
 					.setContentText(getResources().getString(R.string.dm_inprogrees_cover))
-					.setSmallIcon(R.drawable.ic_menu_download);
+					.setSmallIcon(R.drawable.ic_menu_download)
+					.setOngoing(true)
+					.setContentIntent(contentIntent);
 		           mBuilder.setProgress(100, 100, false);
 		           mNotificationManager.notify(0, mBuilder.build());
 		           

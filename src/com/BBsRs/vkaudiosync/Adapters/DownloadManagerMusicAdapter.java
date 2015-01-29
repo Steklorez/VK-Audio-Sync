@@ -5,9 +5,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import org.holoeverywhere.LayoutInflater;
-import org.holoeverywhere.widget.CheckBox;
 import org.holoeverywhere.widget.TextView;
-import org.holoeverywhere.widget.Toast;
 
 import android.content.Context;
 import android.content.Intent;

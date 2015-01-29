@@ -115,10 +115,18 @@ public class DownloadManagerFragment extends Fragment {
         	relativeErrorLayout.setVisibility(View.VISIBLE);
         	listViewMusic.setVisibility(View.GONE);
         	getSupportActionBar().setSubtitle(getResources().getString(R.string.message_zero_count_audio_dm));
+        	if (mainMenu != null){
+        	mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download_disabled);
+	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(false);
+        	}
         } else {
         	relativeErrorLayout.setVisibility(View.GONE);
         	listViewMusic.setVisibility(View.VISIBLE);
         	getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_dm));
+        	if (mainMenu != null){
+        	mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
+	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
+        	}
         }
 		
 	}
@@ -188,10 +196,18 @@ public class DownloadManagerFragment extends Fragment {
 	  		        	relativeErrorLayout.setVisibility(View.VISIBLE);
 	  		        	listViewMusic.setVisibility(View.GONE);
 	  		        	getSupportActionBar().setSubtitle(getResources().getString(R.string.message_zero_count_audio_dm));
+	  		        	if (mainMenu != null){
+	  		          	mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download_disabled);
+	  		  	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(false);
+	  		          	}
 	  		        } else {
 	  		        	relativeErrorLayout.setVisibility(View.GONE);
 	  		        	listViewMusic.setVisibility(View.VISIBLE);
 	  		        	getSupportActionBar().setSubtitle(musicCollectionTemp.size()+" "+getResources().getString(R.string.quan_songs_dm));
+	  		        	if (mainMenu != null){
+	  		          	mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
+	  		  	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
+	  		          	}
 	  		        }
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -223,10 +239,18 @@ public class DownloadManagerFragment extends Fragment {
   		        	relativeErrorLayout.setVisibility(View.VISIBLE);
   		        	listViewMusic.setVisibility(View.GONE);
   		        	getSupportActionBar().setSubtitle(getResources().getString(R.string.message_zero_count_audio_dm));
+  		        	if (mainMenu != null){
+  		          	mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download_disabled);
+  		  	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(false);
+  		          	}
   		        } else {
   		        	relativeErrorLayout.setVisibility(View.GONE);
   		        	listViewMusic.setVisibility(View.VISIBLE);
   		        	getSupportActionBar().setSubtitle(musicCollectionTemp.size()+" "+getResources().getString(R.string.quan_songs_dm));
+  		        	if (mainMenu != null){
+  		          	mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
+  		  	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
+  		          	}
   		        }
   				
 				sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();

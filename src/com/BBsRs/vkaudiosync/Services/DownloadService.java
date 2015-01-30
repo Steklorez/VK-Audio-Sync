@@ -63,6 +63,8 @@ public class DownloadService extends Service {
 	PendingIntent contentIntent;
 	NotificationCompat.Builder mBuilder;
 	
+	boolean isServiceStopped = false;
+	
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
 		return null;
@@ -95,17 +97,22 @@ public class DownloadService extends Service {
 	}
 	
 	public void onDestroy() {
+		sendBroadcastAboutDestroyingService();
+		isServiceStopped = true;
 		wl.release();
 		mNotificationManager.cancelAll();
 		super.onDestroy();
 	}
 	
+	public void sendBroadcastAboutDestroyingService(){
+		Intent i = new Intent(Constants.MUSIC_DOWNLOADED);
+		i.putExtra(Constants.DOWNLOAD_SERVICE_STOPPED, true);
+		sendBroadcast(i);
+	}
+	
 	public void stopServiceCustom(){
 		final Runnable updaterText = new Runnable() {
 	        public void run() {
-				Intent i = new Intent(Constants.MUSIC_DOWNLOADED);
-				i.putExtra(Constants.DOWNLOAD_SERVICE_STOPPED, true);
-				sendBroadcast(i);
 	        	stopSelf();
 	        }
 	    };
@@ -123,25 +130,29 @@ public class DownloadService extends Service {
 			public void run() {
 				int index = 0;
 				for (MusicCollection oneItem : musicCollection){
-					mBuilder.setContentTitle("["+(index+1)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+musicCollection.size()+"] "+oneItem.artist+" - "+oneItem.title)
-							.setContentText(getResources().getString(R.string.dm_inprogrees))
-							.setSmallIcon(R.drawable.ic_menu_download)
-							.setContentIntent(contentIntent)
-							.setOngoing(true)
-							.setProgress(100, 0, false);
-					mNotificationManager.notify(0, mBuilder.build());
+					if (!isServiceStopped){
+							mBuilder.setContentTitle("["+(index+1)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+musicCollection.size()+"] "+oneItem.artist+" - "+oneItem.title)
+								.setContentText(getResources().getString(R.string.dm_inprogrees))
+								.setSmallIcon(R.drawable.ic_menu_download)
+								.setContentIntent(contentIntent)
+								.setOngoing(true)
+								.setProgress(100, 0, false);
+						mNotificationManager.notify(0, mBuilder.build());
 					
-					boolean isSuccessfullyDownloaded = DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", ""));
+						boolean isSuccessfullyDownloaded = DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", ""));
 					
-					if (isSuccessfullyDownloaded)
-						removeFromDM(oneItem);
+						if (isSuccessfullyDownloaded)
+							removeFromDM(oneItem);
 					
-					Intent i = new Intent(Constants.MUSIC_DOWNLOADED);
-					i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
-					i.putExtra(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED, isSuccessfullyDownloaded);
-					i.putExtra(Constants.DOWNLOAD_SERVICE_STOPPED, false);
-					sendBroadcast(i);
-					index++;
+						Intent i = new Intent(Constants.MUSIC_DOWNLOADED);
+						i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
+						i.putExtra(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED, isSuccessfullyDownloaded);
+						i.putExtra(Constants.DOWNLOAD_SERVICE_STOPPED, false);
+						sendBroadcast(i);
+						index++;
+					} else {
+						break;
+					}
 				}
 				stopServiceCustom();
 			}
@@ -214,8 +225,12 @@ public class DownloadService extends Service {
 		    				mBuilder.setProgress(100, last, false);
 		    				mNotificationManager.notify(0, mBuilder.build());
 		    			}
-						
-		    			output.write(data, 0, count);
+		    			if (!isServiceStopped){
+		    				output.write(data, 0, count);
+		    			} else {
+		    				mNotificationManager.cancelAll();
+		    				break;
+		    			}
 		    		}
 
 		    		output.flush();
@@ -224,9 +239,16 @@ public class DownloadService extends Service {
 		           Log.d("DownloadManager", "download ready in" + ((System.currentTimeMillis() - startTime) / 1000) + " sec");
 		           
 		           /*setting up cover art and fix tags so far as we can!*/
-		           mBuilder.setContentText(getResources().getString(R.string.dm_inprogrees_cover))
-					.setProgress(100, 100, false);
-		           mNotificationManager.notify(0, mBuilder.build());
+		           if (!isServiceStopped){
+		        	   mBuilder.setContentText(getResources().getString(R.string.dm_inprogrees_cover))
+						.setProgress(100, 100, false);
+			           mNotificationManager.notify(0, mBuilder.build());
+	    			} else {
+	    				mNotificationManager.cancelAll();
+	    				file.delete();
+	    				return false;
+	    			}
+		           
 		           
 		           Log.d("DownloadManager", "download cover art");
 		           //download bitmap from web

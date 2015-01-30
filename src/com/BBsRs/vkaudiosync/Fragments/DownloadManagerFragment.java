@@ -11,6 +11,7 @@ import org.holoeverywhere.widget.Button;
 import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.RelativeLayout;
 import org.holoeverywhere.widget.TextView;
+import org.holoeverywhere.widget.Toast;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -167,13 +168,19 @@ public class DownloadManagerFragment extends Fragment {
 	    	  getActivity().startService(serviceIntent);
 	    	  break;
 	      case R.id.menu_delete_all:
-	    	  //clean download manager
-	  		  sPref.edit().putString(Constants.DOWNLOAD_SELECTION, "").commit();
-	  		  this.onResume();
+	    	  if (musicCollection.size() == 0){
+	    		  Toast.makeText(getActivity(), getResources().getString(R.string.delete_all_msg), Toast.LENGTH_LONG).show();
+	    	  } else {
+	    		  //clean download manager
+	    		  sPref.edit().putString(Constants.DOWNLOAD_SELECTION, "").commit();
+	  		  	  this.onResume();
+	    	  }
 	    	  break;
 	      case R.id.menu_stop_dm:
 	    	  if (isMyServiceRunning(DownloadService.class))
 	    		  getActivity().stopService(new Intent(getActivity(), DownloadService.class));
+	    	  else 
+	    		  Toast.makeText(getActivity(), getResources().getString(R.string.stop_dm_msg), Toast.LENGTH_LONG).show();
 	    	  break;
 	      }
 		return true;

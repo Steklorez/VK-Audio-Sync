@@ -30,6 +30,8 @@
     <string name="uncheck_all">Uncheck all</string>
     <string name="delete_all">Delete all</string>
     <string name="stop_dm">Stop downloading</string>
+    <string name="stop_dm_msg">Downloading isn\'t started to stop it</string>
+    <string name="delete_all_msg">List is already empty</string>
     <string name="more_than">You can\'t check and download more that 100 songs per one time</string>
     <string name="wall">Wall music</string>
     <string name="refreshing">Refreshing...</string>

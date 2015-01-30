@@ -15,6 +15,9 @@
             <item
                 android:id="@+id/menu_delete_all"
                 android:title="@string/delete_all"/>
+            <item
+                android:id="@+id/menu_stop_dm"
+                android:title="@string/stop_dm"/>
         </menu>
     </item>
 

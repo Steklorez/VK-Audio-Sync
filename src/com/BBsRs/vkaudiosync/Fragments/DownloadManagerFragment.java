@@ -171,6 +171,10 @@ public class DownloadManagerFragment extends Fragment {
 	  		  sPref.edit().putString(Constants.DOWNLOAD_SELECTION, "").commit();
 	  		  this.onResume();
 	    	  break;
+	      case R.id.menu_stop_dm:
+	    	  if (isMyServiceRunning(DownloadService.class))
+	    		  getActivity().stopService(new Intent(getActivity(), DownloadService.class));
+	    	  break;
 	      }
 		return true;
 	}

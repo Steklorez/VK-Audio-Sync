@@ -24,10 +24,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Parcelable;
 import android.os.PowerManager;
+import android.os.StatFs;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -100,7 +102,7 @@ public class DownloadService extends Service {
 		sendBroadcastAboutDestroyingService();
 		isServiceStopped = true;
 		wl.release();
-		mNotificationManager.cancelAll();
+		mNotificationManager.cancel(0);
 		super.onDestroy();
 	}
 	
@@ -203,7 +205,22 @@ public class DownloadService extends Service {
 		           conexion.connect();
 		           int lenghtOfFile = conexion.getContentLength();
 		       	   Log.d("DownloadManager", "Lenght of file: " + lenghtOfFile);
-
+		       	   
+		       	   StatFs stat = new StatFs(root.getPath());
+		       	   long sdAvailSize = (long)stat.getAvailableBlocks() * (long)stat.getBlockSize();
+		       	   if ((long)lenghtOfFile*2 > sdAvailSize){
+		       		   Log.d("DownloadManager", "no free space, avail only " + sdAvailSize);
+		       		
+		       		   isServiceStopped = true;
+		       		   
+		       		   mBuilder.setContentTitle(getApplicationContext().getResources().getString(R.string.no_free_space))
+		       		   .setContentText(getResources().getString(R.string.no_free_space_msg))
+		       		   .setSmallIcon(R.drawable.ic_menu_download)
+		       		   .setContentIntent(contentIntent)
+		       		   .setOngoing(false)
+		       		   .setProgress(0, 0, false);
+		       		   mNotificationManager.notify(1, mBuilder.build());
+		       	   }
 		           /*
 		            * Define InputStreams to read from the URLConnection.
 		            */
@@ -228,7 +245,7 @@ public class DownloadService extends Service {
 		    			if (!isServiceStopped){
 		    				output.write(data, 0, count);
 		    			} else {
-		    				mNotificationManager.cancelAll();
+		    				mNotificationManager.cancel(0);
 		    				break;
 		    			}
 		    		}
@@ -244,7 +261,7 @@ public class DownloadService extends Service {
 						.setProgress(100, 100, false);
 			           mNotificationManager.notify(0, mBuilder.build());
 	    			} else {
-	    				mNotificationManager.cancelAll();
+	    				mNotificationManager.cancel(0);
 	    				file.delete();
 	    				return false;
 	    			}

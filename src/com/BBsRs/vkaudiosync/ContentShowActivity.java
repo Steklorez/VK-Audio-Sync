@@ -36,6 +36,9 @@ public class ContentShowActivity extends Activity {
     Account account=new Account();
     Api api;
     /*----------------------------VK API-----------------------------*/
+    
+    //for retrieve data from activity
+    Bundle bundle;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -75,8 +78,17 @@ public class ContentShowActivity extends Activity {
         sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[5], DownloadManagerFragment.class, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
         sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[6], SettingsFragment.class, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
         
-        if (savedInstanceState == null)
-        sliderMenu.setCurrentPage(1);
+        bundle = getIntent().getExtras(); 
+
+        if (bundle != null) {
+        	if (savedInstanceState == null)
+                sliderMenu.setCurrentPage(bundle.getInt(Constants.INITIAL_PAGE));
+        } else {
+        	if (savedInstanceState == null)
+                sliderMenu.setCurrentPage(1);
+        }
+        
+        
 	
 	}
 	

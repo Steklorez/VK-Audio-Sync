@@ -28,6 +28,11 @@ public class Constants {
 	public static final int MAIN_MUSIC = 0;
 	public static final int WALL_MUSIC = 1;
 	
+	//FOURTH
+	public static final String INITIAL_PAGE = "initial_page";
+	public static final int MUSIC_LIST_FRAGMENT = 1;
+	public static final int DOWNLOAD_MANAGER_FRAGMENT = 5;
+	
 	
 	//BROADCAST RECEIVER
 	public static final String OPEN_MENU_DRAWER = "open_menu_drawer";

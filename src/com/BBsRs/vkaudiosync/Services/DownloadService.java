@@ -114,7 +114,7 @@ public class DownloadService extends Service {
 	
 	private void setPendingNotification(){
 		mBuilder = new NotificationCompat.Builder(this);
-		contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(this, ContentShowActivity.class), Notification.FLAG_ONGOING_EVENT);        
+		contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(this, ContentShowActivity.class).putExtra(Constants.INITIAL_PAGE, Constants.DOWNLOAD_MANAGER_FRAGMENT), Notification.FLAG_ONGOING_EVENT);        
 	}
 	
 	public void startDownloadChecking(){

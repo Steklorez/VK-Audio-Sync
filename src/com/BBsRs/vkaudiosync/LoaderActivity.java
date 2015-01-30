@@ -29,6 +29,7 @@ public class LoaderActivity extends Activity {
 		public void onFinish() {
 			if(api!=null){
 	            Intent refresh = new Intent(getApplicationContext(), ContentShowActivity.class);
+	            refresh.putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT);
 				//restart activity
 			    startActivity(refresh);   
 			    // stop curr activity

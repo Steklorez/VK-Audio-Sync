@@ -5,5 +5,17 @@
         android:icon="@drawable/ic_menu_download"
         android:showAsAction="always"
         android:title="@string/download_selected"/>
+    
+    <item
+        android:id="@+id/submenu"
+        android:icon="@drawable/ic_menu_moreover"
+        android:showAsAction="always"
+        android:title="@string/moreover">
+        <menu>
+            <item
+                android:id="@+id/menu_delete_all"
+                android:title="@string/delete_all"/>
+        </menu>
+    </item>
 
 </menu>

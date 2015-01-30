@@ -166,6 +166,11 @@ public class DownloadManagerFragment extends Fragment {
 	    	  Intent serviceIntent = new Intent(getActivity(), DownloadService.class); 
 	    	  getActivity().startService(serviceIntent);
 	    	  break;
+	      case R.id.menu_delete_all:
+	    	  //clean download manager
+	  		  sPref.edit().putString(Constants.DOWNLOAD_SELECTION, "").commit();
+	  		  this.onResume();
+	    	  break;
 	      }
 		return true;
 	}

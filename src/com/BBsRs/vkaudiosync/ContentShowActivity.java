@@ -105,13 +105,6 @@ public class ContentShowActivity extends Activity {
         registerReceiver(openMenuDrawer, new IntentFilter(Constants.OPEN_MENU_DRAWER));
 	}
 	
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		//clean download manager
-		sPref.edit().putString(Constants.DOWNLOAD_SELECTION, "").commit();
-	}
-	
 	private BroadcastReceiver openMenuDrawer = new BroadcastReceiver() {
 
 	    @Override

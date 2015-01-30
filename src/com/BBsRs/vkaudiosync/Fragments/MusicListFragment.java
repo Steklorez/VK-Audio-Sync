@@ -38,7 +38,6 @@ import android.view.animation.AnimationUtils;
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.Adapters.MusicAdapter;
 import com.BBsRs.vkaudiosync.Application.ObjectSerializer;
-import com.BBsRs.vkaudiosync.Services.DownloadService;
 import com.BBsRs.vkaudiosync.VKApiThings.Account;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 import com.BBsRs.vkaudiosync.collection.MusicCollection;

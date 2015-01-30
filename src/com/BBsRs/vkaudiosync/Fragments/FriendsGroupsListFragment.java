@@ -27,6 +27,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.BBsRs.vkaudiosync.ContentShowActivity;
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.Adapters.FriendsGroupsAdapter;
 import com.BBsRs.vkaudiosync.VKApiThings.Account;
@@ -129,20 +130,25 @@ public class FriendsGroupsListFragment extends Fragment {
         .build();
         
         //refresh on open to load data when app first time started
-	    if(savedInstanceState == null) {
+	    if(savedInstanceState == null && bundle.getParcelableArrayList("friendsGroupsCollection") == null) {
 	    	 mPullToRefreshLayout.setRefreshing(true);
 	         customOnRefreshListener.onRefreshStarted(null);
 	    }
 	    else{
-	    	friendsGroupsCollection = savedInstanceState.getParcelableArrayList("friendsGroupsCollection");
-	    	error = savedInstanceState.getBoolean("error");
+	    	if (savedInstanceState == null){
+	    		friendsGroupsCollection = bundle.getParcelableArrayList("friendsGroupsCollection");
+		    	error = bundle.getBoolean("error");
+		    	PlaceName = bundle.getString("PlaceName");
+	    	} else {
+	    		friendsGroupsCollection = savedInstanceState.getParcelableArrayList("friendsGroupsCollection");
+	    		error = savedInstanceState.getBoolean("error");
+	    		PlaceName = savedInstanceState.getString("PlaceName");
+	    	}
 	    	if ((friendsGroupsCollection.size()>1)) {
 	    		friendsGroupsAdapter = new FriendsGroupsAdapter(getActivity(), friendsGroupsCollection, options);
 	    		
-	    		PlaceName = savedInstanceState.getString("PlaceName");
-                
                 listViewFriendsGroups.setAdapter(friendsGroupsAdapter);
-                listViewFriendsGroups.setSelection(savedInstanceState.getInt("posX"));
+                listViewFriendsGroups.setSelection(savedInstanceState != null ? savedInstanceState.getInt("posX") : bundle.getInt("posX"));
 	    	}
 	    	
 	    	else {
@@ -165,26 +171,22 @@ public class FriendsGroupsListFragment extends Fragment {
 		        errorRetryButton.setEnabled(false);
 			}
 		});
-        
+        final Fragment thisFr = this;
         //programing on item click listener
         listViewFriendsGroups.setOnItemClickListener(new OnItemClickListener(){
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				Bundle bundleMusic = new Bundle();
-				final FragmentTransaction ft = getFragmentManager().beginTransaction();
-				
 	           	switch (bundle.getInt(Constants.BUNDLE_FRIENDS_GROUPS_TYPE)){
             	case Constants.FRIENDS:
             		bundleMusic.putLong(Constants.BUNDLE_USER_ID, friendsGroupsCollection.get(position).gfid);
             		bundleMusic.putInt(Constants.BUNDLE_MUSIC_TYPE, Constants.MAIN_MUSIC_USER);
-            		ft.addToBackStack(Constants.FRIENDS_FRAGMENT);
             		break;
             	case Constants.GROUPS:
             		bundleMusic.putLong(Constants.BUNDLE_USER_ID, bundle.getLong(Constants.BUNDLE_USER_ID));
             		bundleMusic.putLong(Constants.BUNDLE_GROUP_ID, friendsGroupsCollection.get(position).gfid);
             		bundleMusic.putInt(Constants.BUNDLE_MUSIC_TYPE, Constants.MAIN_MUSIC_GROUP);
-            		ft.addToBackStack(Constants.GROUPS_FRAGMENT);
             		break;
             	}
 	           	
@@ -194,13 +196,25 @@ public class FriendsGroupsListFragment extends Fragment {
 	           	
 	           	musicListFragment.setArguments(bundleMusic);
 	           	
-				//replace fragment
-				ft.replace(R.id.contentView, musicListFragment); 
-				ft.commit(); 
+	           	thisFr.onPause();
+				
+				((ContentShowActivity) getSupportActivity()).addonSlider()
+                .obtainSliderMenu().replaceFragment(musicListFragment);
 			}
         });
         
 		return contentView;
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		if (friendsGroupsCollection !=null && listViewFriendsGroups!=null && PlaceName != null){
+			 getArguments().putParcelableArrayList("friendsGroupsCollection", friendsGroupsCollection);
+			 getArguments().putInt("posX",  listViewFriendsGroups.getFirstVisiblePosition());
+			 getArguments().putString("PlaceName",  PlaceName);
+			 getArguments().putBoolean("error", error);
+		}
 	}
 	
 	@Override

@@ -18,7 +18,6 @@ import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.content.res.Resources.NotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,25 +129,25 @@ public class FriendsGroupsListFragment extends Fragment {
         .build();
         
         //refresh on open to load data when app first time started
-	    if(savedInstanceState == null && bundle.getParcelableArrayList("friendsGroupsCollection") == null) {
+	    if(savedInstanceState == null && bundle.getParcelableArrayList(Constants.EXTRA_FRIENDS_GROUPS_COLLECTION) == null) {
 	    	 mPullToRefreshLayout.setRefreshing(true);
 	         customOnRefreshListener.onRefreshStarted(null);
 	    }
 	    else{
 	    	if (savedInstanceState == null){
-	    		friendsGroupsCollection = bundle.getParcelableArrayList("friendsGroupsCollection");
-		    	error = bundle.getBoolean("error");
-		    	PlaceName = bundle.getString("PlaceName");
+	    		friendsGroupsCollection = bundle.getParcelableArrayList(Constants.EXTRA_FRIENDS_GROUPS_COLLECTION);
+		    	error = bundle.getBoolean(Constants.EXTRA_ERROR);
+		    	PlaceName = bundle.getString(Constants.EXTRA_PLACE_NAME);
 	    	} else {
-	    		friendsGroupsCollection = savedInstanceState.getParcelableArrayList("friendsGroupsCollection");
-	    		error = savedInstanceState.getBoolean("error");
-	    		PlaceName = savedInstanceState.getString("PlaceName");
+	    		friendsGroupsCollection = savedInstanceState.getParcelableArrayList(Constants.EXTRA_FRIENDS_GROUPS_COLLECTION);
+	    		error = savedInstanceState.getBoolean(Constants.EXTRA_ERROR);
+	    		PlaceName = savedInstanceState.getString(Constants.EXTRA_PLACE_NAME);
 	    	}
 	    	if ((friendsGroupsCollection.size()>1)) {
 	    		friendsGroupsAdapter = new FriendsGroupsAdapter(getActivity(), friendsGroupsCollection, options);
 	    		
                 listViewFriendsGroups.setAdapter(friendsGroupsAdapter);
-                listViewFriendsGroups.setSelection(savedInstanceState != null ? savedInstanceState.getInt("posX") : bundle.getInt("posX"));
+                listViewFriendsGroups.setSelection(savedInstanceState != null ? savedInstanceState.getInt(Constants.EXTRA_POSX) : bundle.getInt(Constants.EXTRA_POSX));
 	    	}
 	    	
 	    	else {
@@ -210,10 +209,10 @@ public class FriendsGroupsListFragment extends Fragment {
 	public void onPause() {
 		super.onPause();
 		if (friendsGroupsCollection !=null && listViewFriendsGroups!=null && PlaceName != null){
-			 getArguments().putParcelableArrayList("friendsGroupsCollection", friendsGroupsCollection);
-			 getArguments().putInt("posX",  listViewFriendsGroups.getFirstVisiblePosition());
-			 getArguments().putString("PlaceName",  PlaceName);
-			 getArguments().putBoolean("error", error);
+			 getArguments().putParcelableArrayList(Constants.EXTRA_FRIENDS_GROUPS_COLLECTION, friendsGroupsCollection);
+			 getArguments().putInt(Constants.EXTRA_POSX,  listViewFriendsGroups.getFirstVisiblePosition());
+			 getArguments().putString(Constants.EXTRA_PLACE_NAME,  PlaceName);
+			 getArguments().putBoolean(Constants.EXTRA_ERROR, error);
 		}
 	}
 	
@@ -240,10 +239,10 @@ public class FriendsGroupsListFragment extends Fragment {
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		if (friendsGroupsCollection !=null && listViewFriendsGroups!=null && PlaceName != null){
-		 outState.putParcelableArrayList("friendsGroupsCollection", friendsGroupsCollection);
-		 outState.putInt("posX",  listViewFriendsGroups.getFirstVisiblePosition());
-		 outState.putString("PlaceName",  PlaceName);
-		 outState.putBoolean("error", error);
+		 outState.putParcelableArrayList(Constants.EXTRA_FRIENDS_GROUPS_COLLECTION, friendsGroupsCollection);
+		 outState.putInt(Constants.EXTRA_POSX,  listViewFriendsGroups.getFirstVisiblePosition());
+		 outState.putString(Constants.EXTRA_PLACE_NAME,  PlaceName);
+		 outState.putBoolean(Constants.EXTRA_ERROR, error);
 		}
 	}
 	

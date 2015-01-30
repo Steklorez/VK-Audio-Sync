@@ -48,6 +48,10 @@ public class Constants {
 	
 	//SaveInstanceState
 	public static final String EXTRA_MUSIC_COLLECTION = "musicCollection";
+	public static final String EXTRA_FRIENDS_GROUPS_COLLECTION = "friendsGroupsCollection";
+	public static final String EXTRA_POSX = "posX";
+	public static final String EXTRA_PLACE_NAME = "PlaceName";
+	public static final String EXTRA_ERROR = "error";
 	
 	//shared preferences
 	public static final String DOWNLOAD_DIRECTORY = "download_directory";

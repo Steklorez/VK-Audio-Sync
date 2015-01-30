@@ -154,14 +154,14 @@ public class MusicListFragment extends Fragment {
 	    }
 	    else{
 	    	musicCollection = savedInstanceState.getParcelableArrayList(Constants.EXTRA_MUSIC_COLLECTION);
-	    	error = savedInstanceState.getBoolean("error");
+	    	error = savedInstanceState.getBoolean(Constants.EXTRA_ERROR);
 	    	if ((musicCollection.size()>1)) {
 	    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options);
 	    		
-	    		PlaceName = savedInstanceState.getString("PlaceName");
+	    		PlaceName = savedInstanceState.getString(Constants.EXTRA_PLACE_NAME);
                 
                 listViewMusic.setAdapter(musicAdapter);
-                listViewMusic.setSelection(savedInstanceState.getInt("posX"));
+                listViewMusic.setSelection(savedInstanceState.getInt(Constants.EXTRA_POSX));
 	    	}
 	    	
 	    	else {
@@ -193,9 +193,9 @@ public class MusicListFragment extends Fragment {
 		super.onSaveInstanceState(outState);
 		if (musicCollection !=null && listViewMusic!=null && PlaceName != null){
 		 outState.putParcelableArrayList(Constants.EXTRA_MUSIC_COLLECTION, musicCollection);
-		 outState.putInt("posX",  listViewMusic.getFirstVisiblePosition());
-		 outState.putString("PlaceName",  PlaceName);
-		 outState.putBoolean("error", error);
+		 outState.putInt(Constants.EXTRA_POSX,  listViewMusic.getFirstVisiblePosition());
+		 outState.putString(Constants.EXTRA_PLACE_NAME,  PlaceName);
+		 outState.putBoolean(Constants.EXTRA_ERROR, error);
 		}
 	}
 	

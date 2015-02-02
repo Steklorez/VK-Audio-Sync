@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.holoeverywhere.LayoutInflater;
-import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.app.AlertDialog;
 import org.holoeverywhere.app.Dialog;
 import org.holoeverywhere.app.DialogFragment;
@@ -262,7 +261,6 @@ public class MusicListFragment extends Fragment {
 	    	  		    public Dialog onCreateDialog(Bundle savedInstanceState) {
 	    	  		        AlertDialog.Builder builder = new AlertDialog.Builder(getSupportActivity(), getTheme());
 	    	  		        builder.setView(makeNumberPicker());
-	    	  		        builder.setTitle(R.string.check_all);
 	    	  		        builder.setNegativeButton(R.string.cancel, null);
 	    	  		        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 								@Override
@@ -272,6 +270,7 @@ public class MusicListFragment extends Fragment {
 							        prDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 							        prDialog.setMessage(getText(R.string.wait_check));
 							        prDialog.setCancelable(false);
+							        prDialog.setCanceledOnTouchOutside(false);
 							        prDialog.show();
 							        
 							        new Thread(new Runnable(){
@@ -324,6 +323,7 @@ public class MusicListFragment extends Fragment {
 			        prDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			        prDialog.setMessage(getText(R.string.wait_uncheck));
 			        prDialog.setCancelable(false);
+			        prDialog.setCanceledOnTouchOutside(false);
 			        prDialog.show();
 			        
 			        new Thread(new Runnable(){

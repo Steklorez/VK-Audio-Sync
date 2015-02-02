@@ -39,7 +39,7 @@ public class ContentShowActivity extends Activity {
     
     //for retrieve data from activity
     Bundle bundle;
-	
+    
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -89,7 +89,6 @@ public class ContentShowActivity extends Activity {
         }
         
         
-	
 	}
 	
 	@Override

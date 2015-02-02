@@ -104,10 +104,6 @@ public class MusicAdapter extends BaseAdapter {
         holder.checkDownload.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (checked>99){
-					Toast.makeText(context, context.getResources().getString(R.string.more_than), Toast.LENGTH_LONG).show();
-					holder.checkDownload.setChecked(false);
-				}
 				musicCollection.get(position).checked = holder.checkDownload.isChecked() ? 1 : 0;
 				checked+=(holder.checkDownload.isChecked() ? +1 : -1);
 				

@@ -26,7 +26,11 @@
     <string name="download_direcotry">Download directory</string>
     <string name="moreover">moreover</string>
     <string name="main">Main music</string>
-    <string name="check_all">Check first 100</string>
+    <string name="check_all">Check first ..</string>
+    <string name="ok">OK</string>
+    <string name="wait_check">Wait till we check and add to dm your songs..</string>
+    <string name="wait_uncheck">Wait till we uncheck and delete from dm checked songs..</string>
+    <string name="cancel">Cancel</string>
     <string name="uncheck_all">Uncheck all</string>
     <string name="delete_all">Delete all</string>
     <string name="stop_dm">Stop downloading</string>

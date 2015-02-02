@@ -6,11 +6,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.holoeverywhere.LayoutInflater;
+import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.app.AlertDialog;
+import org.holoeverywhere.app.Dialog;
+import org.holoeverywhere.app.DialogFragment;
 import org.holoeverywhere.app.Fragment;
+import org.holoeverywhere.app.ProgressDialog;
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
 import org.holoeverywhere.widget.Button;
 import org.holoeverywhere.widget.ListView;
+import org.holoeverywhere.widget.NumberPicker;
+import org.holoeverywhere.widget.NumberPicker.OnValueChangeListener;
 import org.holoeverywhere.widget.RelativeLayout;
 import org.holoeverywhere.widget.TextView;
 
@@ -21,11 +28,13 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources.NotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -96,6 +105,9 @@ public class MusicListFragment extends Fragment {
     
     //for retrieve data from activity
     Bundle bundle;
+    
+    //to post in UI thread from others threads
+    Handler handler = new Handler();
     
 	
 	@SuppressWarnings("deprecation")
@@ -227,62 +239,135 @@ public class MusicListFragment extends Fragment {
 	      case R.id.menu_check_all:
 	    	  if (musicCollection !=null && musicAdapter !=null && musicCollection.size()>0){
 	    	  	 if (String.valueOf(item.getTitle()).equals(getResources().getString(R.string.check_all))){
-	    	  		int index=0;
-	    	  		for (MusicCollection oneItem : musicCollection){
-	    	  			if (oneItem.checked == 0 && oneItem.exist == 0){
-	    	  				oneItem.checked = 1;
-	    	  				musicAdapter.getItem(index).checked = 1;
-	    	  				
-	    	  				//add music to global download manager
-	    	  				try {
-	    	  					ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
-	    	  					if (musicCollectionTemp==null)
-                            		musicCollectionTemp = new ArrayList<MusicCollection>();
-	    	  					musicCollectionTemp.add(oneItem);
-								sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
+	    	  		DialogFragment NumberPickerDialog = new DialogFragment(){
+	    	  			private int currValue=1;
+	    	  			private View makeNumberPicker() {
+	    	  		        View view = getLayoutInflater().inflate(
+	    	  		                R.layout.number_picker_demo);
+	    	  		        NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.numberPicker);
+	    	  		        numberPicker.setMinValue(1);
+	    	  		        numberPicker.setMaxValue(musicCollection.size());
+	    	  		        numberPicker.setValue(1);
+	    	  		        numberPicker.setOnValueChangedListener(new OnValueChangeListener(){
+								@Override
+								public void onValueChange(NumberPicker picker,
+										int oldVal, int newVal) {
+									currValue = newVal;
+								}
+	    	  		        });
+	    	  		        return view;
+	    	  		    }
 
-	    	  				musicAdapter.checked++;
-	    	  			}
-	    	  			index++;
-	    	  			if (musicAdapter.checked>98)
-	    	  				break;
-	   	   		  	}
+	    	  		    @Override
+	    	  		    public Dialog onCreateDialog(Bundle savedInstanceState) {
+	    	  		        AlertDialog.Builder builder = new AlertDialog.Builder(getSupportActivity(), getTheme());
+	    	  		        builder.setView(makeNumberPicker());
+	    	  		        builder.setTitle(R.string.check_all);
+	    	  		        builder.setNegativeButton(R.string.cancel, null);
+	    	  		        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									final ProgressDialog prDialog = new ProgressDialog(getSupportActivity(), getTheme());
+							        prDialog.setIndeterminate(true);
+							        prDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+							        prDialog.setMessage(getText(R.string.wait_check));
+							        prDialog.setCancelable(false);
+							        prDialog.show();
+							        
+							        new Thread(new Runnable(){
+										@Override
+										public void run() {
+											int index=0;
+							    	  		for (MusicCollection oneItem : musicCollection){
+							    	  			if (oneItem.checked == 0 && oneItem.exist == 0){
+							    	  				oneItem.checked = 1;
+							    	  				musicAdapter.getItem(index).checked = 1;
+							    	  				
+							    	  				//add music to global download manager
+							    	  				try {
+							    	  					ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+							    	  					if (musicCollectionTemp==null)
+						                            		musicCollectionTemp = new ArrayList<MusicCollection>();
+							    	  					musicCollectionTemp.add(oneItem);
+														sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
+													} catch (IOException e) {
+														e.printStackTrace();
+													}
+
+							    	  				musicAdapter.checked++;
+							    	  			}
+							    	  			index++;
+							    	  			if (musicAdapter.checked>currValue-1)
+							    	  				break;
+							   	   		  	}
+							    	  		final Runnable dismissDialog = new Runnable() {
+							    		        public void run() {
+							    		        	prDialog.dismiss();
+							    		        	musicAdapter.notifyDataSetChanged();
+							    		        }
+							    		    };
+							    		    handler.post(dismissDialog);
+										}
+							        }).start();
+								}
+							});
+	    	  		        return builder.create();
+	    	  		    }
+	    	  		};
+	    	  		
+	    	  		NumberPickerDialog.show(getSupportActivity());
+	    	  		
 	    	  		 item.setTitle(getResources().getString(R.string.uncheck_all));
 	    	  	 } else	{
-	    	  		int index=0;
-	    	  		for (MusicCollection oneItem : musicCollection){
-	    	  			if (oneItem.checked == 1 && oneItem.exist == 0){
-	    	  				oneItem.checked = 0;
-	    	  				musicAdapter.getItem(index).checked = 0;
-	    	  				
-	    	  				//remove music from glabal download manager
-	    	  				try {
-	    	  					ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
-	    	  					if (musicCollectionTemp==null)
-                            		musicCollectionTemp = new ArrayList<MusicCollection>();
-	    	  					int indexTemp=0;
-	    	  					for (MusicCollection one: musicCollectionTemp){
-	    	  						if (one.aid==oneItem.aid){
-	    	  							musicCollectionTemp.remove(indexTemp);
-	    	  							break;
-	    	  						}
-	    	  						indexTemp++;
-	    	  					}
-								sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-	    	  				
-	    	  				musicAdapter.checked--;
-	    	  			}
-	    	  			index++;
-	   	   		  	}
+	    	  		final ProgressDialog prDialog = new ProgressDialog(getSupportActivity());
+			        prDialog.setIndeterminate(true);
+			        prDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			        prDialog.setMessage(getText(R.string.wait_uncheck));
+			        prDialog.setCancelable(false);
+			        prDialog.show();
+			        
+			        new Thread(new Runnable(){
+						@Override
+						public void run() {
+							int index=0;
+			    	  		for (MusicCollection oneItem : musicCollection){
+			    	  			if (oneItem.checked == 1 && oneItem.exist == 0){
+			    	  				oneItem.checked = 0;
+			    	  				musicAdapter.getItem(index).checked = 0;
+			    	  				
+			    	  				//remove music from glabal download manager
+			    	  				try {
+			    	  					ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+			    	  					if (musicCollectionTemp==null)
+		                            		musicCollectionTemp = new ArrayList<MusicCollection>();
+			    	  					int indexTemp=0;
+			    	  					for (MusicCollection one: musicCollectionTemp){
+			    	  						if (one.aid==oneItem.aid){
+			    	  							musicCollectionTemp.remove(indexTemp);
+			    	  							break;
+			    	  						}
+			    	  						indexTemp++;
+			    	  					}
+										sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
+									} catch (IOException e) {
+										e.printStackTrace();
+									}
+			    	  				
+			    	  				musicAdapter.checked--;
+			    	  			}
+			    	  			index++;
+			   	   		  	}
+			    	  		final Runnable dismissDialog = new Runnable() {
+			    		        public void run() {
+			    		        	prDialog.dismiss();
+			    		        	musicAdapter.notifyDataSetChanged();
+			    		        }
+			    		    };
+			    		    handler.post(dismissDialog);
+						}
+			        }).start();
 	    	  		 item.setTitle(getResources().getString(R.string.check_all));
 	    	  	 }
-	    	  	musicAdapter.notifyDataSetChanged();
 	    	  }
 	    	  break;
 	      }

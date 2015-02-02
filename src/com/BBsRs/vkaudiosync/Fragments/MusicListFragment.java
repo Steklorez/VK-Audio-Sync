@@ -156,7 +156,7 @@ public class MusicListFragment extends Fragment {
 	    	musicCollection = savedInstanceState.getParcelableArrayList(Constants.EXTRA_MUSIC_COLLECTION);
 	    	error = savedInstanceState.getBoolean(Constants.EXTRA_ERROR);
 	    	if ((musicCollection.size()>1)) {
-	    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options);
+	    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options, savedInstanceState.getInt(Constants.EXTRA_CHECKED_QUAN));
 	    		
 	    		PlaceName = savedInstanceState.getString(Constants.EXTRA_PLACE_NAME);
                 
@@ -196,6 +196,7 @@ public class MusicListFragment extends Fragment {
 		 outState.putInt(Constants.EXTRA_POSX,  listViewMusic.getFirstVisiblePosition());
 		 outState.putString(Constants.EXTRA_PLACE_NAME,  PlaceName);
 		 outState.putBoolean(Constants.EXTRA_ERROR, error);
+		 outState.putInt(Constants.EXTRA_CHECKED_QUAN,  musicAdapter.checked);
 		}
 	}
 	
@@ -315,7 +316,7 @@ public class MusicListFragment extends Fragment {
     		}
     		if (sPref.getBoolean(Constants.OTHER_FRAGMENT, false)){
     			musicCollection = new ArrayList<MusicCollection>();
-	    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options);
+	    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options, 0);
 	    		listViewMusic.setAdapter(musicAdapter);
 	    		
     			mPullToRefreshLayout.setRefreshing(true);
@@ -388,6 +389,7 @@ public class MusicListFragment extends Fragment {
 
     	public boolean isRefreshing = false;
     	public byte isAudioDisabled = 0;
+    	private int quanOfChecked = 0;
     	
 		@Override
 		public void onRefreshStarted(View view) {
@@ -479,8 +481,10 @@ public class MusicListFragment extends Fragment {
                             		else 
                             			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 0, 0));
                             		for (MusicCollection oneDM : musicCollectionTemp){
-                            			if (oneDM.aid == one.aid || (oneDM.title.equals(one.title) && oneDM.artist.equals(one.artist)))
+                            			if (oneDM.aid == one.aid || (oneDM.title.equals(one.title) && oneDM.artist.equals(one.artist))){
                             				musicCollection.get(musicCollection.size()-1).checked = 1;
+                            				quanOfChecked++;
+                            			}
                             		}
                             	}
                             	
@@ -536,14 +540,24 @@ public class MusicListFragment extends Fragment {
                     		listViewMusic.setVisibility(View.VISIBLE);
                     		relativeErrorLayout.setVisibility(View.GONE);
                     	
-                    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options);
+                    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options, quanOfChecked);
 
                     
                    			listViewMusic.setAdapter(musicAdapter);
                    			
                    			Animation flyUpAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fly_up_anim);
                    			listViewMusic.startAnimation(flyUpAnimation);
+                   			
+                   			if (quanOfChecked != 0){
+                	    		if (mainMenu != null)
+                	    			mainMenu.findItem(R.id.menu_check_all).setTitle(getResources().getString(R.string.uncheck_all));
+                	    	} else {
+                	    		if (mainMenu != null)
+                	    			mainMenu.findItem(R.id.menu_check_all).setTitle(getResources().getString(R.string.check_all));
+                	    	}
                    		} else {
+                   			if (mainMenu != null)
+            	    			mainMenu.findItem(R.id.menu_check_all).setVisible(false);
                    			listViewMusic.setVisibility(View.GONE);
                    			relativeErrorLayout.setVisibility(View.VISIBLE);
                    			errorRetryButton.setEnabled(true);

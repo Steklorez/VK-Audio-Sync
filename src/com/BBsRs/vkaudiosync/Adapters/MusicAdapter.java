@@ -31,11 +31,12 @@ public class MusicAdapter extends BaseAdapter {
 	DisplayImageOptions options;
 	public int checked = 0;
 	
-	public MusicAdapter (Context _context, ArrayList<MusicCollection> _musicCollection, DisplayImageOptions _options){
+	public MusicAdapter (Context _context, ArrayList<MusicCollection> _musicCollection, DisplayImageOptions _options, int _checked){
 		musicCollection = _musicCollection;
 		context = _context;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		options = _options;
+		checked = _checked;
 	}
 	
 	// кол-во элементов

@@ -111,11 +111,11 @@ public class DownloadManagerFragment extends Fragment {
         sPref.edit().putBoolean(Constants.OTHER_FRAGMENT, true).commit();
         
         getSupportActionBar().setTitle(getResources().getStringArray(R.array.slider_menu)[5]);
+        getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_dm));
         if (musicCollection.size() == 0){
         	errorMessage.setText(getResources().getString(R.string.message_zero_count_audio_dm));
         	relativeErrorLayout.setVisibility(View.VISIBLE);
         	listViewMusic.setVisibility(View.GONE);
-        	getSupportActionBar().setSubtitle(getResources().getString(R.string.message_zero_count_audio_dm));
         	if (mainMenu != null){
         	mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download_disabled);
 	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(false);
@@ -123,7 +123,6 @@ public class DownloadManagerFragment extends Fragment {
         } else {
         	relativeErrorLayout.setVisibility(View.GONE);
         	listViewMusic.setVisibility(View.VISIBLE);
-        	getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_dm));
         	if (mainMenu != null){
         	mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
 	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
@@ -195,11 +194,11 @@ public class DownloadManagerFragment extends Fragment {
 				if (musicCollectionTemp==null)
             		musicCollectionTemp = new ArrayList<MusicCollection>();
 				
+				getSupportActionBar().setSubtitle(musicCollectionTemp.size()+" "+getResources().getString(R.string.quan_songs_dm));
 				if (musicCollectionTemp.size() == 0){
   		        	errorMessage.setText(getResources().getString(R.string.message_zero_count_audio_dm));
   		        	relativeErrorLayout.setVisibility(View.VISIBLE);
   		        	listViewMusic.setVisibility(View.GONE);
-  		        	getSupportActionBar().setSubtitle(getResources().getString(R.string.message_zero_count_audio_dm));
   		        	if (mainMenu != null){
   		          	mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download_disabled);
   		  	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(false);
@@ -207,7 +206,6 @@ public class DownloadManagerFragment extends Fragment {
   		        } else {
   		        	relativeErrorLayout.setVisibility(View.GONE);
   		        	listViewMusic.setVisibility(View.VISIBLE);
-  		        	getSupportActionBar().setSubtitle(musicCollectionTemp.size()+" "+getResources().getString(R.string.quan_songs_dm));
   		        	if (mainMenu != null){
   		          	mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
   		  	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
@@ -228,11 +226,11 @@ public class DownloadManagerFragment extends Fragment {
 	  					indexTemp++;
 	  				}
 	  				
+	  				getSupportActionBar().setSubtitle(musicCollectionTemp.size()+" "+getResources().getString(R.string.quan_songs_dm));
 	  				if (musicCollectionTemp.size() == 0){
 	  		        	errorMessage.setText(getResources().getString(R.string.message_zero_count_audio_dm));
 	  		        	relativeErrorLayout.setVisibility(View.VISIBLE);
 	  		        	listViewMusic.setVisibility(View.GONE);
-	  		        	getSupportActionBar().setSubtitle(getResources().getString(R.string.message_zero_count_audio_dm));
 	  		        	if (mainMenu != null){
 	  		          	mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download_disabled);
 	  		  	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(false);
@@ -240,7 +238,6 @@ public class DownloadManagerFragment extends Fragment {
 	  		        } else {
 	  		        	relativeErrorLayout.setVisibility(View.GONE);
 	  		        	listViewMusic.setVisibility(View.VISIBLE);
-	  		        	getSupportActionBar().setSubtitle(musicCollectionTemp.size()+" "+getResources().getString(R.string.quan_songs_dm));
 	  		        	if (mainMenu != null){
 	  		          	mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
 	  		  	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
@@ -271,11 +268,11 @@ public class DownloadManagerFragment extends Fragment {
   					indexTemp++;
   				}
   				
+  				getSupportActionBar().setSubtitle(musicCollectionTemp.size()+" "+getResources().getString(R.string.quan_songs_dm));
   				if (musicCollectionTemp.size() == 0){
   		        	errorMessage.setText(getResources().getString(R.string.message_zero_count_audio_dm));
   		        	relativeErrorLayout.setVisibility(View.VISIBLE);
   		        	listViewMusic.setVisibility(View.GONE);
-  		        	getSupportActionBar().setSubtitle(getResources().getString(R.string.message_zero_count_audio_dm));
   		        	if (mainMenu != null){
   		          	mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download_disabled);
   		  	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(false);
@@ -283,7 +280,6 @@ public class DownloadManagerFragment extends Fragment {
   		        } else {
   		        	relativeErrorLayout.setVisibility(View.GONE);
   		        	listViewMusic.setVisibility(View.VISIBLE);
-  		        	getSupportActionBar().setSubtitle(musicCollectionTemp.size()+" "+getResources().getString(R.string.quan_songs_dm));
   		        	if (mainMenu != null){
   		          	mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
   		  	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);

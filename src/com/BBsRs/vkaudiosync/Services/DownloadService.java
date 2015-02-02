@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.ConnectException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -358,9 +359,20 @@ public class DownloadService extends Service {
 					
 		           return true;
 		   } catch (IOException e) {
-			   noConnectionError(file);
-		       Log.d("DownloadManager", "Error: " + e);
-		       return false;
+			   Log.d("DownloadManager", "Error: " + e);
+			   if (e.getMessage().contains("Connection timed out")){
+				   mBuilder.setContentTitle(getApplicationContext().getResources().getString(R.string.no_file)+" "+oneItem.artist+" "+oneItem.title)
+				   .setContentText(getResources().getString(R.string.no_file_msg))
+				   .setSmallIcon(R.drawable.ic_menu_download)
+				   .setContentIntent(contentIntent)
+				   .setOngoing(false)
+				   .setProgress(0, 0, false);
+				   mNotificationManager.notify(2, mBuilder.build());
+				   return true;
+			   } else {
+				   noConnectionError(file);
+				   return false;
+			   }
 		   } catch (NotSupportedException e) {
 			   noConnectionError(file);
 			   e.printStackTrace();

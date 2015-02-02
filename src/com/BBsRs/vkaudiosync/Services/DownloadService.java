@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Parcelable;
@@ -359,47 +358,43 @@ public class DownloadService extends Service {
 					
 		           return true;
 		   } catch (IOException e) {
+			   noConnectionError(file);
 		       Log.d("DownloadManager", "Error: " + e);
-		       if (file!=null) {
-		    	   File mp3 = new File(file.getAbsolutePath()+".mp3");
-		    	   if (mp3!=null)
-		    	   mp3.delete();
-		    	   file.delete();
-		       }
 		       return false;
 		   } catch (NotSupportedException e) {
-			   // TODO Auto-generated catch block
+			   noConnectionError(file);
 			   e.printStackTrace();
-		       if (file!=null) {
-		    	   File mp3 = new File(file.getAbsolutePath()+".mp3");
-		    	   if (mp3!=null)
-		    	   mp3.delete();
-		    	   file.delete();
-		       }
 			   return false;
 		   } catch (UnsupportedTagException e) {
-			   // TODO Auto-generated catch block
+			   noConnectionError(file);
 			   e.printStackTrace();
-		       if (file!=null) {
-		    	   File mp3 = new File(file.getAbsolutePath()+".mp3");
-		    	   if (mp3!=null)
-		    	   mp3.delete();
-		    	   file.delete();
-		       }
 			   return false;
 		   } catch (InvalidDataException e) {
-			   // TODO Auto-generated catch block
+			   noConnectionError(file);
 			   e.printStackTrace();
-		       if (file!=null) {
-		    	   File mp3 = new File(file.getAbsolutePath()+".mp3");
-		    	   if (mp3!=null)
-		    	   mp3.delete();
-		    	   file.delete();
-		       }
 			   return false;
 		   }
 
 		}
+	
+	public void noConnectionError(File file){
+		isServiceStopped = true;
+		
+		if (file!=null) {
+	    	   File mp3 = new File(file.getAbsolutePath()+".mp3");
+	    	   if (mp3!=null)
+	    	   mp3.delete();
+	    	   file.delete();
+	       }
+		   
+		   mBuilder.setContentTitle(getApplicationContext().getResources().getString(R.string.no_conn))
+		   .setContentText(getResources().getString(R.string.no_conn_msg))
+		   .setSmallIcon(R.drawable.ic_menu_download)
+		   .setContentIntent(contentIntent)
+		   .setOngoing(false)
+		   .setProgress(0, 0, false);
+		   mNotificationManager.notify(1, mBuilder.build());
+	}
 	
 	public Bitmap centerCrop(Bitmap srcBmp) {
 		Bitmap dstBmp;

@@ -249,9 +249,9 @@ public class MusicListFragment extends Fragment {
 	    	  		        View view = getLayoutInflater().inflate(
 	    	  		                R.layout.number_picker_demo);
 	    	  		        NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.numberPicker);
-	    	  		        numberPicker.setMinValue(1);
+	    	  		        numberPicker.setMinValue(musicCollection.size()-quanOfExist == 0 ? 0 : 1);
 	    	  		        numberPicker.setMaxValue(musicCollection.size()-quanOfExist);
-	    	  		        numberPicker.setValue(1);
+	    	  		        numberPicker.setValue(musicCollection.size()-quanOfExist == 0 ? 0 : 1);
 	    	  		        numberPicker.setOnValueChangedListener(new OnValueChangeListener(){
 								@Override
 								public void onValueChange(NumberPicker picker,
@@ -283,6 +283,8 @@ public class MusicListFragment extends Fragment {
 										public void run() {
 											int index=0;
 							    	  		for (MusicCollection oneItem : musicCollection){
+							    	  			if (musicAdapter.checked>currValue-1)
+							    	  				break;
 							    	  			if (oneItem.checked == 0 && oneItem.exist == 0){
 							    	  				oneItem.checked = 1;
 							    	  				musicAdapter.getItem(index).checked = 1;
@@ -301,8 +303,6 @@ public class MusicListFragment extends Fragment {
 							    	  				musicAdapter.checked++;
 							    	  			}
 							    	  			index++;
-							    	  			if (musicAdapter.checked>currValue-1)
-							    	  				break;
 							   	   		  	}
 							    	  		final Runnable dismissDialog = new Runnable() {
 							    		        public void run() {
@@ -321,7 +321,9 @@ public class MusicListFragment extends Fragment {
 	    	  		
 	    	  		NumberPickerDialog.show(getSupportActivity());
 	    	  		
-	    	  		 item.setTitle(getResources().getString(R.string.uncheck_all));
+	    	  		if ((musicCollection.size()-quanOfExist) != 0)	
+	    	  			item.setTitle(getResources().getString(R.string.uncheck_all));
+	    	  				
 	    	  	 } else	{
 	    	  		final ProgressDialog prDialog = new ProgressDialog(getSupportActivity());
 			        prDialog.setIndeterminate(true);
@@ -347,7 +349,7 @@ public class MusicListFragment extends Fragment {
 		                            		musicCollectionTemp = new ArrayList<MusicCollection>();
 			    	  					int indexTemp=0;
 			    	  					for (MusicCollection one: musicCollectionTemp){
-			    	  						if (one.aid==oneItem.aid){
+			    	  						if (one.aid==oneItem.aid || (one.artist.equals(oneItem.artist) && one.title.equals(oneItem.title))){
 			    	  							musicCollectionTemp.remove(indexTemp);
 			    	  							break;
 			    	  						}

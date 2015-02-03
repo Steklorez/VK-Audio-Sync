@@ -475,6 +475,7 @@ public class MusicListFragment extends Fragment {
     	public boolean isRefreshing = false;
     	public byte isAudioDisabled = 0;
     	private int quanOfChecked = 0;
+    	private int quanOfExist = 0;
     	
 		@Override
 		public void onRefreshStarted(View view) {
@@ -488,6 +489,8 @@ public class MusicListFragment extends Fragment {
                             	error=true;
                             	musicCollection = new ArrayList<MusicCollection>();
                             	ArrayList<Audio> musicList = new ArrayList<Audio>();
+                            	
+                            	quanOfChecked = quanOfExist = 0;
                             	
                             	switch (bundle.getInt(Constants.BUNDLE_MAIN_WALL_TYPE)){
                             	case Constants.MAIN_MUSIC:
@@ -561,8 +564,10 @@ public class MusicListFragment extends Fragment {
                             		musicCollectionTemp = new ArrayList<MusicCollection>();
                             	for (Audio one : musicList){
                             		f = new File(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/"+(one.artist+" - "+one.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
-                            		if (f.exists())
+                            		if (f.exists()){
+                            			quanOfExist++;
                             			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 1, 1));
+                            		}
                             		else 
                             			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 0, 0));
                             		for (MusicCollection oneDM : musicCollectionTemp){

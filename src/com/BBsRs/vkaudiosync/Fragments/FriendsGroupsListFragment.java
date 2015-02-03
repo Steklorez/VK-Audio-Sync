@@ -143,7 +143,7 @@ public class FriendsGroupsListFragment extends Fragment {
 	    		error = savedInstanceState.getBoolean(Constants.EXTRA_ERROR);
 	    		PlaceName = savedInstanceState.getString(Constants.EXTRA_PLACE_NAME);
 	    	}
-	    	if ((friendsGroupsCollection.size()>1)) {
+	    	if ((friendsGroupsCollection.size()>0)) {
 	    		friendsGroupsAdapter = new FriendsGroupsAdapter(getActivity(), friendsGroupsCollection, options);
 	    		
                 listViewFriendsGroups.setAdapter(friendsGroupsAdapter);

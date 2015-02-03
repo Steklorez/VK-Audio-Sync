@@ -58,6 +58,7 @@ public class Constants {
 	public static final String EXTRA_PLACE_NAME = "PlaceName";
 	public static final String EXTRA_ERROR = "error";
 	public static final String EXTRA_CHECKED_QUAN = "checked_Quan";
+	public static final String EXTRA_EXIST_QUAN = "exist_Quan";
 	
 	//shared preferences
 	public static final String DOWNLOAD_DIRECTORY = "download_directory";

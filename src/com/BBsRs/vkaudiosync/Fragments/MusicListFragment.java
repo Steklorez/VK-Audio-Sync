@@ -108,6 +108,9 @@ public class MusicListFragment extends Fragment {
     //to post in UI thread from others threads
     Handler handler = new Handler();
     
+    //quan of exist
+    public int quanOfExist = 0;
+    
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -166,9 +169,10 @@ public class MusicListFragment extends Fragment {
 	    else{
 	    	musicCollection = savedInstanceState.getParcelableArrayList(Constants.EXTRA_MUSIC_COLLECTION);
 	    	error = savedInstanceState.getBoolean(Constants.EXTRA_ERROR);
-	    	if ((musicCollection.size()>1)) {
+	    	if ((musicCollection.size()>0)) {
 	    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options, savedInstanceState.getInt(Constants.EXTRA_CHECKED_QUAN));
 	    		
+	    		quanOfExist = savedInstanceState.getInt(Constants.EXTRA_EXIST_QUAN);
 	    		PlaceName = savedInstanceState.getString(Constants.EXTRA_PLACE_NAME);
                 
                 listViewMusic.setAdapter(musicAdapter);
@@ -208,6 +212,7 @@ public class MusicListFragment extends Fragment {
 		 outState.putString(Constants.EXTRA_PLACE_NAME,  PlaceName);
 		 outState.putBoolean(Constants.EXTRA_ERROR, error);
 		 outState.putInt(Constants.EXTRA_CHECKED_QUAN,  musicAdapter.checked);
+		 outState.putInt(Constants.EXTRA_EXIST_QUAN,  quanOfExist);
 		}
 	}
 	
@@ -245,7 +250,7 @@ public class MusicListFragment extends Fragment {
 	    	  		                R.layout.number_picker_demo);
 	    	  		        NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.numberPicker);
 	    	  		        numberPicker.setMinValue(1);
-	    	  		        numberPicker.setMaxValue(musicCollection.size());
+	    	  		        numberPicker.setMaxValue(musicCollection.size()-quanOfExist);
 	    	  		        numberPicker.setValue(1);
 	    	  		        numberPicker.setOnValueChangedListener(new OnValueChangeListener(){
 								@Override
@@ -425,7 +430,7 @@ public class MusicListFragment extends Fragment {
 	    				musicAdapter.getItem(index).checked = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
 		    			musicAdapter.getItem(index).exist = intent.getExtras().getBoolean(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED) ? 1 : 0;
 		    			musicAdapter.notifyDataSetChanged();
-		    			
+		    			quanOfExist++;
 		    			break;
 	    			}
 	    			index++;
@@ -475,7 +480,6 @@ public class MusicListFragment extends Fragment {
     	public boolean isRefreshing = false;
     	public byte isAudioDisabled = 0;
     	private int quanOfChecked = 0;
-    	private int quanOfExist = 0;
     	
 		@Override
 		public void onRefreshStarted(View view) {

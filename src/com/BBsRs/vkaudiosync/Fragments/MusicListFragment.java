@@ -420,6 +420,9 @@ public class MusicListFragment extends Fragment {
 				sPref.edit().putBoolean(Constants.OTHER_FRAGMENT, false).commit();
     		}
     	}
+    	
+    	//other fragment false
+        sPref.edit().putBoolean(Constants.OTHER_FRAGMENT, false).commit();
 	}
 	
 	private BroadcastReceiver musicDownloaded = new BroadcastReceiver() {

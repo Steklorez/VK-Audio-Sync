@@ -134,7 +134,7 @@ public class FriendsGroupsListFragment extends Fragment {
 	         customOnRefreshListener.onRefreshStarted(null);
 	    }
 	    else{
-	    	if (savedInstanceState == null){
+	    	if (bundle.containsKey(Constants.EXTRA_FRIENDS_GROUPS_COLLECTION)){
 	    		friendsGroupsCollection = bundle.getParcelableArrayList(Constants.EXTRA_FRIENDS_GROUPS_COLLECTION);
 		    	error = bundle.getBoolean(Constants.EXTRA_ERROR);
 		    	PlaceName = bundle.getString(Constants.EXTRA_PLACE_NAME);

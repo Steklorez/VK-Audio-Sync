@@ -285,48 +285,52 @@ public class DownloadService extends Service {
 					Log.d("DownloadManager", "create new tags");
 					ID3v2 id3v2Tag = new ID3v24Tag();
 					
-					if (mp3file.hasId3v2Tag()){
-						Log.d("DownloadManager", "setting up new tags from existing tags, if they are correct");
-						if (mp3file.getId3v2Tag().getAlbum() !=null && !mp3file.getId3v2Tag().getAlbum().contains("vk.com"))
-						id3v2Tag.setAlbum(mp3file.getId3v2Tag().getAlbum());
-						if (mp3file.getId3v2Tag().getAlbumArtist() !=null && !mp3file.getId3v2Tag().getAlbumArtist().contains("vk.com"))
-						id3v2Tag.setAlbumArtist(mp3file.getId3v2Tag().getAlbumArtist());
-						if (mp3file.getId3v2Tag().getArtist() !=null && !mp3file.getId3v2Tag().getArtist().contains("vk.com"))
-						id3v2Tag.setArtist(mp3file.getId3v2Tag().getArtist());
-						if (mp3file.getId3v2Tag().getChapters() !=null && !mp3file.getId3v2Tag().getChapters().contains("vk.com"))
-						id3v2Tag.setChapters(mp3file.getId3v2Tag().getChapters());
-						if (mp3file.getId3v2Tag().getChapterTOC() !=null && !mp3file.getId3v2Tag().getChapterTOC().contains("vk.com"))
-						id3v2Tag.setChapterTOC(mp3file.getId3v2Tag().getChapterTOC());
-						if (mp3file.getId3v2Tag().getComment() !=null && !mp3file.getId3v2Tag().getComment().contains("vk.com"))
-						id3v2Tag.setComment(mp3file.getId3v2Tag().getComment());
-						if (mp3file.getId3v2Tag().getComposer() !=null && !mp3file.getId3v2Tag().getComposer().contains("vk.com"))
-						id3v2Tag.setComposer(mp3file.getId3v2Tag().getComposer());
-						if (mp3file.getId3v2Tag().getCopyright() !=null && !mp3file.getId3v2Tag().getCopyright().contains("vk.com"))
-						id3v2Tag.setCopyright(mp3file.getId3v2Tag().getCopyright());
-						if (mp3file.getId3v2Tag().getEncoder() !=null && !mp3file.getId3v2Tag().getEncoder().contains("vk.com"))
-						id3v2Tag.setEncoder(mp3file.getId3v2Tag().getEncoder());
-//						if (mp3file.getId3v2Tag().getGenre() !=null)
-						id3v2Tag.setGenre(mp3file.getId3v2Tag().getGenre());
-						if (mp3file.getId3v2Tag().getGenreDescription() !=null && !mp3file.getId3v2Tag().getGenreDescription().contains("vk.com"))
-						id3v2Tag.setGenreDescription(mp3file.getId3v2Tag().getGenreDescription());
-						if (mp3file.getId3v2Tag().getItunesComment() !=null && !mp3file.getId3v2Tag().getItunesComment().contains("vk.com"))
-						id3v2Tag.setItunesComment(mp3file.getId3v2Tag().getItunesComment());
-						if (mp3file.getId3v2Tag().getOriginalArtist() !=null && !mp3file.getId3v2Tag().getOriginalArtist().contains("vk.com"))
-						id3v2Tag.setOriginalArtist(mp3file.getId3v2Tag().getOriginalArtist());
-//						if (mp3file.getId3v2Tag().getPadding() !=null)
-						id3v2Tag.setPadding(mp3file.getId3v2Tag().getPadding());
-						if (mp3file.getId3v2Tag().getPartOfSet() !=null && !mp3file.getId3v2Tag().getPartOfSet().contains("vk.com"))
-						id3v2Tag.setPartOfSet(mp3file.getId3v2Tag().getPartOfSet());
-						if (mp3file.getId3v2Tag().getPublisher() !=null && !mp3file.getId3v2Tag().getPublisher().contains("vk.com"))
-						id3v2Tag.setPublisher(mp3file.getId3v2Tag().getPublisher());
-						if (mp3file.getId3v2Tag().getTitle() !=null && !mp3file.getId3v2Tag().getTitle().contains("vk.com"))
-						id3v2Tag.setTitle(mp3file.getId3v2Tag().getTitle());
-						if (mp3file.getId3v2Tag().getTrack() !=null && !mp3file.getId3v2Tag().getTrack().contains("vk.com"))
-						id3v2Tag.setTrack(mp3file.getId3v2Tag().getTrack());
-						if (mp3file.getId3v2Tag().getUrl() !=null)
-						id3v2Tag.setUrl(mp3file.getId3v2Tag().getUrl());
-						if (mp3file.getId3v2Tag().getYear() !=null && !mp3file.getId3v2Tag().getYear().contains("vk.com"))
-						id3v2Tag.setYear(mp3file.getId3v2Tag().getYear());
+					try {
+						if (mp3file.hasId3v2Tag()){
+							Log.d("DownloadManager", "setting up new tags from existing tags, if they are correct");
+							if (mp3file.getId3v2Tag().getAlbum() !=null && !mp3file.getId3v2Tag().getAlbum().contains("vk.com"))
+								id3v2Tag.setAlbum(mp3file.getId3v2Tag().getAlbum());
+							if (mp3file.getId3v2Tag().getAlbumArtist() !=null && !mp3file.getId3v2Tag().getAlbumArtist().contains("vk.com"))
+								id3v2Tag.setAlbumArtist(mp3file.getId3v2Tag().getAlbumArtist());
+							if (mp3file.getId3v2Tag().getArtist() !=null && !mp3file.getId3v2Tag().getArtist().contains("vk.com"))
+								id3v2Tag.setArtist(mp3file.getId3v2Tag().getArtist());
+							if (mp3file.getId3v2Tag().getChapters() !=null && !mp3file.getId3v2Tag().getChapters().contains("vk.com"))
+								id3v2Tag.setChapters(mp3file.getId3v2Tag().getChapters());
+							if (mp3file.getId3v2Tag().getChapterTOC() !=null && !mp3file.getId3v2Tag().getChapterTOC().contains("vk.com"))
+								id3v2Tag.setChapterTOC(mp3file.getId3v2Tag().getChapterTOC());
+							if (mp3file.getId3v2Tag().getComment() !=null && !mp3file.getId3v2Tag().getComment().contains("vk.com"))
+								id3v2Tag.setComment(mp3file.getId3v2Tag().getComment());
+							if (mp3file.getId3v2Tag().getComposer() !=null && !mp3file.getId3v2Tag().getComposer().contains("vk.com"))
+								id3v2Tag.setComposer(mp3file.getId3v2Tag().getComposer());
+							if (mp3file.getId3v2Tag().getCopyright() !=null && !mp3file.getId3v2Tag().getCopyright().contains("vk.com"))
+								id3v2Tag.setCopyright(mp3file.getId3v2Tag().getCopyright());
+							if (mp3file.getId3v2Tag().getEncoder() !=null && !mp3file.getId3v2Tag().getEncoder().contains("vk.com"))
+								id3v2Tag.setEncoder(mp3file.getId3v2Tag().getEncoder());
+//							if (mp3file.getId3v2Tag().getGenre() !=null)
+								id3v2Tag.setGenre(mp3file.getId3v2Tag().getGenre());
+							if (mp3file.getId3v2Tag().getGenreDescription() !=null && !mp3file.getId3v2Tag().getGenreDescription().contains("vk.com"))
+								id3v2Tag.setGenreDescription(mp3file.getId3v2Tag().getGenreDescription());
+							if (mp3file.getId3v2Tag().getItunesComment() !=null && !mp3file.getId3v2Tag().getItunesComment().contains("vk.com"))
+								id3v2Tag.setItunesComment(mp3file.getId3v2Tag().getItunesComment());
+							if (mp3file.getId3v2Tag().getOriginalArtist() !=null && !mp3file.getId3v2Tag().getOriginalArtist().contains("vk.com"))
+								id3v2Tag.setOriginalArtist(mp3file.getId3v2Tag().getOriginalArtist());
+//							if (mp3file.getId3v2Tag().getPadding() !=null)
+								id3v2Tag.setPadding(mp3file.getId3v2Tag().getPadding());
+							if (mp3file.getId3v2Tag().getPartOfSet() !=null && !mp3file.getId3v2Tag().getPartOfSet().contains("vk.com"))
+								id3v2Tag.setPartOfSet(mp3file.getId3v2Tag().getPartOfSet());
+							if (mp3file.getId3v2Tag().getPublisher() !=null && !mp3file.getId3v2Tag().getPublisher().contains("vk.com"))
+								id3v2Tag.setPublisher(mp3file.getId3v2Tag().getPublisher());
+							if (mp3file.getId3v2Tag().getTitle() !=null && !mp3file.getId3v2Tag().getTitle().contains("vk.com"))
+								id3v2Tag.setTitle(mp3file.getId3v2Tag().getTitle());
+							if (mp3file.getId3v2Tag().getTrack() !=null && !mp3file.getId3v2Tag().getTrack().contains("vk.com"))
+								id3v2Tag.setTrack(mp3file.getId3v2Tag().getTrack());
+							if (mp3file.getId3v2Tag().getUrl() !=null)
+								id3v2Tag.setUrl(mp3file.getId3v2Tag().getUrl());
+							if (mp3file.getId3v2Tag().getYear() !=null && !mp3file.getId3v2Tag().getYear().contains("vk.com"))
+								id3v2Tag.setYear(mp3file.getId3v2Tag().getYear());
+						}
+					} catch (Exception e){
+						e.printStackTrace();
 					}
 					
 					Log.d("DownloadManager", "set new tags (image, artist if still not exist, and title if still not exist)");
@@ -384,7 +388,12 @@ public class DownloadService extends Service {
 			   noConnectionError(file);
 			   e.printStackTrace();
 			   return false;
+		   } catch (Exception e){
+			   noConnectionError(file);
+			   e.printStackTrace();
+			   return false;
 		   }
+		   
 
 		}
 	

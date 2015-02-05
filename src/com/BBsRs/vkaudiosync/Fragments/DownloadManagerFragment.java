@@ -123,9 +123,9 @@ public class DownloadManagerFragment extends Fragment {
         } else {
         	relativeErrorLayout.setVisibility(View.GONE);
         	listViewMusic.setVisibility(View.VISIBLE);
-        	if (mainMenu != null){
-        	mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
-	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
+        	if (mainMenu != null && !(isMyServiceRunning(DownloadService.class))){
+        		mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
+        		mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
         	}
         }
 		
@@ -142,12 +142,17 @@ public class DownloadManagerFragment extends Fragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.dm_menu, menu);
 		mainMenu = menu;
-		if (isMyServiceRunning(DownloadService.class) || musicCollection.size() == 0){
+		if (isMyServiceRunning(DownloadService.class)){
 			mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download_disabled);
 			mainMenu.findItem(R.id.menu_start_download_service).setEnabled(false);
 		} else {
-			mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
-	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
+			if (musicCollection.size() != 0){
+				mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
+				mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
+			} else {
+				mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download_disabled);
+				mainMenu.findItem(R.id.menu_start_download_service).setEnabled(false);
+			}
 		}
 		return;
 	}
@@ -162,9 +167,12 @@ public class DownloadManagerFragment extends Fragment {
 	      case R.id.menu_start_download_service:
 	    	  mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download_disabled);
 	    	  mainMenu.findItem(R.id.menu_start_download_service).setEnabled(false);
-	    	  //start service
-	    	  Intent serviceIntent = new Intent(getActivity(), DownloadService.class); 
-	    	  getActivity().startService(serviceIntent);
+	    	  
+	    	  if (!isMyServiceRunning(DownloadService.class)){
+	    		  //start service
+	    		  Intent serviceIntent = new Intent(getActivity(), DownloadService.class); 
+	    		  getActivity().startService(serviceIntent);
+	    	  }
 	    	  break;
 	      case R.id.menu_delete_all:
 	    	  if (musicCollection.size() == 0){
@@ -176,10 +184,14 @@ public class DownloadManagerFragment extends Fragment {
 	    	  }
 	    	  break;
 	      case R.id.menu_stop_dm:
-	    	  if (isMyServiceRunning(DownloadService.class))
+	    	  if (isMyServiceRunning(DownloadService.class)){
 	    		  getActivity().stopService(new Intent(getActivity(), DownloadService.class));
-	    	  else 
+	    	  }
+	    	  else {
 	    		  Toast.makeText(getActivity(), getResources().getString(R.string.stop_dm_msg), Toast.LENGTH_LONG).show();
+	    	  }
+	    	  mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
+	    	  mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
 	    	  break;
 	      }
 		return true;
@@ -206,7 +218,7 @@ public class DownloadManagerFragment extends Fragment {
   		        } else {
   		        	relativeErrorLayout.setVisibility(View.GONE);
   		        	listViewMusic.setVisibility(View.VISIBLE);
-  		        	if (mainMenu != null){
+  		        	if (mainMenu != null && !(isMyServiceRunning(DownloadService.class))){
   		          	mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
   		  	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
   		          	}
@@ -238,7 +250,7 @@ public class DownloadManagerFragment extends Fragment {
 	  		        } else {
 	  		        	relativeErrorLayout.setVisibility(View.GONE);
 	  		        	listViewMusic.setVisibility(View.VISIBLE);
-	  		        	if (mainMenu != null){
+	  		        	if (mainMenu != null && !(isMyServiceRunning(DownloadService.class))){
 	  		          	mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
 	  		  	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
 	  		          	}
@@ -280,7 +292,7 @@ public class DownloadManagerFragment extends Fragment {
   		        } else {
   		        	relativeErrorLayout.setVisibility(View.GONE);
   		        	listViewMusic.setVisibility(View.VISIBLE);
-  		        	if (mainMenu != null){
+  		        	if (mainMenu != null && !(isMyServiceRunning(DownloadService.class))){
   		          	mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download);
   		  	    	mainMenu.findItem(R.id.menu_start_download_service).setEnabled(true);
   		          	}

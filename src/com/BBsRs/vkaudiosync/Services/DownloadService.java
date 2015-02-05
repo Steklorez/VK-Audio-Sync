@@ -363,7 +363,7 @@ public class DownloadService extends Service {
 		           return true;
 		   } catch (IOException e) {
 			   Log.d("DownloadManager", "Error: " + e);
-			   if (e.getMessage().contains("Connection timed out")){
+			   if (("Error: " + e).contains("Connection timed out") || ("Error: " + e).contains("java.io.FileNotFoundException:")){
 				   mBuilder.setContentTitle(getApplicationContext().getResources().getString(R.string.no_file)+" "+oneItem.artist+" "+oneItem.title)
 				   .setContentText(getResources().getString(R.string.no_file_msg))
 				   .setSmallIcon(R.drawable.ic_menu_download)

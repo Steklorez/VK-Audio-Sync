@@ -134,7 +134,7 @@ public class DownloadService extends Service {
 					if (!isServiceStopped){
 							mBuilder.setContentTitle("["+(index+1)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+musicCollection.size()+"] "+oneItem.artist+" - "+oneItem.title)
 								.setContentText(getResources().getString(R.string.dm_inprogrees))
-								.setSmallIcon(R.drawable.ic_menu_download)
+								.setSmallIcon(R.drawable.notification_animated_icon)
 								.setContentIntent(contentIntent)
 								.setOngoing(true)
 								.setProgress(100, 0, false);
@@ -214,11 +214,11 @@ public class DownloadService extends Service {
 		       		   
 		       		   mBuilder.setContentTitle(getApplicationContext().getResources().getString(R.string.no_free_space))
 		       		   .setContentText(getResources().getString(R.string.no_free_space_msg))
-		       		   .setSmallIcon(R.drawable.ic_menu_download)
+		       		   .setSmallIcon(R.drawable.ic_menu_download_disabled)
 		       		   .setContentIntent(contentIntent)
 		       		   .setOngoing(false)
 		       		   .setProgress(0, 0, false);
-		       		   mNotificationManager.notify(1, mBuilder.build());
+		       		   mNotificationManager.notify(3, mBuilder.build());
 		       	   }
 		           /*
 		            * Define InputStreams to read from the URLConnection.
@@ -366,7 +366,7 @@ public class DownloadService extends Service {
 			   if (("Error: " + e).contains("Connection timed out") || ("Error: " + e).contains("java.io.FileNotFoundException:")){
 				   mBuilder.setContentTitle(getApplicationContext().getResources().getString(R.string.no_file)+" "+oneItem.artist+" "+oneItem.title)
 				   .setContentText(getResources().getString(R.string.no_file_msg))
-				   .setSmallIcon(R.drawable.ic_menu_download)
+				   .setSmallIcon(R.drawable.ic_menu_download_disabled)
 				   .setContentIntent(contentIntent)
 				   .setOngoing(false)
 				   .setProgress(0, 0, false);
@@ -409,7 +409,7 @@ public class DownloadService extends Service {
 		   
 		   mBuilder.setContentTitle(getApplicationContext().getResources().getString(R.string.no_conn))
 		   .setContentText(getResources().getString(R.string.no_conn_msg))
-		   .setSmallIcon(R.drawable.ic_menu_download)
+		   .setSmallIcon(R.drawable.ic_menu_download_disabled)
 		   .setContentIntent(contentIntent)
 		   .setOngoing(false)
 		   .setProgress(0, 0, false);

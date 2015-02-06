@@ -153,7 +153,9 @@ public class FriendsGroupsListFragment extends Fragment {
 	    	else {
 	    		if (error){
 	    			errorMessage.setText(R.string.error_message);
-        			errorRetryButton.setVisibility(View.VISIBLE);
+	    			listViewFriendsGroups.setVisibility(View.GONE);
+                	relativeErrorLayout.setVisibility(View.VISIBLE);
+                	errorRetryButton.setEnabled(true);
 	    		} else {
 	    			mPullToRefreshLayout.setRefreshing(true);
 	    			customOnRefreshListener.onRefreshStarted(null);	

@@ -169,11 +169,12 @@ public class MusicListFragment extends Fragment {
 	    else{
 	    	musicCollection = savedInstanceState.getParcelableArrayList(Constants.EXTRA_MUSIC_COLLECTION);
 	    	error = savedInstanceState.getBoolean(Constants.EXTRA_ERROR);
+	    	PlaceName = savedInstanceState.getString(Constants.EXTRA_PLACE_NAME);
+	    	
 	    	if ((musicCollection.size()>0)) {
 	    		musicAdapter = new MusicAdapter(getActivity(), musicCollection, options, savedInstanceState.getInt(Constants.EXTRA_CHECKED_QUAN));
 	    		
 	    		quanOfExist = savedInstanceState.getInt(Constants.EXTRA_EXIST_QUAN);
-	    		PlaceName = savedInstanceState.getString(Constants.EXTRA_PLACE_NAME);
                 
                 listViewMusic.setAdapter(musicAdapter);
                 listViewMusic.setSelection(savedInstanceState.getInt(Constants.EXTRA_POSX));
@@ -184,8 +185,11 @@ public class MusicListFragment extends Fragment {
 	    		if (error){
 	    			if (mainMenu != null)
     	    			mainMenu.findItem(R.id.menu_check_all).setVisible(false);
-	    			errorMessage.setText(R.string.error_message);
+	    			errorMessage.setText(savedInstanceState.getString(Constants.EXTRA_ERROR_MSG));
         			errorRetryButton.setVisibility(View.VISIBLE);
+        			listViewMusic.setVisibility(View.GONE);
+           			relativeErrorLayout.setVisibility(View.VISIBLE);
+           			errorRetryButton.setEnabled(true);
 	    		} else {
 	    			mPullToRefreshLayout.setRefreshing(true);
 	    			customOnRefreshListener.onRefreshStarted(null);	
@@ -214,8 +218,9 @@ public class MusicListFragment extends Fragment {
 		 outState.putInt(Constants.EXTRA_POSX,  listViewMusic.getFirstVisiblePosition());
 		 outState.putString(Constants.EXTRA_PLACE_NAME,  PlaceName);
 		 outState.putBoolean(Constants.EXTRA_ERROR, error);
-		 outState.putInt(Constants.EXTRA_CHECKED_QUAN,  musicAdapter.checked);
+		 outState.putInt(Constants.EXTRA_CHECKED_QUAN,  musicAdapter != null ? musicAdapter.checked : 0);
 		 outState.putInt(Constants.EXTRA_EXIST_QUAN,  quanOfExist);
+		 outState.putString(Constants.EXTRA_ERROR_MSG,  String.valueOf(errorMessage.getText()));
 		}
 	}
 	
@@ -672,20 +677,19 @@ public class MusicListFragment extends Fragment {
                    			listViewMusic.setVisibility(View.GONE);
                    			relativeErrorLayout.setVisibility(View.VISIBLE);
                    			errorRetryButton.setEnabled(true);
+                   			errorRetryButton.setVisibility(View.VISIBLE);
                    			// set action bar
                     		getSupportActionBar().setTitle(PlaceName);
                     		switch (isAudioDisabled){
                     		case 2:
                     			errorMessage.setText(R.string.error_message_zero_count_audio);
-                    			errorRetryButton.setVisibility(View.GONE);
                     			break;
                     		case 1:
                     			errorMessage.setText(R.string.error_message_audio_disabled);
-                    			errorRetryButton.setVisibility(View.GONE);
                     			break;
                     		case 0:
                     			errorMessage.setText(R.string.error_message);
-                    			errorRetryButton.setVisibility(View.VISIBLE);
+                    			
                     			break;
                     		}
                    		}

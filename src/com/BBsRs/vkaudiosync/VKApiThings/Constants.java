@@ -57,6 +57,7 @@ public class Constants {
 	public static final String EXTRA_POSX = "posX";
 	public static final String EXTRA_PLACE_NAME = "PlaceName";
 	public static final String EXTRA_ERROR = "error";
+	public static final String EXTRA_ERROR_MSG = "error_message";
 	public static final String EXTRA_CHECKED_QUAN = "checked_Quan";
 	public static final String EXTRA_EXIST_QUAN = "exist_Quan";
 	

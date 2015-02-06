@@ -680,17 +680,58 @@ public class MusicListFragment extends Fragment {
                    			errorRetryButton.setVisibility(View.VISIBLE);
                    			// set action bar
                     		getSupportActionBar().setTitle(PlaceName);
-                    		switch (isAudioDisabled){
-                    		case 2:
-                    			errorMessage.setText(R.string.error_message_zero_count_audio);
-                    			break;
-                    		case 1:
-                    			errorMessage.setText(R.string.error_message_audio_disabled);
-                    			break;
-                    		case 0:
-                    			errorMessage.setText(R.string.error_message);
-                    			
-                    			break;
+                    		
+                    		errorMessage.setText(R.string.error_message);
+                    		
+                    		switch (bundle.getInt(Constants.BUNDLE_MAIN_WALL_TYPE)){
+                        	case Constants.MAIN_MUSIC:
+                        		switch (bundle.getInt(Constants.BUNDLE_MUSIC_TYPE)){
+                            	case Constants.MAIN_MUSIC_USER:
+                            		switch (isAudioDisabled){
+                            		case 2:
+                            			errorMessage.setText(R.string.error_message_zero_count_audio_user_main);
+                            			break;
+                            		case 1:
+                            			errorMessage.setText(R.string.error_message_audio_disabled_user_main);
+                            			break;
+                            		}
+                            		break;
+                            	case Constants.MAIN_MUSIC_GROUP:
+                            		switch (isAudioDisabled){
+                            		case 2:
+                            			errorMessage.setText(R.string.error_message_zero_count_audio_group_main);
+                            			break;
+                            		case 1:
+                            			errorMessage.setText(R.string.error_message_audio_disabled_group_main);
+                            			break;
+                            		}
+                            		break;
+                        		}
+                        		break;
+                        	case Constants.WALL_MUSIC:
+                        		switch (bundle.getInt(Constants.BUNDLE_MUSIC_TYPE)){
+                            	case Constants.MAIN_MUSIC_USER:
+                            		switch (isAudioDisabled){
+                            		case 2:
+                            			errorMessage.setText(R.string.error_message_zero_count_audio_user_wall);
+                            			break;
+                            		case 1:
+                            			errorMessage.setText(R.string.error_message_audio_disabled_user_wall);
+                            			break;
+                            		}
+                            		break;
+                            	case Constants.MAIN_MUSIC_GROUP:
+                            		switch (isAudioDisabled){
+                            		case 2:
+                            			errorMessage.setText(R.string.error_message_zero_count_audio_group_wall);
+                            			break;
+                            		case 1:
+                            			errorMessage.setText(R.string.error_message_audio_disabled_group_wall);
+                            			break;
+                            		}
+                            		break;
+                        		}
+                        		break;
                     		}
                    		}
                    } catch (NullPointerException e){

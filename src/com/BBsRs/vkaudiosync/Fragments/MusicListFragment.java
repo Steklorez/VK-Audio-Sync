@@ -34,6 +34,7 @@ import android.content.res.Resources.NotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -360,6 +361,9 @@ public class MusicListFragment extends Fragment {
 			    	  					for (MusicCollection one: musicCollectionTemp){
 			    	  						if (one.aid==oneItem.aid || (one.artist.equals(oneItem.artist) && one.title.equals(oneItem.title))){
 			    	  							musicCollectionTemp.remove(indexTemp);
+			    	  							Intent i = new Intent(Constants.SOME_DELETED);
+			    	  							i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
+			    	  							getActivity().sendBroadcast(i);
 			    	  							break;
 			    	  						}
 			    	  						indexTemp++;

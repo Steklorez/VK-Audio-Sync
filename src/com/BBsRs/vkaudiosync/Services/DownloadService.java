@@ -14,13 +14,16 @@ import java.util.ArrayList;
 
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
+import org.holoeverywhere.widget.Toast;
 
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -54,6 +57,8 @@ public class DownloadService extends Service {
 	
 	ArrayList<MusicCollection> musicCollection = new ArrayList<MusicCollection>();
 	
+	ArrayList<MusicCollection> musicCollectionToSkip = new ArrayList<MusicCollection>();
+	
 	PowerManager pm;
 	PowerManager.WakeLock wl;
 	
@@ -65,6 +70,8 @@ public class DownloadService extends Service {
 	NotificationCompat.Builder mBuilder;
 	
 	boolean isServiceStopped = false;
+	
+	MusicCollection currentTrackDownloading;
 	
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
@@ -91,7 +98,7 @@ public class DownloadService extends Service {
 		pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Constants.PARTIAL_WAKE_LOCK_TAG);
 		wl.acquire();
-		
+		getApplicationContext().registerReceiver(someDeleted, new IntentFilter(Constants.SOME_DELETED));
         setPendingNotification();
 		startDownloadChecking();
 		return super.onStartCommand(intent, flags, startId);
@@ -102,6 +109,7 @@ public class DownloadService extends Service {
 		isServiceStopped = true;
 		wl.release();
 		mNotificationManager.cancel(0);
+		getApplicationContext().unregisterReceiver(someDeleted);
 		super.onDestroy();
 	}
 	
@@ -125,6 +133,21 @@ public class DownloadService extends Service {
 		contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(this, ContentShowActivity.class).putExtra(Constants.INITIAL_PAGE, Constants.DOWNLOAD_MANAGER_FRAGMENT), Notification.FLAG_ONGOING_EVENT);        
 	}
 	
+	private BroadcastReceiver someDeleted = new BroadcastReceiver() {
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	    	if ((((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid == currentTrackDownloading.aid) || (((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).artist.equals(currentTrackDownloading.artist) && ((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).title.equals(currentTrackDownloading.title))){
+	    		Toast.makeText(getApplicationContext(), getString(R.string.cant_delete_just_in_time)+" "+currentTrackDownloading.artist+" "+currentTrackDownloading.title, Toast.LENGTH_LONG).show();
+	    	} else {
+	    		//add song, which we need to skip BY JUST IN TIME EDITOR FOR DM
+	    		musicCollectionToSkip.add((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM));
+	    	
+	    		mBuilder.setContentTitle("["+(currentTrackDownloading.lyrics_id)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+(musicCollection.size()-musicCollectionToSkip.size())+"] "+currentTrackDownloading.artist+" - "+currentTrackDownloading.title);
+	    		mNotificationManager.notify(0, mBuilder.build());
+	    	}
+	   	}
+	};
+	
 	public void startDownloadChecking(){
 		new Thread(new Runnable() {
 			@Override
@@ -132,25 +155,36 @@ public class DownloadService extends Service {
 				int index = 0;
 				for (MusicCollection oneItem : musicCollection){
 					if (!isServiceStopped){
-							mBuilder.setContentTitle("["+(index+1)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+musicCollection.size()+"] "+oneItem.artist+" - "+oneItem.title)
-								.setContentText(getResources().getString(R.string.dm_inprogrees))
-								.setSmallIcon(R.drawable.notification_animated_icon)
-								.setContentIntent(contentIntent)
-								.setOngoing(true)
-								.setProgress(100, 0, false);
-						mNotificationManager.notify(0, mBuilder.build());
+						boolean skip = false;
+						for (MusicCollection oneItemToSkip : musicCollectionToSkip){
+							if ((oneItem.aid==oneItemToSkip.aid) || (oneItem.title.equals(oneItemToSkip.title) && oneItem.artist.equals(oneItemToSkip.artist))){
+								skip = true;
+								break;
+							}
+						}
+						if (!skip){
+							currentTrackDownloading = oneItem;
+							currentTrackDownloading.lyrics_id = (long) (index+1);
+							mBuilder.setContentTitle("["+(index+1)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+(musicCollection.size()-musicCollectionToSkip.size())+"] "+oneItem.artist+" - "+oneItem.title)
+									.setContentText(getResources().getString(R.string.dm_inprogrees))
+									.setSmallIcon(R.drawable.notification_animated_icon)
+									.setContentIntent(contentIntent)
+									.setOngoing(true)
+									.setProgress(100, 0, false);
+							mNotificationManager.notify(0, mBuilder.build());
 					
-						boolean isSuccessfullyDownloaded = DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", ""));
+							boolean isSuccessfullyDownloaded = DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", ""));
 					
-						if (isSuccessfullyDownloaded)
-							removeFromDM(oneItem);
+							if (isSuccessfullyDownloaded)
+								removeFromDM(oneItem);
 					
-						Intent i = new Intent(Constants.MUSIC_DOWNLOADED);
-						i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
-						i.putExtra(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED, isSuccessfullyDownloaded);
-						i.putExtra(Constants.DOWNLOAD_SERVICE_STOPPED, false);
-						sendBroadcast(i);
-						index++;
+							Intent i = new Intent(Constants.MUSIC_DOWNLOADED);
+							i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
+							i.putExtra(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED, isSuccessfullyDownloaded);
+							i.putExtra(Constants.DOWNLOAD_SERVICE_STOPPED, false);
+							sendBroadcast(i);
+							index++;
+						}
 					} else {
 						break;
 					}
@@ -257,7 +291,7 @@ public class DownloadService extends Service {
 		           /*setting up cover art and fix tags so far as we can!*/
 		           if (!isServiceStopped){
 		        	   mBuilder.setContentText(getResources().getString(R.string.dm_inprogrees_cover))
-						.setProgress(100, 100, false);
+						.setProgress(0, 0, true);
 			           mNotificationManager.notify(0, mBuilder.build());
 	    			} else {
 	    				mNotificationManager.cancel(0);

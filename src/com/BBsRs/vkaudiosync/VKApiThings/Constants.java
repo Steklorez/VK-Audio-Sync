@@ -43,6 +43,7 @@ public class Constants {
 	
 	public static final String SOME_CHECKED = "checked";
 	public static final String SOME_DELETED = "deleted";
+	public static final String SOME_ADDED = "added";
 	
 	//wake lock tag
 	public static final String PARTIAL_WAKE_LOCK_TAG = "my tag";

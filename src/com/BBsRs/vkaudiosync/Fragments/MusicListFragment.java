@@ -252,6 +252,7 @@ public class MusicListFragment extends Fragment {
 	    	  break;
 	      case R.id.menu_check_all:
 	    	  if (musicCollection !=null && musicAdapter !=null && musicCollection.size()>0){
+	    		 final Context context = getActivity();
 	    	  	 if (String.valueOf(item.getTitle()).equals(getResources().getString(R.string.check_all))){
 	    	  		DialogFragment NumberPickerDialog = new DialogFragment(){
 	    	  			private int currValue=1;
@@ -309,6 +310,10 @@ public class MusicListFragment extends Fragment {
 													} catch (IOException e) {
 														e.printStackTrace();
 													}
+							    	  				
+							    	  				Intent i = new Intent(Constants.SOME_ADDED);
+						    						i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
+						    						context.sendBroadcast(i);
 
 							    	  				musicAdapter.checked++;
 							    	  			}
@@ -363,7 +368,7 @@ public class MusicListFragment extends Fragment {
 			    	  							musicCollectionTemp.remove(indexTemp);
 			    	  							Intent i = new Intent(Constants.SOME_DELETED);
 			    	  							i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
-			    	  							getActivity().sendBroadcast(i);
+			    	  							context.sendBroadcast(i);
 			    	  							break;
 			    	  						}
 			    	  						indexTemp++;

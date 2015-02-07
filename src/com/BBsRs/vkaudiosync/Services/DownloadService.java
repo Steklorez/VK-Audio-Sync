@@ -73,6 +73,8 @@ public class DownloadService extends Service {
 	
 	MusicCollection currentTrackDownloading;
 	
+	int currentDownloadingIndex=0, totalQuanToDownload=0;
+	
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
 		return null;
@@ -92,6 +94,7 @@ public class DownloadService extends Service {
 	       	musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
 	       	if (musicCollection==null)
 	       		musicCollection = new ArrayList<MusicCollection>();
+	       	totalQuanToDownload = musicCollection.size();
 	    } catch (IOException e) {
 	    	e.printStackTrace();
 	    }
@@ -99,6 +102,7 @@ public class DownloadService extends Service {
 		wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Constants.PARTIAL_WAKE_LOCK_TAG);
 		wl.acquire();
 		getApplicationContext().registerReceiver(someDeleted, new IntentFilter(Constants.SOME_DELETED));
+		getApplicationContext().registerReceiver(someAdded, new IntentFilter(Constants.SOME_ADDED));
         setPendingNotification();
 		startDownloadChecking();
 		return super.onStartCommand(intent, flags, startId);
@@ -110,6 +114,7 @@ public class DownloadService extends Service {
 		wl.release();
 		mNotificationManager.cancel(0);
 		getApplicationContext().unregisterReceiver(someDeleted);
+		getApplicationContext().unregisterReceiver(someAdded);
 		super.onDestroy();
 	}
 	
@@ -141,8 +146,32 @@ public class DownloadService extends Service {
 	    	} else {
 	    		//add song, which we need to skip BY JUST IN TIME EDITOR FOR DM
 	    		musicCollectionToSkip.add((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM));
-	    	
-	    		mBuilder.setContentTitle("["+(currentTrackDownloading.lyrics_id)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+(musicCollection.size()-musicCollectionToSkip.size())+"] "+currentTrackDownloading.artist+" - "+currentTrackDownloading.title);
+	    		totalQuanToDownload --;
+	    		
+	    		mBuilder.setContentTitle("["+(currentTrackDownloading.lyrics_id)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+totalQuanToDownload+"] "+currentTrackDownloading.artist+" - "+currentTrackDownloading.title);
+	    		mNotificationManager.notify(0, mBuilder.build());
+	    	}
+	   	}
+	};
+	
+	private BroadcastReceiver someAdded = new BroadcastReceiver() {
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	    	if ((((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid == currentTrackDownloading.aid) || (((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).artist.equals(currentTrackDownloading.artist) && ((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).title.equals(currentTrackDownloading.title))){
+	    		Toast.makeText(getApplicationContext(), getString(R.string.cant_add_just_in_time)+" "+currentTrackDownloading.artist+" "+currentTrackDownloading.title, Toast.LENGTH_LONG).show();
+	    	} else {
+	    		//del song, which we need to skip BY JUST IN TIME EDITOR FOR DM
+				int indexTemp = 0;
+				for (MusicCollection one : musicCollectionToSkip) {
+					if (one.aid == ((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid || (one.artist.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).artist) && one.title.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).title))) {
+						musicCollectionToSkip.remove(indexTemp);
+						break;
+					}
+					indexTemp++;
+				}
+	    		totalQuanToDownload++;
+	    		
+	    		mBuilder.setContentTitle("["+(currentTrackDownloading.lyrics_id)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+totalQuanToDownload+"] "+currentTrackDownloading.artist+" - "+currentTrackDownloading.title);
 	    		mNotificationManager.notify(0, mBuilder.build());
 	    	}
 	   	}
@@ -152,7 +181,6 @@ public class DownloadService extends Service {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				int index = 0;
 				for (MusicCollection oneItem : musicCollection){
 					if (!isServiceStopped){
 						boolean skip = false;
@@ -164,8 +192,8 @@ public class DownloadService extends Service {
 						}
 						if (!skip){
 							currentTrackDownloading = oneItem;
-							currentTrackDownloading.lyrics_id = (long) (index+1);
-							mBuilder.setContentTitle("["+(index+1)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+(musicCollection.size()-musicCollectionToSkip.size())+"] "+oneItem.artist+" - "+oneItem.title)
+							currentTrackDownloading.lyrics_id = (long) (currentDownloadingIndex+1);
+							mBuilder.setContentTitle("["+(currentDownloadingIndex+1)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+totalQuanToDownload+"] "+oneItem.artist+" - "+oneItem.title)
 									.setContentText(getResources().getString(R.string.dm_inprogrees))
 									.setSmallIcon(R.drawable.notification_animated_icon)
 									.setContentIntent(contentIntent)
@@ -183,7 +211,7 @@ public class DownloadService extends Service {
 							i.putExtra(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED, isSuccessfullyDownloaded);
 							i.putExtra(Constants.DOWNLOAD_SERVICE_STOPPED, false);
 							sendBroadcast(i);
-							index++;
+							currentDownloadingIndex++;
 						}
 					} else {
 						break;

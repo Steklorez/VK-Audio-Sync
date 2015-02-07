@@ -238,6 +238,9 @@ public class DownloadService extends Service {
 
 		           URL url = new URL(oneItem.url); //you can write here any link
 		           file = new File(dir, fileName);
+		           
+		           if (new File(file.getAbsolutePath()+".mp3").exists())
+		        	   return true;
 
 		           long startTime = System.currentTimeMillis();
 		           Log.d("DownloadManager", "download begining");

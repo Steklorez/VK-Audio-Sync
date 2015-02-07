@@ -189,6 +189,17 @@ public class DownloadService extends Service {
 						break;
 					}
 				}
+				//check if new tracks added after service start
+				try {
+			       	musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+			       	if (musicCollection==null)
+			       		musicCollection = new ArrayList<MusicCollection>();
+			    } catch (IOException e) {
+			    	e.printStackTrace();
+			    }
+				if (musicCollection.size() != 0)
+				startDownloadChecking();
+				else
 				stopServiceCustom();
 			}
 		}).start();

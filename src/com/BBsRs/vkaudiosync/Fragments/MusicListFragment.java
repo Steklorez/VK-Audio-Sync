@@ -179,13 +179,8 @@ public class MusicListFragment extends Fragment {
                 
                 listViewMusic.setAdapter(musicAdapter);
                 listViewMusic.setSelection(savedInstanceState.getInt(Constants.EXTRA_POSX));
-                
-                if (mainMenu != null)
-	    			mainMenu.findItem(R.id.menu_check_all).setVisible(true);
 	    	} else {
 	    		if (error){
-	    			if (mainMenu != null)
-    	    			mainMenu.findItem(R.id.menu_check_all).setVisible(false);
 	    			errorMessage.setText(savedInstanceState.getString(Constants.EXTRA_ERROR_MSG));
         			errorRetryButton.setVisibility(View.VISIBLE);
         			listViewMusic.setVisibility(View.GONE);
@@ -229,7 +224,6 @@ public class MusicListFragment extends Fragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.ml_menu, menu);
 		mainMenu = menu;
-		mainMenu.findItem(R.id.menu_check_all).setVisible(false);
 		return;
 	}
 	
@@ -239,6 +233,22 @@ public class MusicListFragment extends Fragment {
 	      case android.R.id.home:
 	    	  Intent i = new Intent(Constants.OPEN_MENU_DRAWER);
 	    	  getActivity().sendBroadcast(i);
+	    	  break;
+	      case R.id.submenu:
+	    	  switch (bundle.getInt(Constants.BUNDLE_MAIN_WALL_TYPE)){
+	    	  case Constants.MAIN_MUSIC:
+	    		  mainMenu.findItem(R.id.menu_main).setVisible(false);
+	    		  mainMenu.findItem(R.id.menu_wall).setVisible(true);
+	    		  break;
+	    	  case Constants.WALL_MUSIC:
+	    		  mainMenu.findItem(R.id.menu_main).setVisible(true);
+	    		  mainMenu.findItem(R.id.menu_wall).setVisible(false);
+	    		  break;
+	    	  }
+	    	  if (musicCollection.size()!=0)
+	    		  mainMenu.findItem(R.id.menu_check_all).setEnabled(true);
+	    	  else 
+	    		  mainMenu.findItem(R.id.menu_check_all).setEnabled(false);
 	    	  break;
 	      case R.id.menu_main:
 	    	  bundle.putInt(Constants.BUNDLE_MAIN_WALL_TYPE, Constants.MAIN_MUSIC);
@@ -690,17 +700,13 @@ public class MusicListFragment extends Fragment {
                    			if (quanOfChecked != 0){
                 	    		if (mainMenu != null){
                 	    			mainMenu.findItem(R.id.menu_check_all).setTitle(getResources().getString(R.string.uncheck_all));
-                	    			mainMenu.findItem(R.id.menu_check_all).setVisible(true);
                 	    		}
                 	    	} else {
                 	    		if (mainMenu != null){
                 	    			mainMenu.findItem(R.id.menu_check_all).setTitle(getResources().getString(R.string.check_all));
-                	    			mainMenu.findItem(R.id.menu_check_all).setVisible(true);
                 	    		}
                 	    	}
                    		} else {
-                   			if (mainMenu != null)
-            	    			mainMenu.findItem(R.id.menu_check_all).setVisible(false);
                    			listViewMusic.setVisibility(View.GONE);
                    			relativeErrorLayout.setVisibility(View.VISIBLE);
                    			errorRetryButton.setEnabled(true);

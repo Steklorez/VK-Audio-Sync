@@ -33,6 +33,13 @@
     <string name="downloading">Downloading</string>
     <string name="account">Account</string>
     <string name="logout">Log out</string>
+    <string name="imageloader">Image Loader</string>
+    <string name="imageloader_pause_scroll">Pause on scroll</string>
+    <string name="imageloader_pause_scroll_summary">Disabling may make lists more laggy</string>
+    <string name="imageloader_pause_fling">Pause on fling</string>
+    <string name="imageloader_pause_fling_summary">Disabling may make lists more laggy</string>
+    <string name="imageloader_clear_cache">Clear cache</string>
+    <string name="imageloader_clear_cache_success">Image cache successfully cleared!</string>
     <string name="download_direcotry">Download directory</string>
     <string name="moreover">moreover</string>
     <string name="main">Main music</string>

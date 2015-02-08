@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
     <PreferenceCategory android:title="@string/downloading" >
         <Preference
             android:key="preference_folder"
             android:title="@string/download_direcotry" />
-        
-        </PreferenceCategory>
-        
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/imageloader" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="preference_imageloader_pause_on_scroll"
+            android:summary="@string/imageloader_pause_scroll_summary"
+            android:title="@string/imageloader_pause_scroll" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="preference_imageloader_pause_on_fling"
+            android:summary="@string/imageloader_pause_fling_summary"
+            android:title="@string/imageloader_pause_fling" />
+
+        <Preference
+            android:key="preference_imageloader_clear_cache"
+            android:title="@string/imageloader_clear_cache" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/account" >
         <Preference
             android:key="preference_logout"
             android:title="@string/logout" />
-        </PreferenceCategory>
+    </PreferenceCategory>
 
 </PreferenceScreen>

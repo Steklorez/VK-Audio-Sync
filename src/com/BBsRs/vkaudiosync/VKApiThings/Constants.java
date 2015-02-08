@@ -68,6 +68,8 @@ public class Constants {
 	public static final String DOWNLOAD_SELECTION = "download_selection";
 	public static final String ONE_AUDIO_ITEM = "one_audio_item";
 	public static final String OTHER_FRAGMENT = "other_fragment";
-	
+	public static final String PREFERENCE_IMAGELOADER_PAUSE_ON_SCROLL_KEY = "preference_imageloader_pause_on_scroll";
+	public static final String PREFERENCE_IMAGELOADER_PAUSE_ON_FLING_KEY = "preference_imageloader_pause_on_fling";
+	public static final String PREFERENCE_IMAGELOADER_CLEAR_CACHE = "preference_imageloader_clear_cache";
 
 }

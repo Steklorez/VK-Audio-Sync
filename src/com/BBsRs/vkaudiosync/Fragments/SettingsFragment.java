@@ -5,6 +5,7 @@ import org.holoeverywhere.preference.Preference.OnPreferenceClickListener;
 import org.holoeverywhere.preference.PreferenceFragment;
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
+import org.holoeverywhere.widget.Toast;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import com.BBsRs.vkaudiosync.DirChooseActivity;
 import com.BBsRs.vkaudiosync.LoaderActivity;
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class SettingsFragment extends PreferenceFragment {
 	
@@ -36,6 +38,22 @@ public class SettingsFragment extends PreferenceFragment {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				getActivity().startActivity(new Intent(getActivity(), DirChooseActivity.class));
+				return false;
+			}
+        });
+        
+        Preference clearCache = (Preference) findPreference (Constants.PREFERENCE_IMAGELOADER_CLEAR_CACHE);
+        clearCache.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				try {
+				ImageLoader.getInstance().clearMemoryCache();
+				ImageLoader.getInstance().clearDiskCache();
+				} catch (Exception e){
+					e.printStackTrace();
+				} finally {
+					Toast.makeText(getActivity(), getString(R.string.imageloader_clear_cache_success), Toast.LENGTH_LONG).show();
+				}
 				return false;
 			}
         });

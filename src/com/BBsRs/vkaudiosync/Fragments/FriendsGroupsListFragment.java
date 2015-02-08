@@ -33,6 +33,8 @@ import com.BBsRs.vkaudiosync.VKApiThings.Account;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 import com.BBsRs.vkaudiosync.collection.FriendsGroupsCollection;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.perm.kate.api.Api;
 import com.perm.kate.api.Group;
 import com.perm.kate.api.User;
@@ -235,6 +237,9 @@ public class FriendsGroupsListFragment extends Fragment {
     	}
     	
     	sPref.edit().putBoolean(Constants.OTHER_FRAGMENT, true).commit();
+    	
+    	//set pause on scroll and etc for imageloader
+        listViewFriendsGroups.setOnScrollListener(new PauseOnScrollListener(ImageLoader.getInstance(), sPref.getBoolean(Constants.PREFERENCE_IMAGELOADER_PAUSE_ON_SCROLL_KEY, true), sPref.getBoolean(Constants.PREFERENCE_IMAGELOADER_PAUSE_ON_FLING_KEY, true)));
 	}
 	
 	@Override

@@ -34,6 +34,8 @@ import com.BBsRs.vkaudiosync.Services.DownloadService;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 import com.BBsRs.vkaudiosync.collection.MusicCollection;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 
 public class DownloadManagerFragment extends Fragment {
 	
@@ -131,6 +133,8 @@ public class DownloadManagerFragment extends Fragment {
         	}
         }
 		
+        //set pause on scroll and etc for imageloader
+        listViewMusic.setOnScrollListener(new PauseOnScrollListener(ImageLoader.getInstance(), sPref.getBoolean(Constants.PREFERENCE_IMAGELOADER_PAUSE_ON_SCROLL_KEY, true), sPref.getBoolean(Constants.PREFERENCE_IMAGELOADER_PAUSE_ON_FLING_KEY, true)));
 	}
 	
 	@Override

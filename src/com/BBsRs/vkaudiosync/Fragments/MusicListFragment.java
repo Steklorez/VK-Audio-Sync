@@ -404,6 +404,7 @@ public class MusicListFragment extends Fragment {
 		super.onPause();
 		getActivity().unregisterReceiver(musicDownloaded);
 		getActivity().unregisterReceiver(someChecked);
+		getActivity().unregisterReceiver(musicPercentageChanged);
 	}
 	
 	@Override
@@ -412,6 +413,7 @@ public class MusicListFragment extends Fragment {
 		//turn up download receiver
         getActivity().registerReceiver(musicDownloaded, new IntentFilter(Constants.MUSIC_DOWNLOADED));
         getActivity().registerReceiver(someChecked, new IntentFilter(Constants.SOME_CHECKED));
+        getActivity().registerReceiver(musicPercentageChanged, new IntentFilter(Constants.MUSIC_PERCENTAGE_CHANGED));
         
     	 // set action bar
     	getSupportActionBar().setTitle(PlaceName);
@@ -498,6 +500,22 @@ public class MusicListFragment extends Fragment {
 	    	} else {
 	    		if (mainMenu != null)
 	    			mainMenu.findItem(R.id.menu_check_all).setTitle(getResources().getString(R.string.check_all));
+	    	}
+	    }
+	};
+	
+	private BroadcastReceiver musicPercentageChanged = new BroadcastReceiver() {
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	    	int index=0;
+	    	if (musicAdapter !=null)
+	    	for (MusicCollection oneItem : musicAdapter.musicCollection){
+	    		if ((oneItem.aid==((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid) || (oneItem.artist.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).artist) && oneItem.title.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).title))){
+	    			musicAdapter.getItem(index).percentage=((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).percentage;
+	    			musicAdapter.notifyDataSetChanged();
+	    			break;
+	    		}
+	    		index++;
 	    	}
 	    }
 	};
@@ -597,10 +615,10 @@ public class MusicListFragment extends Fragment {
                             		f = new File(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/"+(one.artist+" - "+one.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
                             		if (f.exists()){
                             			quanOfExist++;
-                            			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 1, 1));
+                            			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 1, 1, 101));
                             		}
                             		else 
-                            			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 0, 0));
+                            			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 0, 0, 0));
                             		for (MusicCollection oneDM : musicCollectionTemp){
                             			if (oneDM.aid == one.aid || (oneDM.title.equals(one.title) && oneDM.artist.equals(one.artist))){
                             				musicCollection.get(musicCollection.size()-1).checked = 1;

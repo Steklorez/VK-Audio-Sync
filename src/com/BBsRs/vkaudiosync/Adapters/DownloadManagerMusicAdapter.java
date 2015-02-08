@@ -63,6 +63,7 @@ public class DownloadManagerMusicAdapter extends BaseAdapter {
         public TextView subtitle;
         public ImageView deleteItem;
         public ImageView albumArt;
+        public TextView percentage;
     }
     
     @Override
@@ -77,6 +78,7 @@ public class DownloadManagerMusicAdapter extends BaseAdapter {
             holder.subtitle = (TextView) rowView.findViewById(R.id.subtitle);
             holder.deleteItem = (ImageView) rowView.findViewById(R.id.deleteItem);
             holder.albumArt = (ImageView)rowView.findViewById(R.id.cover_art);
+            holder.percentage = (TextView)rowView.findViewById(R.id.percentage);
             rowView.setTag(holder);
         } else {
             holder = (ViewHolder) rowView.getTag();
@@ -85,6 +87,13 @@ public class DownloadManagerMusicAdapter extends BaseAdapter {
         holder.length.setText(stringPlusZero(String.valueOf((int)(musicCollection.get(position).duration)/60))+":"+stringPlusZero(String.valueOf((int)(musicCollection.get(position).duration)%60)));
         holder.title.setText(String.valueOf(musicCollection.get(position).artist));
         holder.subtitle.setText(String.valueOf(musicCollection.get(position).title));
+
+        if (musicCollection.get(position).percentage != 0 && musicCollection.get(position).percentage != 101){
+        	holder.percentage.setVisibility(View.VISIBLE);
+        	holder.percentage.setText(String.valueOf(musicCollection.get(position).percentage)+"%");
+        } else {
+        	holder.percentage.setVisibility(View.GONE);
+        }
         
         try {
         	ImageLoader.getInstance().displayImage(Constants.GOOGLE_IMAGE_REQUEST_URL + URLEncoder.encode(musicCollection.get(position).artist+ " - "+musicCollection.get(position).title, Constants.DEFAULT_CHARSET), holder.albumArt, options, true);

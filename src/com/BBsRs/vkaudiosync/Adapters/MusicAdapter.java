@@ -24,7 +24,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class MusicAdapter extends BaseAdapter {
 
-	ArrayList<MusicCollection> musicCollection = new ArrayList<MusicCollection>();
+	public ArrayList<MusicCollection> musicCollection = new ArrayList<MusicCollection>();
 	Context context;
 	LayoutInflater inflater;
 	DisplayImageOptions options;
@@ -67,6 +67,7 @@ public class MusicAdapter extends BaseAdapter {
         public TextView subtitle;
         public CheckBox checkDownload;
         public ImageView albumArt;
+        public TextView percentage;
     }
     
     @Override
@@ -81,6 +82,7 @@ public class MusicAdapter extends BaseAdapter {
             holder.subtitle = (TextView) rowView.findViewById(R.id.subtitle);
             holder.checkDownload = (CheckBox) rowView.findViewById(R.id.checlDownload);
             holder.albumArt = (ImageView)rowView.findViewById(R.id.cover_art);
+            holder.percentage = (TextView)rowView.findViewById(R.id.percentage);
             rowView.setTag(holder);
         } else {
             holder = (ViewHolder) rowView.getTag();
@@ -91,6 +93,13 @@ public class MusicAdapter extends BaseAdapter {
         holder.subtitle.setText(String.valueOf(musicCollection.get(position).title));
         holder.checkDownload.setChecked(musicCollection.get(position).checked == 1 ? true : false);
         holder.checkDownload.setEnabled(musicCollection.get(position).exist == 0 ? true : false);
+        
+        if (musicCollection.get(position).percentage != 0 && musicCollection.get(position).percentage != 101){
+        	holder.percentage.setVisibility(View.VISIBLE);
+        	holder.percentage.setText(String.valueOf(musicCollection.get(position).percentage)+"%");
+        } else {
+        	holder.percentage.setVisibility(View.GONE);
+        }
         
         try {
         	ImageLoader.getInstance().displayImage(Constants.GOOGLE_IMAGE_REQUEST_URL + URLEncoder.encode(musicCollection.get(position).artist+ " - "+musicCollection.get(position).title, Constants.DEFAULT_CHARSET), holder.albumArt, options, true);

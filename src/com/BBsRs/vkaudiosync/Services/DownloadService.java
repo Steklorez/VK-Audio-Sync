@@ -255,6 +255,7 @@ public class DownloadService extends Service {
 	
 	public boolean DownloadFromUrl(MusicCollection oneItem, String fileName) {
 		File file = null;
+		Intent i;
 
 		   try {
 		           File root = new File (sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/");               
@@ -316,6 +317,12 @@ public class DownloadService extends Service {
 		    				shownIn = System.currentTimeMillis();
 		    				mBuilder.setProgress(100, last, false);
 		    				mNotificationManager.notify(0, mBuilder.build());
+		    				
+		    				//send broadcast about percentage of track
+		    				oneItem.percentage=last;
+		    				i = new Intent(Constants.MUSIC_PERCENTAGE_CHANGED);
+							i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
+							sendBroadcast(i);
 		    			}
 		    			if (!isServiceStopped){
 		    				output.write(data, 0, count);
@@ -329,6 +336,12 @@ public class DownloadService extends Service {
 		    		output.close();
 		    		input.close();
 		           Log.d("DownloadManager", "download ready in" + ((System.currentTimeMillis() - startTime) / 1000) + " sec");
+
+		           //send that song to 100% downloaded
+		           oneItem.percentage=100;
+		           i = new Intent(Constants.MUSIC_PERCENTAGE_CHANGED);
+		           i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
+		           sendBroadcast(i);
 		           
 		           /*setting up cover art and fix tags so far as we can!*/
 		           if (!isServiceStopped){
@@ -435,6 +448,12 @@ public class DownloadService extends Service {
 					
 					Log.d("DownloadManager", "delete downloaded file");
 					file.delete();
+					
+					//send that song to 101% downloaded
+			        oneItem.percentage=101;
+			        i = new Intent(Constants.MUSIC_PERCENTAGE_CHANGED);
+			        i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
+			        sendBroadcast(i);
 					
 		           return true;
 		   } catch (IOException e) {

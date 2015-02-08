@@ -37,6 +37,7 @@ public class Constants {
 	//BROADCAST RECEIVER
 	public static final String OPEN_MENU_DRAWER = "open_menu_drawer";
 	public static final String MUSIC_DOWNLOADED = "downloaded";
+	public static final String MUSIC_PERCENTAGE_CHANGED = "music_percetage_changed";
 	
 	public static final String MUSIC_SUCCESSFULLY_DOWNLOADED = "successfully";
 	public static final String DOWNLOAD_SERVICE_STOPPED= "stopped";

@@ -83,5 +83,19 @@
         </LinearLayout>
 
     </RelativeLayout>
+    
+     <TextView
+         android:id="@+id/percentage"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignBottom="@+id/cover_art"
+         android:layout_alignLeft="@+id/cover_art"
+         android:layout_alignRight="@+id/cover_art"
+         android:layout_alignTop="@+id/cover_art"
+         android:background="#7F000000"
+         android:gravity="center"
+         android:textAppearance="?android:attr/textAppearanceMedium"
+         android:textStyle="bold"
+         android:visibility="gone" />
 
 </RelativeLayout>

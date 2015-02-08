@@ -11,7 +11,8 @@
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:layout_alignParentLeft="true"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/deactivated_100" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -80,5 +81,19 @@
         </LinearLayout>
 
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/percentage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/cover_art"
+        android:layout_alignLeft="@+id/cover_art"
+        android:layout_alignRight="@+id/cover_art"
+        android:layout_alignTop="@+id/cover_art"
+        android:gravity="center"
+        android:background="#7F000000"
+        android:visibility="gone" 
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
 
 </RelativeLayout>

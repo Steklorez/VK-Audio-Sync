@@ -108,6 +108,7 @@ public class DownloadManagerFragment extends Fragment {
         //register delete receiver
         getActivity().registerReceiver(someDeleted, new IntentFilter(Constants.SOME_DELETED));
         getActivity().registerReceiver(musicDownloaded, new IntentFilter(Constants.MUSIC_DOWNLOADED));
+        getActivity().registerReceiver(musicPercentageChanged, new IntentFilter(Constants.MUSIC_PERCENTAGE_CHANGED));
         
         sPref.edit().putBoolean(Constants.OTHER_FRAGMENT, true).commit();
         
@@ -137,6 +138,7 @@ public class DownloadManagerFragment extends Fragment {
 		super.onPause();
 		getActivity().unregisterReceiver(someDeleted);
 		getActivity().unregisterReceiver(musicDownloaded);
+		getActivity().unregisterReceiver(musicPercentageChanged);
 	}
 	
 	@Override
@@ -309,6 +311,22 @@ public class DownloadManagerFragment extends Fragment {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+	    }
+	};
+	
+	private BroadcastReceiver musicPercentageChanged = new BroadcastReceiver() {
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	    	int index=0;
+	    	if (musicAdapter !=null)
+	    	for (MusicCollection oneItem : musicAdapter.musicCollection){
+	    		if ((oneItem.aid==((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid) || (oneItem.artist.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).artist) && oneItem.title.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).title))){
+	    			musicAdapter.getItem(index).percentage=((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).percentage;
+	    			musicAdapter.notifyDataSetChanged();
+	    			break;
+	    		}
+	    		index++;
+	    	}
 	    }
 	};
 	

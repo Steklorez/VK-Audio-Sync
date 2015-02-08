@@ -29,9 +29,10 @@ public class MusicCollection implements Parcelable, Serializable {
     public Long lyrics_id;
     public int checked;
     public int exist;
+    public int percentage;
   
 
-  public MusicCollection(long _aid, long _owner_id, String _artist, String _title, long _duration, String _url, Long _lyrics_id, int _checked, int _exist) {
+  public MusicCollection(long _aid, long _owner_id, String _artist, String _title, long _duration, String _url, Long _lyrics_id, int _checked, int _exist, int _percentage) {
 	    aid = _aid;
 	    owner_id = _owner_id;
 	    artist = _artist;
@@ -41,6 +42,7 @@ public class MusicCollection implements Parcelable, Serializable {
 	    lyrics_id = _lyrics_id;
 	    checked = _checked;
 	    exist = _exist;
+	    percentage = _percentage;
   }
 
 
@@ -59,6 +61,7 @@ private MusicCollection(Parcel in) {
     lyrics_id = in.readLong();
     checked = in.readInt();
     exist = in.readInt();
+    percentage = in.readInt();
 }
 
 @Override
@@ -72,6 +75,7 @@ public void writeToParcel(Parcel out, int flags) {
      out.writeLong(lyrics_id != null ? lyrics_id : 0);
      out.writeInt(checked);
      out.writeInt(exist);
+     out.writeInt(percentage);
 }
 
 public static final Parcelable.Creator<MusicCollection> CREATOR = new Parcelable.Creator<MusicCollection>() {

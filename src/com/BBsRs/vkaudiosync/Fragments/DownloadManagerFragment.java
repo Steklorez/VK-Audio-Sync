@@ -168,6 +168,19 @@ public class DownloadManagerFragment extends Fragment {
 	    	  i = new Intent(Constants.OPEN_MENU_DRAWER);
 	    	  getActivity().sendBroadcast(i);
 	    	  break;
+	      case R.id.submenu:
+	    	  if (musicCollection.size() == 0){
+	    		  mainMenu.findItem(R.id.menu_delete_all).setEnabled(false);
+	    	  } else {
+	    		  mainMenu.findItem(R.id.menu_delete_all).setEnabled(true);
+	    	  }
+	    	  
+	    	  if (isMyServiceRunning(DownloadService.class)){
+	    		  mainMenu.findItem(R.id.menu_stop_dm).setEnabled(true);
+	    	  } else {
+	    		  mainMenu.findItem(R.id.menu_stop_dm).setEnabled(false);
+	    	  }
+	    	  break;
 	      case R.id.menu_start_download_service:
 	    	  mainMenu.findItem(R.id.menu_start_download_service).setIcon(R.drawable.ic_menu_download_disabled);
 	    	  mainMenu.findItem(R.id.menu_start_download_service).setEnabled(false);

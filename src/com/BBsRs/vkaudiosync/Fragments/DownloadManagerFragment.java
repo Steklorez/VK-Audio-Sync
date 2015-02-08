@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -159,9 +160,10 @@ public class DownloadManagerFragment extends Fragment {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent i;
 	      switch (item.getItemId()) {
 	      case android.R.id.home:
-	    	  Intent i = new Intent(Constants.OPEN_MENU_DRAWER);
+	    	  i = new Intent(Constants.OPEN_MENU_DRAWER);
 	    	  getActivity().sendBroadcast(i);
 	    	  break;
 	      case R.id.menu_start_download_service:
@@ -179,6 +181,11 @@ public class DownloadManagerFragment extends Fragment {
 	    		  Toast.makeText(getActivity(), getResources().getString(R.string.delete_all_msg), Toast.LENGTH_LONG).show();
 	    	  } else {
 	    		  //clean download manager
+	    		  for (MusicCollection oneItem : musicCollection){
+					i = new Intent(Constants.SOME_DELETED);
+					i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
+					getActivity().sendBroadcast(i);
+	    		  }
 	    		  sPref.edit().putString(Constants.DOWNLOAD_SELECTION, "").commit();
 	  		  	  this.onResume();
 	    	  }

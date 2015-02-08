@@ -337,20 +337,26 @@ public class DownloadService extends Service {
 		    		input.close();
 		           Log.d("DownloadManager", "download ready in" + ((System.currentTimeMillis() - startTime) / 1000) + " sec");
 
-		           //send that song to 100% downloaded
-		           oneItem.percentage=100;
-		           i = new Intent(Constants.MUSIC_PERCENTAGE_CHANGED);
-		           i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
-		           sendBroadcast(i);
-		           
 		           /*setting up cover art and fix tags so far as we can!*/
 		           if (!isServiceStopped){
 		        	   mBuilder.setContentText(getResources().getString(R.string.dm_inprogrees_cover))
 						.setProgress(0, 0, true);
 			           mNotificationManager.notify(0, mBuilder.build());
+			           
+			           //send that song to 100% downloaded
+			           oneItem.percentage=100;
+			           i = new Intent(Constants.MUSIC_PERCENTAGE_CHANGED);
+			           i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
+			           sendBroadcast(i);
 	    			} else {
 	    				mNotificationManager.cancel(0);
 	    				file.delete();
+	    				
+	    				//send that song to 0% downloaded
+	 		           	oneItem.percentage=0;
+	 		           	i = new Intent(Constants.MUSIC_PERCENTAGE_CHANGED);
+	 		           	i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
+	 		           	sendBroadcast(i);
 	    				return false;
 	    			}
 		           

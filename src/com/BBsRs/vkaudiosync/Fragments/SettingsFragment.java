@@ -1,5 +1,7 @@
 package com.BBsRs.vkaudiosync.Fragments;
 
+import org.holoeverywhere.preference.CheckBoxPreference;
+import org.holoeverywhere.preference.ListPreference;
 import org.holoeverywhere.preference.Preference;
 import org.holoeverywhere.preference.Preference.OnPreferenceClickListener;
 import org.holoeverywhere.preference.PreferenceFragment;
@@ -9,6 +11,7 @@ import org.holoeverywhere.widget.Toast;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.BBsRs.vkaudiosync.DirChooseActivity;
 import com.BBsRs.vkaudiosync.LoaderActivity;
@@ -22,6 +25,8 @@ public class SettingsFragment extends PreferenceFragment {
     SharedPreferences sPref;
     
     Preference chooseDir;
+    ListPreference ausFrequency;
+    CheckBoxPreference aus;
     
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +73,9 @@ public class SettingsFragment extends PreferenceFragment {
 				return false;
 			}
         });
+        
+        ausFrequency = (ListPreference) findPreference(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION_FREQUENCY);
+        aus = (CheckBoxPreference) findPreference(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION);
 	}
 	
 	@Override
@@ -78,7 +86,16 @@ public class SettingsFragment extends PreferenceFragment {
 		
 		sPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		chooseDir.setSummary(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/");
-		
+
+		int index=0;
+		for (String summaryValue : getActivity().getResources().getStringArray(R.array.prefs_aus_freq_entry_values)){
+			if (summaryValue.equals(sPref.getString(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION_FREQUENCY, getString(R.string.prefs_aus_freq_default_value)))){
+				ausFrequency.setSummary(getActivity().getResources().getStringArray(R.array.prefs_aus_freq_values)[index]);
+				break;
+			}
+			index++;
+		}
+
 		sPref.edit().putBoolean(Constants.OTHER_FRAGMENT, true).commit();
 	}
 	

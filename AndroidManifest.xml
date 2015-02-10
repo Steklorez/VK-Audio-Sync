@@ -38,6 +38,8 @@
         <activity android:name="ContentShowActivity" android:launchMode="singleInstance">
         </activity>
         <activity android:name="DirChooseActivity" android:theme="@style/Holo.Theme.Dialog.Custom"></activity>
+        <service android:name=".Services.AutomaticSynchronizationService">
+        </service>
     </application>
 
 </manifest>

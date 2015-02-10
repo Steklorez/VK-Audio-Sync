@@ -65,17 +65,17 @@
     <string name="wall">Wall music</string>
     <string name="refreshing">Refreshing...</string>
     <string name="prefs_aus">Automatic synchronization</string>
-    <string name="prefs_aus_summary">All songs in your main list will be synced with your device autommatically, include adding new and deleting.</string>
+    <string name="prefs_aus_summary">All songs in your main list will be synced with your device autommatically, include adding new and deleting old.</string>
     <string name="prefs_aus_freq">Update frequency</string>
 
     <string name="prefs_aus_freq_default_value">1000</string>
 
     <string-array name="prefs_aus_freq_entry_values">
-        <item>1 min</item>
+        <item>1000</item>
     </string-array>
 
     <string-array name="prefs_aus_freq_values">
-        <item>1000</item>
+        <item>1 minute</item>
     </string-array>
 
     <string-array name="slider_menu">

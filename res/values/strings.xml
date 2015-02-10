@@ -66,6 +66,7 @@
     <string name="more_than">You can\'t check and download more that 100 songs per one time</string>
     <string name="wall">Wall music</string>
     <string name="refreshing">Refreshing...</string>
+    
     <string-array name="slider_menu">
         <item >MUSIC</item>
         <item >My music</item>

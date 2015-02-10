@@ -328,6 +328,11 @@ public class DownloadService extends Service {
 		    				output.write(data, 0, count);
 		    			} else {
 		    				mNotificationManager.cancel(0);
+		    				//send that song to 0% downloaded
+		 		           	oneItem.percentage=0;
+		 		           	i = new Intent(Constants.MUSIC_PERCENTAGE_CHANGED);
+		 		           	i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
+		 		           	sendBroadcast(i);
 		    				break;
 		    			}
 		    		}

@@ -3,12 +3,16 @@ package com.BBsRs.vkaudiosync.Fragments;
 import org.holoeverywhere.preference.CheckBoxPreference;
 import org.holoeverywhere.preference.ListPreference;
 import org.holoeverywhere.preference.Preference;
+import org.holoeverywhere.preference.Preference.OnPreferenceChangeListener;
 import org.holoeverywhere.preference.Preference.OnPreferenceClickListener;
 import org.holoeverywhere.preference.PreferenceFragment;
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
 import org.holoeverywhere.widget.Toast;
 
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +20,7 @@ import android.util.Log;
 import com.BBsRs.vkaudiosync.DirChooseActivity;
 import com.BBsRs.vkaudiosync.LoaderActivity;
 import com.BBsRs.vkaudiosync.R;
+import com.BBsRs.vkaudiosync.Services.AutomaticSynchronizationService;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -76,6 +81,35 @@ public class SettingsFragment extends PreferenceFragment {
         
         ausFrequency = (ListPreference) findPreference(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION_FREQUENCY);
         aus = (CheckBoxPreference) findPreference(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION);
+        
+        ausFrequency.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+			@Override
+			public boolean onPreferenceChange(Preference preference,
+					Object newValue) {
+				sPref.edit().putString(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION_FREQUENCY, (String) newValue).commit();
+				setSummaryAusFrequency();
+				return false;
+			}
+        });
+        
+        aus.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+			@Override
+			public boolean onPreferenceChange(Preference preference,
+					Object newValue) {
+				aus.setChecked(!aus.isChecked());
+				
+				if (aus.isChecked()){
+					if (!isMyServiceRunning(AutomaticSynchronizationService.class)){
+						getActivity().startService(new Intent(getActivity(), AutomaticSynchronizationService.class));
+					}
+				} else {
+					if (isMyServiceRunning(AutomaticSynchronizationService.class)){
+						getActivity().stopService(new Intent(getActivity(), AutomaticSynchronizationService.class));
+					}
+				}
+				return false;
+			}
+        });
 	}
 	
 	@Override
@@ -87,6 +121,12 @@ public class SettingsFragment extends PreferenceFragment {
 		sPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		chooseDir.setSummary(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/");
 
+		setSummaryAusFrequency();
+
+		sPref.edit().putBoolean(Constants.OTHER_FRAGMENT, true).commit();
+	}
+	
+	public void setSummaryAusFrequency(){
 		int index=0;
 		for (String summaryValue : getActivity().getResources().getStringArray(R.array.prefs_aus_freq_entry_values)){
 			if (summaryValue.equals(sPref.getString(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION_FREQUENCY, getString(R.string.prefs_aus_freq_default_value)))){
@@ -95,9 +135,16 @@ public class SettingsFragment extends PreferenceFragment {
 			}
 			index++;
 		}
-
-		sPref.edit().putBoolean(Constants.OTHER_FRAGMENT, true).commit();
 	}
 	
+    private boolean isMyServiceRunning(Class<?> serviceClass) {			//returns true is service running
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

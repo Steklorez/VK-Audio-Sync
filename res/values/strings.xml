@@ -6,12 +6,10 @@
     <string name="error_message_audio_disabled_user_main">Audio seems been disabled on this page, try check wall of this user.</string>
     <string name="error_message_audio_disabled_group_wall">Audio seems been disabled on this wall, try check main page of this community.</string>
     <string name="error_message_audio_disabled_group_main">Audio seems been disabled on this page, try check wall of this community.</string>
-    
     <string name="error_message_zero_count_audio_user_wall">Here basically no songs, try check main page of this user.</string>
     <string name="error_message_zero_count_audio_user_main">Here basically no songs, try check wall of this user.</string>
     <string name="error_message_zero_count_audio_group_wall">Here basically no songs, try check main page of this community.</string>
     <string name="error_message_zero_count_audio_group_main">Here basically no songs, try check wall of this community.</string>
-    
     <string name="message_zero_count_audio_dm">Here basically no songs, try add songs to download manager from own list, friends, and communities or their walls.</string>
     <string name="error_retry">Retry</string>
     <string name="cant_delete_just_in_time">You can\'t delete current downloading track from dm.</string>
@@ -66,15 +64,28 @@
     <string name="more_than">You can\'t check and download more that 100 songs per one time</string>
     <string name="wall">Wall music</string>
     <string name="refreshing">Refreshing...</string>
-    
+    <string name="prefs_aus">Automatic synchronization</string>
+    <string name="prefs_aus_summary">All songs in your main list will be synced with your device autommatically, include adding new and deleting.</string>
+    <string name="prefs_aus_freq">Update frequency</string>
+
+    <string name="prefs_aus_freq_default_value">1000</string>
+
+    <string-array name="prefs_aus_freq_entry_values">
+        <item>1 min</item>
+    </string-array>
+
+    <string-array name="prefs_aus_freq_values">
+        <item>1000</item>
+    </string-array>
+
     <string-array name="slider_menu">
-        <item >MUSIC</item>
-        <item >My music</item>
-        <item >Friends</item>
-        <item >Groups</item>
-        <item >APPLICATION</item>
-        <item >Download manager</item>
-        <item >Settings</item>
+        <item>MUSIC</item>
+        <item>My music</item>
+        <item>Friends</item>
+        <item>Groups</item>
+        <item>APPLICATION</item>
+        <item>Download manager</item>
+        <item>Settings</item>
     </string-array>
 
 </resources>

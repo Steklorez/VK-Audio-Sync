@@ -6,6 +6,20 @@
             android:key="preference_folder"
             android:title="@string/download_direcotry" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/prefs_aus" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="preference_automatic_synchronization"
+            android:summary="@string/prefs_aus_summary"
+            android:title="@string/prefs_aus" />
+        <ListPreference
+            android:defaultValue="@string/prefs_aus_freq_default_value"
+            android:dialogTitle="@string/prefs_aus_freq"
+            android:entries="@array/prefs_aus_freq_values"
+            android:entryValues="@array/prefs_aus_freq_entry_values"
+            android:key="preference_automatic_synchronization_frequency"
+            android:title="@string/prefs_aus_freq" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/imageloader" >
         <CheckBoxPreference
             android:defaultValue="true"

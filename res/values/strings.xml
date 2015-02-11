@@ -68,14 +68,18 @@
     <string name="prefs_aus_summary">All songs in your main list will be synced with your device autommatically, include adding new and deleting old.</string>
     <string name="prefs_aus_freq">Update frequency</string>
 
-    <string name="prefs_aus_freq_default_value">1000</string>
+    <string name="prefs_aus_freq_default_value">60000</string>
 
     <string-array name="prefs_aus_freq_entry_values">
-        <item>1000</item>
+        <item>30000</item>
+        <item>60000</item>
+        <item>3600000</item>
     </string-array>
 
     <string-array name="prefs_aus_freq_values">
+        <item>30 seconds</item>
         <item>1 minute</item>
+        <item>1 hour</item>
     </string-array>
 
     <string-array name="slider_menu">

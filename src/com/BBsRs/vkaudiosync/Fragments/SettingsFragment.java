@@ -12,10 +12,11 @@ import org.holoeverywhere.widget.Toast;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.BBsRs.vkaudiosync.DirChooseActivity;
 import com.BBsRs.vkaudiosync.LoaderActivity;
@@ -86,8 +87,16 @@ public class SettingsFragment extends PreferenceFragment {
 			@Override
 			public boolean onPreferenceChange(Preference preference,
 					Object newValue) {
-				sPref.edit().putString(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION_FREQUENCY, (String) newValue).commit();
+				ausFrequency.setValue((String) newValue);
 				setSummaryAusFrequency();
+				
+				//cancel next update event
+				cancelUpdates(getActivity());
+				
+				if (isMyServiceRunning(AutomaticSynchronizationService.class)){
+					getActivity().stopService(new Intent(getActivity(), AutomaticSynchronizationService.class));
+				}
+				getActivity().startService(new Intent(getActivity(), AutomaticSynchronizationService.class));
 				return false;
 			}
         });
@@ -97,6 +106,11 @@ public class SettingsFragment extends PreferenceFragment {
 			public boolean onPreferenceChange(Preference preference,
 					Object newValue) {
 				aus.setChecked(!aus.isChecked());
+				
+				ausFrequency.setEnabled(aus.isChecked());
+				
+				//cancel next update event
+				cancelUpdates(getActivity());
 				
 				if (aus.isChecked()){
 					if (!isMyServiceRunning(AutomaticSynchronizationService.class)){
@@ -127,6 +141,7 @@ public class SettingsFragment extends PreferenceFragment {
 	}
 	
 	public void setSummaryAusFrequency(){
+		ausFrequency.setEnabled(sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, false));
 		int index=0;
 		for (String summaryValue : getActivity().getResources().getStringArray(R.array.prefs_aus_freq_entry_values)){
 			if (summaryValue.equals(sPref.getString(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION_FREQUENCY, getString(R.string.prefs_aus_freq_default_value)))){
@@ -145,6 +160,16 @@ public class SettingsFragment extends PreferenceFragment {
             }
         }
         return false;
+    }
+    
+    public static PendingIntent getUpdateIntent(Context context) {
+        Intent i = new Intent(context, AutomaticSynchronizationService.class);
+        return PendingIntent.getService(context, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+    
+    public static void cancelUpdates(Context context) {
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        am.cancel(getUpdateIntent(context));
     }
 
 }

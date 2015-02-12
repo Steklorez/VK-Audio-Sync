@@ -66,6 +66,7 @@ public class Constants {
 	//shared preferences
 	public static final String DOWNLOAD_DIRECTORY = "download_directory";
 	public static final String DOWNLOAD_SELECTION = "download_selection";
+	public static final String AUS_MAIN_LIST_BASE = "aus_main_list_base";
 	public static final String ONE_AUDIO_ITEM = "one_audio_item";
 	public static final String OTHER_FRAGMENT = "other_fragment";
 	public static final String PREFERENCE_IMAGELOADER_PAUSE_ON_SCROLL_KEY = "preference_imageloader_pause_on_scroll";

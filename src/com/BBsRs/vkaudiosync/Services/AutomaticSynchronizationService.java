@@ -1,12 +1,11 @@
 package com.BBsRs.vkaudiosync.Services;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
-
-import com.BBsRs.vkaudiosync.R;
-import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -19,6 +18,14 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.util.Log;
 
+import com.BBsRs.vkaudiosync.R;
+import com.BBsRs.vkaudiosync.Application.ObjectSerializer;
+import com.BBsRs.vkaudiosync.VKApiThings.Account;
+import com.BBsRs.vkaudiosync.VKApiThings.Constants;
+import com.BBsRs.vkaudiosync.collection.MusicCollection;
+import com.perm.kate.api.Api;
+import com.perm.kate.api.Audio;
+
 public class AutomaticSynchronizationService extends Service {
 	
 	private static String LOG_TAG = "AUS Service";
@@ -28,6 +35,11 @@ public class AutomaticSynchronizationService extends Service {
 	//preferences 
     SharedPreferences sPref;
 
+    /*----------------------------VK API-----------------------------*/
+    Account account=new Account();
+    Api api;
+    /*----------------------------VK API-----------------------------*/
+    
 	@Override
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
@@ -37,6 +49,15 @@ public class AutomaticSynchronizationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
     	Log.i(LOG_TAG, "start command");
+    	
+    	/*----------------------------VK API-----------------------------*/
+    	//retrieve old session
+        account.restore(getApplicationContext());
+        
+        //create new session
+        if(account.access_token!=null)
+            api=new Api(account.access_token, Constants.API_ID);
+        /*----------------------------VK API-----------------------------*/
     	
     	//set up preferences
         sPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -66,6 +87,12 @@ public class AutomaticSynchronizationService extends Service {
     private class MainMusicListUpdateTask extends AsyncTask<Void, Void, Void> {
         private WakeLock mWakeLock;
         private Context mContext;
+        //music collection
+        ArrayList<MusicCollection> musicCollectionExistingBase = new ArrayList<MusicCollection>();
+        ArrayList<MusicCollection> musicCollectionLoadedBase = new ArrayList<MusicCollection>();
+        ArrayList<MusicCollection> musicCollectionToDelete = new ArrayList<MusicCollection>();
+        ArrayList<MusicCollection> musicCollectionToDownload = new ArrayList<MusicCollection>();
+        File f;
 
         public MainMusicListUpdateTask() {
             Log.i(LOG_TAG, "Starting music update task");
@@ -81,13 +108,80 @@ public class AutomaticSynchronizationService extends Service {
             mWakeLock.acquire();
         }
 
+		@SuppressWarnings("unchecked")
 		@Override
 		protected Void doInBackground(Void... params) {
-			Log.i(LOG_TAG, "doing stuff");
+			Log.i(LOG_TAG, "load and check songs");
 			try {
-				Thread.sleep((int) (0.25 * 60 * 1000)); // half half minute sleep
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				//read existing base
+				musicCollectionExistingBase = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.AUS_MAIN_LIST_BASE, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+	        	if (musicCollectionExistingBase==null)
+	        		musicCollectionExistingBase = new ArrayList<MusicCollection>();
+	        	
+	        	//read current vk base
+	        	ArrayList<Audio> musicList = api.getAudio(account.user_id, null, null, null, null, null);
+	        	
+	        	//if we first time sync library, set and save that all songs is loaded
+	        	if (musicCollectionExistingBase.size()==0){ 
+	        		for (Audio one : musicList){
+	        			musicCollectionExistingBase.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 1, 1, 101));
+                	}
+	        		sPref.edit().putString(Constants.AUS_MAIN_LIST_BASE, ObjectSerializer.serialize(musicCollectionExistingBase)).commit();
+	        	}
+	        	
+	        	//set up current and correct vk base 
+	        	for (Audio one : musicList){
+            		f = new File(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/"+(one.artist+" - "+one.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
+            		if (f.exists())
+            			musicCollectionLoadedBase.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 1, 1, 101));
+            		else 
+            			musicCollectionLoadedBase.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 0, 0, 0));
+	        	}
+	        	
+	        	//compare our lists and catch what we need to delete
+	        	for (MusicCollection oneExistingItem : musicCollectionExistingBase){
+	        		boolean deleteItem = false;
+	        		for (MusicCollection oneLoadedItem : musicCollectionLoadedBase){
+	        			if ((oneExistingItem.aid == oneLoadedItem.aid) || (oneExistingItem.artist.equals(oneLoadedItem.artist) && oneExistingItem.title.equals(oneLoadedItem.title))){
+	        				deleteItem = false;
+	        				break;
+	        			} else {
+	        				deleteItem = true;
+	        			}
+	        		}
+	        		if (deleteItem){
+	        			Log.i(LOG_TAG, "WE NEED DELETE: "+oneExistingItem.artist+" - "+oneExistingItem.title);
+	        			musicCollectionToDelete.add(oneExistingItem);
+	        		}
+	        	}
+	        	
+	        	if (musicCollectionToDelete.size()==0)
+	        		Log.i(LOG_TAG, "nothing to delete");
+	        	
+	        	//compare our lists and catch what we need to download
+	        	for (MusicCollection oneLoadedItem : musicCollectionLoadedBase){
+	        		boolean addItem = false;
+	        		for (MusicCollection oneExistingItem : musicCollectionExistingBase){
+	        			if ((oneLoadedItem.aid == oneExistingItem.aid) || (oneLoadedItem.artist.equals(oneExistingItem.artist) && oneLoadedItem.title.equals(oneExistingItem.title))){
+	        				addItem = false;
+	        				break;
+	        			} else {
+	        				addItem = true;
+	        			}
+	        		}
+	        		if (addItem){
+	        			Log.i(LOG_TAG, "WE NEED TO DOWNLOAD: "+oneLoadedItem.artist+" - "+oneLoadedItem.title);
+	        			musicCollectionToDownload.add(oneLoadedItem);
+	        		}
+	        	}
+	        	
+	        	if (musicCollectionToDownload.size()==0)
+	        		Log.i(LOG_TAG, "nothing to download");
+	        	
+	        	//update existing base with new realies 
+	        	sPref.edit().putString(Constants.AUS_MAIN_LIST_BASE, ObjectSerializer.serialize(musicCollectionLoadedBase)).commit();
+	        	
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return null;

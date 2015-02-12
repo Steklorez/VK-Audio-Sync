@@ -221,6 +221,7 @@ public class AutomaticSynchronizationService extends Service {
 	        	sPref.edit().putString(Constants.AUS_MAIN_LIST_BASE, ObjectSerializer.serialize(musicCollectionLoadedBase)).commit();
 	        	
 			} catch (Exception e) {
+				this.cancel(false);
 				e.printStackTrace();
 			}
 			return null;
@@ -243,9 +244,6 @@ public class AutomaticSynchronizationService extends Service {
 				Log.i(LOG_TAG, "Music list successfully updated");
 				if (sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, false))	
 					scheduleUpdate(mContext, Integer.parseInt(sPref.getString(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION_FREQUENCY, getString(R.string.prefs_aus_freq_default_value))));
-			} else if (isCancelled()) {
-				// cancelled, likely due to lost network - we'll get restarted
-				// when network comes back
 			} else {
 				// failure, schedule next download in 30 minutes
 				Log.i(LOG_TAG, "Music list refresh failed, scheduling update in 30 minutes");

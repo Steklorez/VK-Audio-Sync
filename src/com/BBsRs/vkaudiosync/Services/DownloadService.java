@@ -91,9 +91,10 @@ public class DownloadService extends Service {
         sPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         
 		try {
-	       	musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
-	       	if (musicCollection==null)
+			musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+			if (musicCollection==null)
 	       		musicCollection = new ArrayList<MusicCollection>();
+			
 	       	totalQuanToDownload = musicCollection.size();
 	    } catch (IOException e) {
 	    	e.printStackTrace();

@@ -74,5 +74,5 @@ public class Constants {
 	public static final String PREFERENCE_IMAGELOADER_CLEAR_CACHE = "preference_imageloader_clear_cache";
 	public static final String PREFERENCE_AUTOMATIC_SYNCHRONIZATION = "preference_automatic_synchronization";
 	public static final String PREFERENCE_AUTOMATIC_SYNCHRONIZATION_FREQUENCY = "preference_automatic_synchronization_frequency";
-
+	
 }

@@ -7,11 +7,14 @@ import java.util.Date;
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
 
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -157,6 +160,18 @@ public class AutomaticSynchronizationService extends Service {
 	        	
 	        	if (musicCollectionToDelete.size()==0)
 	        		Log.i(LOG_TAG, "nothing to delete");
+	        	else {
+	        		Log.i(LOG_TAG, "deleting songs");
+	        		for (MusicCollection oneItemDelete : musicCollectionToDelete){
+	        			f = new File(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/"+(oneItemDelete.artist+" - "+oneItemDelete.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
+	        			if (f.exists()){
+	        				f.delete();
+	    					Intent intent =new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+	    					intent.setData(Uri.fromFile(new File(f.getAbsolutePath())));
+	    					sendBroadcast(intent);
+	        			}
+	        		}
+	        	}
 	        	
 	        	//compare our lists and catch what we need to download
 	        	for (MusicCollection oneLoadedItem : musicCollectionLoadedBase){
@@ -177,6 +192,19 @@ public class AutomaticSynchronizationService extends Service {
 	        	
 	        	if (musicCollectionToDownload.size()==0)
 	        		Log.i(LOG_TAG, "nothing to download");
+	        	else {
+	        		if (!isMyServiceRunning(DownloadService.class)){
+	        			Log.i(LOG_TAG, "start downloading");
+	        			//save the list to dm
+	    	        	sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionToDownload)).commit();
+	        			
+	  	    		  	//start service
+	  	    		  	Intent serviceIntent = new Intent(mContext, DownloadService.class); 
+	  	    		  	mContext.startService(serviceIntent);
+	  	    	  	} else {
+	  	    	  		Log.i(LOG_TAG, "service is already running do it next time");
+	  	    	  	}
+	        	}
 	        	
 	        	//update existing base with new realies 
 	        	sPref.edit().putString(Constants.AUS_MAIN_LIST_BASE, ObjectSerializer.serialize(musicCollectionLoadedBase)).commit();
@@ -237,5 +265,15 @@ public class AutomaticSynchronizationService extends Service {
     public static void cancelUpdates(Context context) {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         am.cancel(getUpdateIntent(context));
+    }
+    
+    private boolean isMyServiceRunning(Class<?> serviceClass) {			//returns true is service running
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

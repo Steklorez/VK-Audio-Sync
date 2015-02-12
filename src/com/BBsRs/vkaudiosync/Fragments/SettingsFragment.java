@@ -21,6 +21,7 @@ import android.os.Bundle;
 import com.BBsRs.vkaudiosync.DirChooseActivity;
 import com.BBsRs.vkaudiosync.LoaderActivity;
 import com.BBsRs.vkaudiosync.R;
+import com.BBsRs.vkaudiosync.Application.ObjectSerializer;
 import com.BBsRs.vkaudiosync.Services.AutomaticSynchronizationService;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -32,7 +33,7 @@ public class SettingsFragment extends PreferenceFragment {
     
     Preference chooseDir;
     ListPreference ausFrequency;
-    CheckBoxPreference aus;
+    CheckBoxPreference aus, ausWifi;
     
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,13 +83,14 @@ public class SettingsFragment extends PreferenceFragment {
         
         ausFrequency = (ListPreference) findPreference(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION_FREQUENCY);
         aus = (CheckBoxPreference) findPreference(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION);
+        ausWifi = (CheckBoxPreference) findPreference(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION_WIFI);
         
         ausFrequency.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
 			@Override
 			public boolean onPreferenceChange(Preference preference,
 					Object newValue) {
 				ausFrequency.setValue((String) newValue);
-				setSummaryAusFrequency();
+				updateViewsAus();
 				
 				//cancel next update event
 				cancelUpdates(getActivity());
@@ -107,7 +109,12 @@ public class SettingsFragment extends PreferenceFragment {
 					Object newValue) {
 				aus.setChecked(!aus.isChecked());
 				
-				ausFrequency.setEnabled(aus.isChecked());
+				updateViewsAus();
+				
+				//clear queue if we disable this func
+				if (!aus.isChecked()){
+					sPref.edit().putString(Constants.AUS_MAIN_LIST_BASE, "").commit();
+				}
 				
 				//cancel next update event
 				cancelUpdates(getActivity());
@@ -135,13 +142,15 @@ public class SettingsFragment extends PreferenceFragment {
 		sPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		chooseDir.setSummary(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/");
 
-		setSummaryAusFrequency();
+		updateViewsAus();
 
 		sPref.edit().putBoolean(Constants.OTHER_FRAGMENT, true).commit();
 	}
 	
-	public void setSummaryAusFrequency(){
+	public void updateViewsAus(){
+		aus.setSummary(sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, false) ? getString(R.string.prefs_aus_summary_enabled) : getString(R.string.prefs_aus_summary));
 		ausFrequency.setEnabled(sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, false));
+		ausWifi.setEnabled(sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, false));
 		int index=0;
 		for (String summaryValue : getActivity().getResources().getStringArray(R.array.prefs_aus_freq_entry_values)){
 			if (summaryValue.equals(sPref.getString(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION_FREQUENCY, getString(R.string.prefs_aus_freq_default_value)))){

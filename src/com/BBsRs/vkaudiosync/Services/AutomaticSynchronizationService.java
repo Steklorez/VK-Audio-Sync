@@ -8,12 +8,14 @@ import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
 
 import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.IBinder;
@@ -115,6 +117,15 @@ public class AutomaticSynchronizationService extends Service {
 		@Override
 		protected Void doInBackground(Void... params) {
 			Log.i(LOG_TAG, "load and check songs");
+			
+			if (sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION_WIFI, true)){
+				ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+				NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+				if (!mWifi.isConnected()) {
+					Log.i(LOG_TAG, "no wifi connection");
+					return null;
+				}
+			}
 			try {
 				//read existing base
 				musicCollectionExistingBase = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.AUS_MAIN_LIST_BASE, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));

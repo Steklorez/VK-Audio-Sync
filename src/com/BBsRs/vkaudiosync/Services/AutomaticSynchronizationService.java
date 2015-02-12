@@ -216,10 +216,6 @@ public class AutomaticSynchronizationService extends Service {
 	  	    	  		Log.i(LOG_TAG, "service is already running do it next time");
 	  	    	  	}
 	        	}
-	        	
-	        	//update existing base with new realies 
-	        	sPref.edit().putString(Constants.AUS_MAIN_LIST_BASE, ObjectSerializer.serialize(musicCollectionLoadedBase)).commit();
-	        	
 			} catch (Exception e) {
 				this.cancel(false);
 				e.printStackTrace();

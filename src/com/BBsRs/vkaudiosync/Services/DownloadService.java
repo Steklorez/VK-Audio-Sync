@@ -204,9 +204,11 @@ public class DownloadService extends Service {
 					
 							boolean isSuccessfullyDownloaded = DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", ""));
 					
-							if (isSuccessfullyDownloaded)
+							if (isSuccessfullyDownloaded){
 								removeFromDM(oneItem);
-					
+								addToExistingBase(oneItem);
+							}
+								
 							Intent i = new Intent(Constants.MUSIC_DOWNLOADED);
 							i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
 							i.putExtra(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED, isSuccessfullyDownloaded);
@@ -249,6 +251,19 @@ public class DownloadService extends Service {
 					indexTemp++;
 				}
 			sPref.edit().putString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(musicCollectionTemp)).commit();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void addToExistingBase (MusicCollection itemToAdd){
+		//update existing base with new realies 
+		try {
+			ArrayList<MusicCollection> musicCollectionExistingBase = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.AUS_MAIN_LIST_BASE, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+        	if (musicCollectionExistingBase==null)
+        		musicCollectionExistingBase = new ArrayList<MusicCollection>();
+        	musicCollectionExistingBase.add(itemToAdd);
+			sPref.edit().putString(Constants.AUS_MAIN_LIST_BASE, ObjectSerializer.serialize(musicCollectionExistingBase)).commit();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -49,11 +49,6 @@ public class LoaderActivity extends Activity {
 			if(api!=null){
 
 				try {
-		        	if (!isMyServiceRunning(AutomaticSynchronizationService.class) && sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, true)){
-		        		getApplicationContext().startService(new Intent(getApplicationContext(), AutomaticSynchronizationService.class));
-		        	}
-					
-					
 		        	ArrayList<MusicCollection> musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
 		        	if (musicCollection==null)
 		        		musicCollection = new ArrayList<MusicCollection>();
@@ -143,6 +138,12 @@ public class LoaderActivity extends Activity {
 		// Если сессия есть создаём API для обращения к серверу
 		if (account.access_token != null)
 			api = new Api(account.access_token, Constants.API_ID);
+		
+		if (api !=null){
+			if (!isMyServiceRunning(AutomaticSynchronizationService.class) && sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, true)){
+        		getApplicationContext().startService(new Intent(getApplicationContext(), AutomaticSynchronizationService.class));
+        	}
+		}
 
 		CountDownTimer = new timer(3000, 1000); // timer to 2 seconds (tick one
 												// second)

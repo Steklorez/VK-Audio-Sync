@@ -65,7 +65,6 @@ public class DownloadService extends Service {
 	private final Handler handler = new Handler();
 	
 	NotificationManager mNotificationManager;
-	Notification not;
 	PendingIntent contentIntent;
 	NotificationCompat.Builder mBuilder;
 	
@@ -87,6 +86,9 @@ public class DownloadService extends Service {
 	
 	@SuppressWarnings("unchecked")
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Constants.PARTIAL_WAKE_LOCK_TAG);
+		wl.acquire();
 		//set up preferences
         sPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         
@@ -99,9 +101,6 @@ public class DownloadService extends Service {
 	    } catch (IOException e) {
 	    	e.printStackTrace();
 	    }
-		pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-		wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Constants.PARTIAL_WAKE_LOCK_TAG);
-		wl.acquire();
 		getApplicationContext().registerReceiver(someDeleted, new IntentFilter(Constants.SOME_DELETED));
 		getApplicationContext().registerReceiver(someAdded, new IntentFilter(Constants.SOME_ADDED));
         setPendingNotification();

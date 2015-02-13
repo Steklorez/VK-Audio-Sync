@@ -181,6 +181,20 @@ public class AutomaticSynchronizationService extends Service {
 	    					intent.setData(Uri.fromFile(new File(f.getAbsolutePath())));
 	    					sendBroadcast(intent);
 	        			}
+	        			//delete from existing base
+	        			ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.AUS_MAIN_LIST_BASE, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+	        			if (musicCollectionTemp==null)
+	                		musicCollectionTemp = new ArrayList<MusicCollection>();
+	        					int indexTemp=0;
+	        				for (MusicCollection one: musicCollectionTemp){
+	        					if ((one.aid==oneItemDelete.aid || (one.title.equals(oneItemDelete.title) && one.artist.equals(oneItemDelete.artist)))){
+	        						musicCollectionTemp.remove(indexTemp);
+	        						break;
+	        					}
+	        					indexTemp++;
+	        				}
+	                	
+	        			sPref.edit().putString(Constants.AUS_MAIN_LIST_BASE, ObjectSerializer.serialize(musicCollectionTemp)).commit();
 	        		}
 	        	}
 	        	

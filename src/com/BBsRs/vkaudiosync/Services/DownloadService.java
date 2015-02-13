@@ -298,6 +298,34 @@ public class DownloadService extends Service {
 		           int lenghtOfFile = conexion.getContentLength();
 		       	   Log.d("DownloadManager", "Lenght of file: " + lenghtOfFile);
 		       	   
+		       	   if (sPref.getBoolean(Constants.PREFERENCE_SKIP_BIG, true)){
+		       		   if (lenghtOfFile>Integer.parseInt(sPref.getString(Constants.PREFERENCE_SKIP_BIG_SIZE, getString(R.string.prefs_skip_big_size_default_value)))){
+		       			   Log.d(LOG_TAG, "skip, track is too huge by size");
+		       			   mBuilder.setContentTitle(getApplicationContext().getResources().getString(R.string.no_file)+" "+oneItem.artist+" "+oneItem.title)
+	       				   .setContentText(getResources().getString(R.string.file_huge_size_msg))
+	       				   .setSmallIcon(R.drawable.ic_menu_download_disabled)
+	       				   .setContentIntent(contentIntent)
+	       				   .setOngoing(false)
+	       				   .setProgress(0, 0, false);
+	       				   mNotificationManager.notify(NotID, mBuilder.build());
+	       				   NotID++;
+		       			   return true;
+		       		   } else {
+		       			   if (oneItem.duration>Integer.parseInt(sPref.getString(Constants.PREFERENCE_SKIP_BIG_LENGTH, getString(R.string.prefs_skip_big_length_default_value)))){
+		       				   Log.d(LOG_TAG, "skip, track is too huge by duration");
+		       				   mBuilder.setContentTitle(getApplicationContext().getResources().getString(R.string.no_file)+" "+oneItem.artist+" "+oneItem.title)
+		       				   .setContentText(getResources().getString(R.string.file_huge_length_msg))
+		       				   .setSmallIcon(R.drawable.ic_menu_download_disabled)
+		       				   .setContentIntent(contentIntent)
+		       				   .setOngoing(false)
+		       				   .setProgress(0, 0, false);
+		       				   mNotificationManager.notify(NotID, mBuilder.build());
+		       				   NotID++;
+		       				   return true;
+		       			   }
+		       		   }
+		       	   }
+		       	   
 		       	   StatFs stat = new StatFs(root.getPath());
 		       	   long sdAvailSize = (long)stat.getAvailableBlocks() * (long)stat.getBlockSize();
 		       	   if ((long)lenghtOfFile*2 > sdAvailSize){

@@ -61,6 +61,8 @@
     <string name="no_conn_msg">Check your connection and try again.</string>
     <string name="no_file">File:</string>
     <string name="no_file_msg">is missed on VK server, skip it.</string>
+    <string name="file_huge_size_msg">is too huge by size, skip it.</string>
+    <string name="file_huge_length_msg">is too huge by length, skip it.</string>
     <string name="more_than">You can\'t check and download more that 100 songs per one time</string>
     <string name="wall">Wall music</string>
     <string name="refreshing">Refreshing...</string>

@@ -75,5 +75,8 @@ public class Constants {
 	public static final String PREFERENCE_AUTOMATIC_SYNCHRONIZATION = "preference_automatic_synchronization";
 	public static final String PREFERENCE_AUTOMATIC_SYNCHRONIZATION_FREQUENCY = "preference_automatic_synchronization_frequency";
 	public static final String PREFERENCE_AUTOMATIC_SYNCHRONIZATION_WIFI = "preference_automatic_synchronization_wifi";
+	public static final String PREFERENCE_SKIP_BIG = "preference_skip_big";
+	public static final String PREFERENCE_SKIP_BIG_SIZE = "preference_skip_big_size";
+	public static final String PREFERENCE_SKIP_BIG_LENGTH = "preference_skip_big_length";
 	
 }

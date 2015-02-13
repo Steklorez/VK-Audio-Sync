@@ -21,7 +21,6 @@ import android.os.Bundle;
 import com.BBsRs.vkaudiosync.DirChooseActivity;
 import com.BBsRs.vkaudiosync.LoaderActivity;
 import com.BBsRs.vkaudiosync.R;
-import com.BBsRs.vkaudiosync.Application.ObjectSerializer;
 import com.BBsRs.vkaudiosync.Services.AutomaticSynchronizationService;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -32,8 +31,8 @@ public class SettingsFragment extends PreferenceFragment {
     SharedPreferences sPref;
     
     Preference chooseDir;
-    ListPreference ausFrequency;
-    CheckBoxPreference aus, ausWifi;
+    ListPreference ausFrequency, skipBigSize, skipBigLength;
+    CheckBoxPreference aus, ausWifi, skipBig;
     
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,13 +83,28 @@ public class SettingsFragment extends PreferenceFragment {
         ausFrequency = (ListPreference) findPreference(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION_FREQUENCY);
         aus = (CheckBoxPreference) findPreference(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION);
         ausWifi = (CheckBoxPreference) findPreference(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION_WIFI);
+        skipBig = (CheckBoxPreference) findPreference(Constants.PREFERENCE_SKIP_BIG);
+        skipBigSize = (ListPreference)findPreference(Constants.PREFERENCE_SKIP_BIG_SIZE);
+        skipBigLength = (ListPreference)findPreference(Constants.PREFERENCE_SKIP_BIG_LENGTH);
+        
+        skipBig.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+
+			@Override
+			public boolean onPreferenceChange(Preference preference,
+					Object newValue) {
+				skipBig.setChecked(!skipBig.isChecked());
+				updateViews();
+				return false;
+			}
+        	
+        });
         
         ausFrequency.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
 			@Override
 			public boolean onPreferenceChange(Preference preference,
 					Object newValue) {
 				ausFrequency.setValue((String) newValue);
-				updateViewsAus();
+				updateViews();
 				
 				//cancel next update event
 				cancelUpdates(getActivity());
@@ -109,7 +123,7 @@ public class SettingsFragment extends PreferenceFragment {
 					Object newValue) {
 				aus.setChecked(!aus.isChecked());
 				
-				updateViewsAus();
+				updateViews();
 				
 				//clear queue if we disable this func
 				if (!aus.isChecked()){
@@ -142,12 +156,14 @@ public class SettingsFragment extends PreferenceFragment {
 		sPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		chooseDir.setSummary(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/");
 
-		updateViewsAus();
+		updateViews();
 
 		sPref.edit().putBoolean(Constants.OTHER_FRAGMENT, true).commit();
 	}
 	
-	public void updateViewsAus(){
+	public void updateViews(){
+		skipBigSize.setEnabled(sPref.getBoolean(Constants.PREFERENCE_SKIP_BIG, true));
+		skipBigLength.setEnabled(sPref.getBoolean(Constants.PREFERENCE_SKIP_BIG, true));
 		aus.setSummary(sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, false) ? getString(R.string.prefs_aus_summary_enabled) : getString(R.string.prefs_aus_summary));
 		ausFrequency.setEnabled(sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, false));
 		ausWifi.setEnabled(sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, false));
@@ -155,6 +171,24 @@ public class SettingsFragment extends PreferenceFragment {
 		for (String summaryValue : getActivity().getResources().getStringArray(R.array.prefs_aus_freq_entry_values)){
 			if (summaryValue.equals(sPref.getString(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION_FREQUENCY, getString(R.string.prefs_aus_freq_default_value)))){
 				ausFrequency.setSummary(getActivity().getResources().getStringArray(R.array.prefs_aus_freq_values)[index]);
+				break;
+			}
+			index++;
+		}
+		
+		index=0;
+		for (String summaryValue : getActivity().getResources().getStringArray(R.array.prefs_skip_big_size_entry_values)){
+			if (summaryValue.equals(sPref.getString(Constants.PREFERENCE_SKIP_BIG_SIZE, getString(R.string.prefs_skip_big_size_default_value)))){
+				skipBigSize.setSummary(getActivity().getResources().getStringArray(R.array.prefs_skip_big_size_values)[index]);
+				break;
+			}
+			index++;
+		}
+		
+		index=0;
+		for (String summaryValue : getActivity().getResources().getStringArray(R.array.prefs_skip_big_length_entry_values)){
+			if (summaryValue.equals(sPref.getString(Constants.PREFERENCE_SKIP_BIG_LENGTH, getString(R.string.prefs_skip_big_length_default_value)))){
+				skipBigLength.setSummary(getActivity().getResources().getStringArray(R.array.prefs_skip_big_length_values)[index]);
 				break;
 			}
 			index++;

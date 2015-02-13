@@ -5,6 +5,25 @@
         <Preference
             android:key="preference_folder"
             android:title="@string/download_direcotry" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="preference_skip_big"
+            android:summary="@string/prefs_skip_big_summary"
+            android:title="@string/prefs_skip_big" />
+        <ListPreference
+            android:defaultValue="@string/prefs_skip_big_size_default_value"
+            android:dialogTitle="@string/prefs_skip_big_size"
+            android:entries="@array/prefs_skip_big_size_values"
+            android:entryValues="@array/prefs_skip_big_size_entry_values"
+            android:key="preference_skip_big_size"
+            android:title="@string/prefs_skip_big_size" />
+       <ListPreference
+            android:defaultValue="@string/prefs_skip_big_length_default_value"
+            android:dialogTitle="@string/prefs_skip_big_length"
+            android:entries="@array/prefs_skip_big_length_values"
+            android:entryValues="@array/prefs_skip_big_length_entry_values"
+            android:key="preference_skip_big_length"
+            android:title="@string/prefs_skip_big_length" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefs_aus" >
         <CheckBoxPreference
@@ -12,6 +31,11 @@
             android:key="preference_automatic_synchronization"
             android:summary="@string/prefs_aus_summary"
             android:title="@string/prefs_aus" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="preference_automatic_synchronization_wifi"
+            android:summary="@string/prefs_aus_wifi_summary"
+            android:title="@string/prefs_aus_wifi" />
         <ListPreference
             android:defaultValue="@string/prefs_aus_freq_default_value"
             android:dialogTitle="@string/prefs_aus_freq"
@@ -19,11 +43,6 @@
             android:entryValues="@array/prefs_aus_freq_entry_values"
             android:key="preference_automatic_synchronization_frequency"
             android:title="@string/prefs_aus_freq" />
-         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="preference_automatic_synchronization_wifi"
-            android:summary="@string/prefs_aus_wifi_summary"
-            android:title="@string/prefs_aus_wifi" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/imageloader" >
         <CheckBoxPreference

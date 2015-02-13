@@ -70,7 +70,6 @@
     <string name="prefs_aus_freq">Update frequency</string>
     <string name="prefs_aus_wifi">Update only with wifi</string>
     <string name="prefs_aus_wifi_summary">Saves your mobile traffic</string>
-
     <string name="prefs_aus_freq_default_value">3600000</string>
 
     <string-array name="prefs_aus_freq_entry_values">
@@ -80,7 +79,6 @@
         <item>7200000</item>
         <item>10800000</item>
     </string-array>
-
     <string-array name="prefs_aus_freq_values">
         <item>1 minute</item>
         <item>30 minutes</item>
@@ -89,6 +87,41 @@
         <item>3 hours</item>
     </string-array>
 
+    <string name="prefs_skip_big">Prevent huge tracks from downloading</string>
+    <string name="prefs_skip_big_summary">Huge tracks by size or length will never be downloaded, include automatic synchronization</string>
+    <string name="prefs_skip_big_size">Max size of tracks which can be downloaded</string>
+    <string name="prefs_skip_big_size_default_value">31457280</string>
+
+    <string-array name="prefs_skip_big_size_entry_values">
+        <item>20971520</item>
+        <item>31457280</item>
+        <item>52428800</item>
+        <item>104857600</item>
+    </string-array>
+    <string-array name="prefs_skip_big_size_values">
+        <item>20 Mb</item>
+        <item>30 Mb</item>
+        <item>50 Mb</item>
+        <item>100 Mb</item>
+    </string-array>
+    
+    <string name="prefs_skip_big_length">Max length of tracks which can be downloaded</string>
+    <string name="prefs_skip_big_length_default_value">900</string>
+
+    <string-array name="prefs_skip_big_length_entry_values">
+        <item>600</item>
+        <item>900</item>
+        <item>1200</item>
+        <item>1800</item>
+    </string-array>
+    <string-array name="prefs_skip_big_length_values">
+        <item>10 minutes</item>
+        <item>15 minutes</item>
+        <item>20 minutes</item>
+        <item>30 minutes</item>
+    </string-array>
+    
+    
     <string-array name="slider_menu">
         <item>MUSIC</item>
         <item>My music</item>

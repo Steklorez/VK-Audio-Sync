@@ -57,8 +57,6 @@ public class DownloadService extends Service {
 	
 	ArrayList<MusicCollection> musicCollection = new ArrayList<MusicCollection>();
 	
-	ArrayList<MusicCollection> musicCollectionToSkip = new ArrayList<MusicCollection>();
-	
 	PowerManager pm;
 	PowerManager.WakeLock wl;
 	
@@ -144,11 +142,9 @@ public class DownloadService extends Service {
 	    	if ((((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid == currentTrackDownloading.aid) || (((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).artist.equals(currentTrackDownloading.artist) && ((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).title.equals(currentTrackDownloading.title))){
 	    		Toast.makeText(getApplicationContext(), getString(R.string.cant_delete_just_in_time)+" "+currentTrackDownloading.artist+" "+currentTrackDownloading.title, Toast.LENGTH_LONG).show();
 	    	} else {
-	    		//add song, which we need to skip BY JUST IN TIME EDITOR FOR DM
-	    		musicCollectionToSkip.add((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM));
 	    		totalQuanToDownload --;
 	    		
-	    		mBuilder.setContentTitle("["+(currentTrackDownloading.lyrics_id)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+totalQuanToDownload+"] "+currentTrackDownloading.artist+" - "+currentTrackDownloading.title);
+	    		mBuilder.setContentTitle("["+(currentDownloadingIndex+1)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+totalQuanToDownload+"] "+currentTrackDownloading.artist+" - "+currentTrackDownloading.title);
 	    		mNotificationManager.notify(0, mBuilder.build());
 	    	}
 	   	}
@@ -160,18 +156,9 @@ public class DownloadService extends Service {
 	    	if ((((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid == currentTrackDownloading.aid) || (((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).artist.equals(currentTrackDownloading.artist) && ((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).title.equals(currentTrackDownloading.title))){
 	    		Toast.makeText(getApplicationContext(), getString(R.string.cant_add_just_in_time)+" "+currentTrackDownloading.artist+" "+currentTrackDownloading.title, Toast.LENGTH_LONG).show();
 	    	} else {
-	    		//del song, which we need to skip BY JUST IN TIME EDITOR FOR DM
-				int indexTemp = 0;
-				for (MusicCollection one : musicCollectionToSkip) {
-					if (one.aid == ((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid || (one.artist.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).artist) && one.title.equals(((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).title))) {
-						musicCollectionToSkip.remove(indexTemp);
-						break;
-					}
-					indexTemp++;
-				}
 	    		totalQuanToDownload++;
 	    		
-	    		mBuilder.setContentTitle("["+(currentTrackDownloading.lyrics_id)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+totalQuanToDownload+"] "+currentTrackDownloading.artist+" - "+currentTrackDownloading.title);
+	    		mBuilder.setContentTitle("["+(currentDownloadingIndex+1)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+totalQuanToDownload+"] "+currentTrackDownloading.artist+" - "+currentTrackDownloading.title);
 	    		mNotificationManager.notify(0, mBuilder.build());
 	    	}
 	   	}
@@ -181,55 +168,46 @@ public class DownloadService extends Service {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				for (MusicCollection oneItem : musicCollection){
-					if (!isServiceStopped){
-						boolean skip = false;
-						for (MusicCollection oneItemToSkip : musicCollectionToSkip){
-							if ((oneItem.aid==oneItemToSkip.aid) || (oneItem.title.equals(oneItemToSkip.title) && oneItem.artist.equals(oneItemToSkip.artist))){
-								skip = true;
-								break;
-							}
-						}
-						if (!skip){
-							currentTrackDownloading = oneItem;
-							currentTrackDownloading.lyrics_id = (long) (currentDownloadingIndex+1);
-							mBuilder.setContentTitle("["+(currentDownloadingIndex+1)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+totalQuanToDownload+"] "+oneItem.artist+" - "+oneItem.title)
-									.setContentText(getResources().getString(R.string.dm_inprogrees))
-									.setSmallIcon(R.drawable.notification_animated_icon)
-									.setContentIntent(contentIntent)
-									.setOngoing(true)
-									.setProgress(100, 0, false);
-							mNotificationManager.notify(0, mBuilder.build());
-					
-							boolean isSuccessfullyDownloaded = DownloadFromUrl(oneItem, (oneItem.artist+" - "+oneItem.title).replaceAll("[\\/:*?\"<>|]", ""));
-					
-							if (isSuccessfullyDownloaded){
-								removeFromDM(oneItem);
-								addToExistingBase(oneItem);
-							}
-								
-							Intent i = new Intent(Constants.MUSIC_DOWNLOADED);
-							i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
-							i.putExtra(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED, isSuccessfullyDownloaded);
-							i.putExtra(Constants.DOWNLOAD_SERVICE_STOPPED, false);
-							sendBroadcast(i);
-							currentDownloadingIndex++;
-						}
-					} else {
-						break;
+				
+				while (true){
+					//just load new music collection
+					try {
+						musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+						if (musicCollection==null)
+				       		musicCollection = new ArrayList<MusicCollection>();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
+					
+					//if here no songs stop service
+					if (musicCollection.size()==0)
+						break;
+					
+					currentTrackDownloading = musicCollection.get(0);
+					
+					mBuilder.setContentTitle("["+(currentDownloadingIndex+1)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+totalQuanToDownload+"] "+currentTrackDownloading.artist+" - "+currentTrackDownloading.title)
+					.setContentText(getResources().getString(R.string.dm_inprogrees))
+					.setSmallIcon(R.drawable.notification_animated_icon)
+					.setContentIntent(contentIntent)
+					.setOngoing(true)
+					.setProgress(100, 0, false);
+					mNotificationManager.notify(0, mBuilder.build());
+	
+					boolean isSuccessfullyDownloaded = DownloadFromUrl(currentTrackDownloading, (currentTrackDownloading.artist+" - "+currentTrackDownloading.title).replaceAll("[\\/:*?\"<>|]", ""));
+	
+					if (isSuccessfullyDownloaded){
+						removeFromDM(currentTrackDownloading);
+						addToExistingBase(currentTrackDownloading);
+					}
+				
+					Intent i = new Intent(Constants.MUSIC_DOWNLOADED);
+					i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)currentTrackDownloading);
+					i.putExtra(Constants.MUSIC_SUCCESSFULLY_DOWNLOADED, isSuccessfullyDownloaded);
+					i.putExtra(Constants.DOWNLOAD_SERVICE_STOPPED, false);
+					sendBroadcast(i);
+					currentDownloadingIndex++;
 				}
-				//check if new tracks added after service start
-				try {
-			       	musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
-			       	if (musicCollection==null)
-			       		musicCollection = new ArrayList<MusicCollection>();
-			    } catch (IOException e) {
-			    	e.printStackTrace();
-			    }
-				if (musicCollection.size() != 0)
-				startDownloadChecking();
-				else
 				stopServiceCustom();
 			}
 		}).start();

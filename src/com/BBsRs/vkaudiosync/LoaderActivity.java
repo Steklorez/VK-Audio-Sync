@@ -11,6 +11,9 @@ import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
 import org.holoeverywhere.widget.RelativeLayout;
 
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -46,16 +49,12 @@ public class LoaderActivity extends Activity {
 			if(api!=null){
 
 				try {
-					//read existing base, first time start sync.
-					ArrayList<MusicCollection> musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.AUS_MAIN_LIST_BASE, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
-		        	if ( musicCollection==null)
-		        		 musicCollection = new ArrayList<MusicCollection>();
-		        	if (musicCollection.size() == 0 && sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, true)){
+		        	if (!isMyServiceRunning(AutomaticSynchronizationService.class) && sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, true)){
 		        		getApplicationContext().startService(new Intent(getApplicationContext(), AutomaticSynchronizationService.class));
 		        	}
 					
 					
-		        	musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+		        	ArrayList<MusicCollection> musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
 		        	if (musicCollection==null)
 		        		musicCollection = new ArrayList<MusicCollection>();
 		        	
@@ -174,5 +173,15 @@ public class LoaderActivity extends Activity {
 	    // stop curr activity
 	    finish();
 	}
+	
+	private boolean isMyServiceRunning(Class<?> serviceClass) {			//returns true is service running
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

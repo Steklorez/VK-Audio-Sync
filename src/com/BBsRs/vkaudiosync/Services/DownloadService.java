@@ -66,7 +66,7 @@ public class DownloadService extends Service {
 	PendingIntent contentIntent;
 	NotificationCompat.Builder mBuilder;
 	
-	boolean isServiceStopped = false;
+	boolean isServiceStopped = false, skipCurrentDownloading = false;
 	
 	MusicCollection currentTrackDownloading;
 	
@@ -140,7 +140,9 @@ public class DownloadService extends Service {
 	    @Override
 	    public void onReceive(Context context, Intent intent) {
 	    	if ((((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid == currentTrackDownloading.aid) || (((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).artist.equals(currentTrackDownloading.artist) && ((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).title.equals(currentTrackDownloading.title))){
-	    		Toast.makeText(getApplicationContext(), getString(R.string.cant_delete_just_in_time)+" "+currentTrackDownloading.artist+" "+currentTrackDownloading.title, Toast.LENGTH_LONG).show();
+	    		skipCurrentDownloading = true;
+	    		totalQuanToDownload --;
+	    		currentDownloadingIndex--;
 	    	} else {
 	    		totalQuanToDownload --;
 	    		
@@ -154,7 +156,7 @@ public class DownloadService extends Service {
 	    @Override
 	    public void onReceive(Context context, Intent intent) {
 	    	if ((((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).aid == currentTrackDownloading.aid) || (((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).artist.equals(currentTrackDownloading.artist) && ((MusicCollection)intent.getExtras().getParcelable(Constants.ONE_AUDIO_ITEM)).title.equals(currentTrackDownloading.title))){
-	    		Toast.makeText(getApplicationContext(), getString(R.string.cant_add_just_in_time)+" "+currentTrackDownloading.artist+" "+currentTrackDownloading.title, Toast.LENGTH_LONG).show();
+	    		//do nothing
 	    	} else {
 	    		totalQuanToDownload++;
 	    		
@@ -181,10 +183,11 @@ public class DownloadService extends Service {
 					}
 					
 					//if here no songs stop service
-					if (musicCollection.size()==0)
+					if (musicCollection.size()==0 || isServiceStopped)
 						break;
 					
 					currentTrackDownloading = musicCollection.get(0);
+					skipCurrentDownloading = false;
 					
 					mBuilder.setContentTitle("["+(currentDownloadingIndex+1)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+totalQuanToDownload+"] "+currentTrackDownloading.artist+" - "+currentTrackDownloading.title)
 					.setContentText(getResources().getString(R.string.dm_inprogrees))
@@ -329,7 +332,7 @@ public class DownloadService extends Service {
 
 		       	   long total = 0;
 		       	   int count, last=0;
-		       	   long shownIn = System.currentTimeMillis();
+		       	   long shownIn = System.currentTimeMillis(), sendIn = System.currentTimeMillis();
 
 		    		while ((count = input.read(data)) != -1) {
 		    			total += count;
@@ -340,21 +343,26 @@ public class DownloadService extends Service {
 		    				mBuilder.setProgress(100, last, false);
 		    				mNotificationManager.notify(0, mBuilder.build());
 		    				
-		    				//send broadcast about percentage of track
-		    				oneItem.percentage=last;
-		    				i = new Intent(Constants.MUSIC_PERCENTAGE_CHANGED);
-							i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
-							sendBroadcast(i);
+		    				if ((System.currentTimeMillis() - sendIn) > 750){
+		    					sendIn = System.currentTimeMillis();
+		    					//send broadcast about percentage of track
+		    					oneItem.percentage=last;
+		    					i = new Intent(Constants.MUSIC_PERCENTAGE_CHANGED);
+								i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
+								sendBroadcast(i);
+		    				}
 		    			}
-		    			if (!isServiceStopped){
+		    			if (!isServiceStopped && !skipCurrentDownloading){
 		    				output.write(data, 0, count);
 		    			} else {
-		    				mNotificationManager.cancel(0);
+		    				if (isServiceStopped){
+		    					mNotificationManager.cancel(0);
+		    				}
 		    				//send that song to 0% downloaded
-		 		           	oneItem.percentage=0;
-		 		           	i = new Intent(Constants.MUSIC_PERCENTAGE_CHANGED);
-		 		           	i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
-		 		           	sendBroadcast(i);
+	 		           		oneItem.percentage=0;
+	 		           		i = new Intent(Constants.MUSIC_PERCENTAGE_CHANGED);
+	 		           		i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
+	 		           		sendBroadcast(i);
 		    				break;
 		    			}
 		    		}
@@ -365,7 +373,7 @@ public class DownloadService extends Service {
 		           Log.d("DownloadManager", "download ready in" + ((System.currentTimeMillis() - startTime) / 1000) + " sec");
 
 		           /*setting up cover art and fix tags so far as we can!*/
-		           if (!isServiceStopped){
+		           if (!isServiceStopped && !skipCurrentDownloading){
 		        	   mBuilder.setContentText(getResources().getString(R.string.dm_inprogrees_cover))
 						.setProgress(0, 0, true);
 			           mNotificationManager.notify(0, mBuilder.build());
@@ -376,7 +384,9 @@ public class DownloadService extends Service {
 			           i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
 			           sendBroadcast(i);
 	    			} else {
-	    				mNotificationManager.cancel(0);
+	    				if (isServiceStopped){
+	    					mNotificationManager.cancel(0);
+	    				}
 	    				file.delete();
 	    				
 	    				//send that song to 0% downloaded

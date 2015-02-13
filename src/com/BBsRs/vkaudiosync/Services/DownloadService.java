@@ -73,7 +73,7 @@ public class DownloadService extends Service {
 	
 	MusicCollection currentTrackDownloading;
 	
-	int currentDownloadingIndex=0, totalQuanToDownload=0;
+	int currentDownloadingIndex=0, totalQuanToDownload=0, NotID = 1;
 	
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
@@ -311,7 +311,8 @@ public class DownloadService extends Service {
 		       		   .setContentIntent(contentIntent)
 		       		   .setOngoing(false)
 		       		   .setProgress(0, 0, false);
-		       		   mNotificationManager.notify(3, mBuilder.build());
+		       		   mNotificationManager.notify(NotID, mBuilder.build());
+		       		   NotID++;
 		       	   }
 		           /*
 		            * Define InputStreams to read from the URLConnection.
@@ -492,7 +493,8 @@ public class DownloadService extends Service {
 				   .setContentIntent(contentIntent)
 				   .setOngoing(false)
 				   .setProgress(0, 0, false);
-				   mNotificationManager.notify(2, mBuilder.build());
+				   mNotificationManager.notify(NotID, mBuilder.build());
+				   NotID++;
 				   return true;
 			   } else {
 				   noConnectionError(file);
@@ -535,7 +537,8 @@ public class DownloadService extends Service {
 		   .setContentIntent(contentIntent)
 		   .setOngoing(false)
 		   .setProgress(0, 0, false);
-		   mNotificationManager.notify(1, mBuilder.build());
+		   mNotificationManager.notify(NotID, mBuilder.build());
+		   NotID++;
 	}
 	
 	public Bitmap centerCrop(Bitmap srcBmp) {

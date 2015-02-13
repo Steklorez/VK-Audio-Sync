@@ -71,18 +71,22 @@
     <string name="prefs_aus_wifi">Update only with wifi</string>
     <string name="prefs_aus_wifi_summary">Saves your mobile traffic</string>
 
-    <string name="prefs_aus_freq_default_value">60000</string>
+    <string name="prefs_aus_freq_default_value">3600000</string>
 
     <string-array name="prefs_aus_freq_entry_values">
-        <item>30000</item>
         <item>60000</item>
+        <item>1800000</item>
         <item>3600000</item>
+        <item>7200000</item>
+        <item>10800000</item>
     </string-array>
 
     <string-array name="prefs_aus_freq_values">
-        <item>30 seconds</item>
         <item>1 minute</item>
+        <item>30 minutes</item>
         <item>1 hour</item>
+        <item>2 hours</item>
+        <item>3 hours</item>
     </string-array>
 
     <string-array name="slider_menu">

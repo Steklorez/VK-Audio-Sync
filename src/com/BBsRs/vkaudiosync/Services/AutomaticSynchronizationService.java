@@ -252,13 +252,13 @@ public class AutomaticSynchronizationService extends Service {
 		private void finish(boolean success) {
 			if (success) {
 				Log.i(LOG_TAG, "Music list successfully updated");
-				if (sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, false))	
+				if (sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, true))	
 					scheduleUpdate(mContext, Integer.parseInt(sPref.getString(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION_FREQUENCY, getString(R.string.prefs_aus_freq_default_value))));
 			} else {
 				// failure, schedule next download in 30 minutes
 				Log.i(LOG_TAG, "Music list refresh failed, scheduling update in 30 minutes");
 				long interval = 30 * 60 * 1000;
-				if (sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, false))		
+				if (sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, true))		
 					scheduleUpdate(mContext, interval);
 			}
 

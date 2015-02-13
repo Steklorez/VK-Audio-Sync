@@ -17,6 +17,7 @@ import android.os.CountDownTimer;
 import android.view.View;
 
 import com.BBsRs.vkaudiosync.Application.ObjectSerializer;
+import com.BBsRs.vkaudiosync.Services.AutomaticSynchronizationService;
 import com.BBsRs.vkaudiosync.VKApiThings.Account;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 import com.BBsRs.vkaudiosync.collection.MusicCollection;
@@ -45,7 +46,16 @@ public class LoaderActivity extends Activity {
 			if(api!=null){
 
 				try {
-		        	ArrayList<MusicCollection> musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+					//read existing base, first time start sync.
+					ArrayList<MusicCollection> musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.AUS_MAIN_LIST_BASE, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+		        	if ( musicCollection==null)
+		        		 musicCollection = new ArrayList<MusicCollection>();
+		        	if (musicCollection.size() == 0 && sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, true)){
+		        		getApplicationContext().startService(new Intent(getApplicationContext(), AutomaticSynchronizationService.class));
+		        	}
+					
+					
+		        	musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
 		        	if (musicCollection==null)
 		        		musicCollection = new ArrayList<MusicCollection>();
 		        	

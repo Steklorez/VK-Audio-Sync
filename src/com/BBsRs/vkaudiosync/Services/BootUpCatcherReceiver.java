@@ -21,7 +21,7 @@ public class BootUpCatcherReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		//set up preferences
         sPref = PreferenceManager.getDefaultSharedPreferences(context);
-        if (sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, false)){
+        if (sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, true)){
         	Log.i(LOG_TAG, "start service");
         	context.startService(new Intent(context, AutomaticSynchronizationService.class));
         }	

@@ -27,7 +27,7 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefs_aus" >
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="preference_automatic_synchronization"
             android:summary="@string/prefs_aus_summary"
             android:title="@string/prefs_aus" />

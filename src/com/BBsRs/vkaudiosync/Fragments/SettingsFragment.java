@@ -164,9 +164,9 @@ public class SettingsFragment extends PreferenceFragment {
 	public void updateViews(){
 		skipBigSize.setEnabled(sPref.getBoolean(Constants.PREFERENCE_SKIP_BIG, true));
 		skipBigLength.setEnabled(sPref.getBoolean(Constants.PREFERENCE_SKIP_BIG, true));
-		aus.setSummary(sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, false) ? getString(R.string.prefs_aus_summary_enabled) : getString(R.string.prefs_aus_summary));
-		ausFrequency.setEnabled(sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, false));
-		ausWifi.setEnabled(sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, false));
+		aus.setSummary(sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, true) ? getString(R.string.prefs_aus_summary_enabled) : getString(R.string.prefs_aus_summary));
+		ausFrequency.setEnabled(sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, true));
+		ausWifi.setEnabled(sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, true));
 		int index=0;
 		for (String summaryValue : getActivity().getResources().getStringArray(R.array.prefs_aus_freq_entry_values)){
 			if (summaryValue.equals(sPref.getString(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION_FREQUENCY, getString(R.string.prefs_aus_freq_default_value)))){

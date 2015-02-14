@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
-import org.holoeverywhere.widget.Toast;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -38,6 +37,7 @@ import android.util.Log;
 import com.BBsRs.vkaudiosync.ContentShowActivity;
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.Application.ObjectSerializer;
+import com.BBsRs.vkaudiosync.VKApiThings.Account;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 import com.BBsRs.vkaudiosync.collection.MusicCollection;
 import com.mpatric.mp3agic.ID3v2;
@@ -47,6 +47,7 @@ import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.NotSupportedException;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.perm.kate.api.Api;
 
 public class DownloadService extends Service {
 	
@@ -72,6 +73,11 @@ public class DownloadService extends Service {
 	
 	int currentDownloadingIndex=0, totalQuanToDownload=0, NotID = 1;
 	
+	/*----------------------------VK API-----------------------------*/
+    Account account=new Account();
+    Api api;
+    /*----------------------------VK API-----------------------------*/
+	
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
 		return null;
@@ -89,6 +95,15 @@ public class DownloadService extends Service {
 		wl.acquire();
 		//set up preferences
         sPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        
+        /*----------------------------VK API-----------------------------*/
+    	//retrieve old session
+        account.restore(getApplicationContext());
+        
+        //create new session
+        if(account.access_token!=null)
+            api=new Api(account.access_token, Constants.API_ID);
+        /*----------------------------VK API-----------------------------*/
         
 		try {
 			musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
@@ -201,7 +216,8 @@ public class DownloadService extends Service {
 	
 					if (isSuccessfullyDownloaded){
 						removeFromDM(currentTrackDownloading);
-						addToExistingBase(currentTrackDownloading);
+						if (account.user_id == currentTrackDownloading.owner_id)
+							addToExistingBase(currentTrackDownloading);
 					}
 				
 					Intent i = new Intent(Constants.MUSIC_DOWNLOADED);

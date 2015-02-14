@@ -222,7 +222,7 @@ public class AutomaticSynchronizationService extends Service {
 	        		}
 	        	}
 	        	
-	        	if (musicCollectionToDownload.size()==0)
+	        	if (musicCollectionToDownload.size()==0){
 	        		Log.i(LOG_TAG, "nothing to download");
 	        		if (sPref.getBoolean(Constants.PREFERENCE_NOTIFY_RESULT, true) && successfullyDeleted!=0){
 	        			// define sound URI, the sound to be played when there's a notification
@@ -241,7 +241,8 @@ public class AutomaticSynchronizationService extends Service {
 	        			.setOngoing(false)
 	        			.setSound(soundUri);
 	        			mNotificationManager.notify(100, mBuilder.build());
-	    		}
+	        		}
+	        	}
 	        	else {
 	        		if (!isMyServiceRunning(DownloadService.class)){
 	        			Log.i(LOG_TAG, "start downloading");

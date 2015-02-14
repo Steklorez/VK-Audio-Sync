@@ -131,7 +131,7 @@ public class DownloadService extends Service {
 		getApplicationContext().unregisterReceiver(someDeleted);
 		getApplicationContext().unregisterReceiver(someAdded);
 		
-		if (sPref.getBoolean(Constants.PREFERENCE_NOTIFY_RESULT, true)){
+		if ((sPref.getBoolean(Constants.PREFERENCE_NOTIFY_RESULT, true)) && (!(successfullyDownloaded==0 && successfullyDeleted==0))){
 			// define sound URI, the sound to be played when there's a notification
 			Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 			
@@ -145,9 +145,7 @@ public class DownloadService extends Service {
 			.setOngoing(false)
 			.setProgress(0, 0, false)
 			.setSound(soundUri);
-			if (!(successfullyDownloaded==0 && successfullyDeleted==0)){
-				mNotificationManager.notify(100, mBuilder.build());
-			}
+			mNotificationManager.notify(100, mBuilder.build());
 		}
 		
 		wl.release();

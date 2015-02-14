@@ -78,5 +78,6 @@ public class Constants {
 	public static final String PREFERENCE_SKIP_BIG = "preference_skip_big";
 	public static final String PREFERENCE_SKIP_BIG_SIZE = "preference_skip_big_size";
 	public static final String PREFERENCE_SKIP_BIG_LENGTH = "preference_skip_big_length";
+	public static final String PREFERENCE_REVERSE_DOWNLOADING = "preference_reverse_downloading";
 	
 }

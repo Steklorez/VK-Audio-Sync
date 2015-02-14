@@ -201,7 +201,11 @@ public class DownloadService extends Service {
 					if (musicCollection.size()==0 || isServiceStopped)
 						break;
 					
-					currentTrackDownloading = musicCollection.get(0);
+					if (sPref.getBoolean(Constants.PREFERENCE_REVERSE_DOWNLOADING, false)){
+						currentTrackDownloading = musicCollection.get(musicCollection.size()-1);
+					} else{
+						currentTrackDownloading = musicCollection.get(0);
+					}
 					skipCurrentDownloading = false;
 					
 					mBuilder.setContentTitle("["+(currentDownloadingIndex+1)+" "+getApplicationContext().getResources().getString(R.string.of)+" "+totalQuanToDownload+"] "+currentTrackDownloading.artist+" - "+currentTrackDownloading.title)
@@ -359,7 +363,7 @@ public class DownloadService extends Service {
 		    				mBuilder.setProgress(100, last, false);
 		    				mNotificationManager.notify(0, mBuilder.build());
 		    				
-		    				if ((System.currentTimeMillis() - sendIn) > 750){
+		    				if ((System.currentTimeMillis() - sendIn) > 700){
 		    					sendIn = System.currentTimeMillis();
 		    					//send broadcast about percentage of track
 		    					oneItem.percentage=last;

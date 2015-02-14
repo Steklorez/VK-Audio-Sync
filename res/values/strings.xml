@@ -122,6 +122,9 @@
     </string-array>
     
     
+    <string name="prefs_revers_downloading">Revers downloading queue</string>
+    <string name="prefs_revers_downloading_summary">If turned on music order in last added list will be just like on your vk page.</string>
+    
     <string-array name="slider_menu">
         <item>MUSIC</item>
         <item>My music</item>

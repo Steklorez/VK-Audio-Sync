@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
@@ -71,7 +72,7 @@ public class DownloadService extends Service {
 	
 	MusicCollection currentTrackDownloading;
 	
-	int currentDownloadingIndex=0, totalQuanToDownload=0, NotID = 1;
+	int currentDownloadingIndex=0, totalQuanToDownload=0, NotID = 1, successfullyDownloaded = 0, successfullyDeleted=0;
 	
 	/*----------------------------VK API-----------------------------*/
     Account account=new Account();
@@ -105,6 +106,8 @@ public class DownloadService extends Service {
             api=new Api(account.access_token, Constants.API_ID);
         /*----------------------------VK API-----------------------------*/
         
+        successfullyDeleted = intent.getIntExtra(Constants.INTENT_SUCCESSFULLY_DELETED, 0);
+        
 		try {
 			musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
 			if (musicCollection==null)
@@ -124,10 +127,30 @@ public class DownloadService extends Service {
 	public void onDestroy() {
 		sendBroadcastAboutDestroyingService();
 		isServiceStopped = true;
-		wl.release();
 		mNotificationManager.cancel(0);
 		getApplicationContext().unregisterReceiver(someDeleted);
 		getApplicationContext().unregisterReceiver(someAdded);
+		
+		if (sPref.getBoolean(Constants.PREFERENCE_NOTIFY_RESULT, true)){
+			// define sound URI, the sound to be played when there's a notification
+			Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+			
+			// define intent to open main page
+			contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(this, ContentShowActivity.class).putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT), Notification.FLAG_ONLY_ALERT_ONCE);        
+		
+			mBuilder.setContentTitle(getString(R.string.app_name))
+			.setContentText(getString(R.string.notify_downloaded)+" "+successfullyDownloaded+" "+getString(R.string.notify_deleted)+" "+successfullyDeleted)
+			.setSmallIcon(R.drawable.ic_menu_download)
+			.setContentIntent(contentIntent)
+			.setOngoing(false)
+			.setProgress(0, 0, false)
+			.setSound(soundUri);
+			if (!(successfullyDownloaded==0 && successfullyDeleted==0)){
+				mNotificationManager.notify(100, mBuilder.build());
+			}
+		}
+		
+		wl.release();
 		super.onDestroy();
 	}
 	
@@ -518,6 +541,7 @@ public class DownloadService extends Service {
 			        i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
 			        sendBroadcast(i);
 					
+			        successfullyDownloaded++;
 		           return true;
 		   } catch (IOException e) {
 			   Log.d("DownloadManager", "Error: " + e);

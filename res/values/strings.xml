@@ -121,6 +121,10 @@
         <item>30 minutes</item>
     </string-array>
     
+    <string name="prefs_notify_result">Notify with sound about dm</string>
+    <string name="prefs_notify_result_summary">After download job you will get notification about result, include from automatic synchronization with number of deleting.</string>
+    <string name="notify_deleted">Deleted:</string>
+    <string name="notify_downloaded">Downloaded:</string>
     
     <string name="prefs_revers_downloading">Revers downloading queue</string>
     <string name="prefs_revers_downloading_summary">If turned on music order in last added list will be just like on your vk page.</string>

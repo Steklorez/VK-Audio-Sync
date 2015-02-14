@@ -25,6 +25,11 @@
             android:key="preference_skip_big_length"
             android:title="@string/prefs_skip_big_length" />
        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="preference_notifiy_result"
+            android:summary="@string/prefs_notify_result_summary"
+            android:title="@string/prefs_notify_result" />
+       <CheckBoxPreference
             android:defaultValue="false"
             android:key="preference_reverse_downloading"
             android:summary="@string/prefs_revers_downloading_summary"

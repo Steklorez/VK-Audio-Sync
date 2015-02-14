@@ -10,10 +10,13 @@ import org.holoeverywhere.preference.SharedPreferences;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -21,8 +24,10 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.BBsRs.vkaudiosync.ContentShowActivity;
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.Application.ObjectSerializer;
 import com.BBsRs.vkaudiosync.VKApiThings.Account;
@@ -98,6 +103,7 @@ public class AutomaticSynchronizationService extends Service {
         ArrayList<MusicCollection> musicCollectionToDelete = new ArrayList<MusicCollection>();
         ArrayList<MusicCollection> musicCollectionToDownload = new ArrayList<MusicCollection>();
         File f;
+        int successfullyDeleted = 0;
 
         public MainMusicListUpdateTask() {
             Log.i(LOG_TAG, "Starting music update task");
@@ -180,6 +186,7 @@ public class AutomaticSynchronizationService extends Service {
 	    					Intent intent =new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
 	    					intent.setData(Uri.fromFile(new File(f.getAbsolutePath())));
 	    					sendBroadcast(intent);
+	    					successfullyDeleted++;
 	        			}
 	        			//delete from existing base
 	        			ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.AUS_MAIN_LIST_BASE, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
@@ -217,6 +224,24 @@ public class AutomaticSynchronizationService extends Service {
 	        	
 	        	if (musicCollectionToDownload.size()==0)
 	        		Log.i(LOG_TAG, "nothing to download");
+	        		if (sPref.getBoolean(Constants.PREFERENCE_NOTIFY_RESULT, true) && successfullyDeleted!=0){
+	        			// define sound URI, the sound to be played when there's a notification
+	        			Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+	    			
+	        			// define intent to open main page
+	        			PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(mContext, ContentShowActivity.class).putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT), Notification.FLAG_ONLY_ALERT_ONCE);        
+	    		
+	        			NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+	        			NotificationCompat.Builder mBuilder  = new NotificationCompat.Builder(mContext);
+	        			
+	        			mBuilder.setContentTitle(getString(R.string.app_name))
+	        			.setContentText(getString(R.string.notify_downloaded)+" "+0+" "+getString(R.string.notify_deleted)+" "+successfullyDeleted)
+	        			.setSmallIcon(R.drawable.ic_menu_download)
+	        			.setContentIntent(contentIntent)
+	        			.setOngoing(false)
+	        			.setSound(soundUri);
+	        			mNotificationManager.notify(100, mBuilder.build());
+	    		}
 	        	else {
 	        		if (!isMyServiceRunning(DownloadService.class)){
 	        			Log.i(LOG_TAG, "start downloading");
@@ -225,6 +250,7 @@ public class AutomaticSynchronizationService extends Service {
 	        			
 	  	    		  	//start service
 	  	    		  	Intent serviceIntent = new Intent(mContext, DownloadService.class); 
+	  	    		  	serviceIntent.putExtra(Constants.INTENT_SUCCESSFULLY_DELETED, successfullyDeleted);
 	  	    		  	mContext.startService(serviceIntent);
 	  	    	  	} else {
 	  	    	  		Log.i(LOG_TAG, "service is already running do it next time");

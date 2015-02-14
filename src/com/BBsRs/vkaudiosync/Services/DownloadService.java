@@ -136,7 +136,7 @@ public class DownloadService extends Service {
 			Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 			
 			// define intent to open main page
-			contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(this, ContentShowActivity.class).putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT), Notification.FLAG_ONLY_ALERT_ONCE);        
+			contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(this, ContentShowActivity.class).putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT), Notification.FLAG_AUTO_CANCEL);        
 		
 			mBuilder.setContentTitle(getString(R.string.app_name))
 			.setContentText(getString(R.string.notify_downloaded)+" "+successfullyDownloaded+" "+getString(R.string.notify_deleted)+" "+successfullyDeleted)
@@ -144,6 +144,7 @@ public class DownloadService extends Service {
 			.setContentIntent(contentIntent)
 			.setOngoing(false)
 			.setProgress(0, 0, false)
+			.setAutoCancel(true)
 			.setSound(soundUri);
 			mNotificationManager.notify(100, mBuilder.build());
 		}

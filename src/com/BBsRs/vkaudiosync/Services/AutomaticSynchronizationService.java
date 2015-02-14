@@ -229,7 +229,7 @@ public class AutomaticSynchronizationService extends Service {
 	        			Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 	    			
 	        			// define intent to open main page
-	        			PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(mContext, ContentShowActivity.class).putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT), Notification.FLAG_ONLY_ALERT_ONCE);        
+	        			PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(mContext, ContentShowActivity.class).putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT), Notification.FLAG_AUTO_CANCEL);        
 	    		
 	        			NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 	        			NotificationCompat.Builder mBuilder  = new NotificationCompat.Builder(mContext);
@@ -239,6 +239,7 @@ public class AutomaticSynchronizationService extends Service {
 	        			.setSmallIcon(R.drawable.ic_menu_download)
 	        			.setContentIntent(contentIntent)
 	        			.setOngoing(false)
+	        			.setAutoCancel(true)
 	        			.setSound(soundUri);
 	        			mNotificationManager.notify(100, mBuilder.build());
 	        		}

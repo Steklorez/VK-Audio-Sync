@@ -1,15 +1,8 @@
 package com.BBsRs.vkaudiosync;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import org.holoeverywhere.app.Activity;
-import org.holoeverywhere.app.AlertDialog;
-import org.holoeverywhere.app.Dialog;
-import org.holoeverywhere.app.DialogFragment;
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
-import org.holoeverywhere.widget.RelativeLayout;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -17,13 +10,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.view.View;
 
-import com.BBsRs.vkaudiosync.Application.ObjectSerializer;
 import com.BBsRs.vkaudiosync.Services.AutomaticSynchronizationService;
 import com.BBsRs.vkaudiosync.VKApiThings.Account;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
-import com.BBsRs.vkaudiosync.collection.MusicCollection;
 import com.perm.kate.api.Api;
 
 public class LoaderActivity extends Activity {
@@ -49,66 +39,13 @@ public class LoaderActivity extends Activity {
 			if(api!=null){
 
 				try {
-		        	ArrayList<MusicCollection> musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
-		        	if (musicCollection==null)
-		        		musicCollection = new ArrayList<MusicCollection>();
-		        	
-		        	if (musicCollection.size()>0){
-		        		
-		        		final DialogFragment alertDialog = new DialogFragment(){
-		    	  			private View makeNumberPicker() {
-		    	  		        View content = getLayoutInflater().inflate(
-		    	  		                R.layout.dialog_content);
-		    	  		        RelativeLayout freeAd = (RelativeLayout)content.findViewById(R.id.resume);
-		    	  		        freeAd.setOnClickListener(new View.OnClickListener() {
-		    	  		        	@Override
-		    	  		        	public void onClick(View v) {
-		    	  		        		dismiss();
-		    	  		        		Intent refresh = new Intent(getApplicationContext(), ContentShowActivity.class);
-		    	  			            refresh.putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT);
-		    	  						//restart activity
-		    	  					    startActivity(refresh);   
-		    	  					    // stop curr activity
-		    	  					    finish();
-		    	  		        	}
-		    	  		      	});
-		    	      		
-		    	  		        RelativeLayout paidRtHigh = (RelativeLayout)content.findViewById(R.id.delete);
-		    	  		        paidRtHigh.setOnClickListener(new View.OnClickListener() {
-		    	  		        	@Override
-		    	  		        	public void onClick(View v) {
-		    	  		        		sPref.edit().putString(Constants.DOWNLOAD_SELECTION, "").commit();
-		    	  		        		dismiss();
-		    	  		        		Intent refresh = new Intent(getApplicationContext(), ContentShowActivity.class);
-		    	  			            refresh.putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT);
-		    	  						//restart activity
-		    	  					    startActivity(refresh);   
-		    	  					    // stop curr activity
-		    	  					    finish();
-		    	  		        	}
-		    	  		        });
-		    	  		      
-		    	  		        return content;
-		    	  		    }
-
-		    	  		    @Override
-		    	  		    public Dialog onCreateDialog(Bundle savedInstanceState) {
-		    	  		        AlertDialog.Builder builder = new AlertDialog.Builder(getSupportActivity(), getTheme());
-		    	  		        builder.setView(makeNumberPicker());
-		    	  		        builder.setCancelable(false);
-		    	  		        return builder.create();
-		    	  		    }
-		    	  		};
-		    	  		alertDialog.show(getSupportFragmentManager());
-		        	} else {
-		        		Intent refresh = new Intent(getApplicationContext(), ContentShowActivity.class);
-  			            refresh.putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT);
-  						//restart activity
-  					    startActivity(refresh);   
-  					    // stop curr activity
-  					    finish();
-		        	}
-		        } catch (IOException e) {
+		        	Intent refresh = new Intent(getApplicationContext(), ContentShowActivity.class);
+  			        refresh.putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT);
+  					//restart activity
+  					startActivity(refresh);   
+  					// stop curr activity
+  					finish();
+		        } catch (Exception e) {
 		            e.printStackTrace();
 		        }
 	        }else{

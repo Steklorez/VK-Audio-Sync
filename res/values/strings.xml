@@ -41,16 +41,12 @@
     <string name="main">Main music</string>
     <string name="check_all">Check first ..</string>
     <string name="ok">OK</string>
+    <string name="delete_all">Delete all</string>
     <string name="wait_check">Wait till we check and add to dm your songs..</string>
     <string name="wait_uncheck">Wait till we uncheck and delete from dm checked songs..</string>
     <string name="cancel">Cancel</string>
     <string name="uncheck_all">Uncheck all</string>
-    <string name="delete_all">Delete all</string>
-    <string name="delete_all_dialog_msg">Delete all songs from dm and resume</string>
-    <string name="resume">Resume</string>
-    <string name="resume_dialog_msg">Resume adding songs to dm</string>
     <string name="stop_dm">Stop downloading</string>
-    <string name="findsome">We find items in your download manager, which has not yet been downloaded. What todo?</string>
     <string name="stop_dm_msg">Downloading isn\'t started to stop it</string>
     <string name="delete_all_msg">List is already empty</string>
     <string name="no_free_space">No more free space available.</string>

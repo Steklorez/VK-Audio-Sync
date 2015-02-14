@@ -27,7 +27,7 @@ import android.os.PowerManager.WakeLock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.BBsRs.vkaudiosync.ContentShowActivity;
+import com.BBsRs.vkaudiosync.DialogActivity;
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.Application.ObjectSerializer;
 import com.BBsRs.vkaudiosync.VKApiThings.Account;
@@ -229,7 +229,7 @@ public class AutomaticSynchronizationService extends Service {
 	        			Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 	    			
 	        			// define intent to open main page
-	        			PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(mContext, ContentShowActivity.class).putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT), Notification.FLAG_AUTO_CANCEL);        
+	        			PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(mContext, DialogActivity.class), Notification.FLAG_AUTO_CANCEL);        
 	    		
 	        			NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 	        			NotificationCompat.Builder mBuilder  = new NotificationCompat.Builder(mContext);

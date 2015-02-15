@@ -102,8 +102,8 @@ public class AutomaticSynchronizationService extends Service {
         ArrayList<MusicCollection> musicCollectionLoadedBase = new ArrayList<MusicCollection>();
         ArrayList<MusicCollection> musicCollectionToDelete = new ArrayList<MusicCollection>();
         ArrayList<MusicCollection> musicCollectionToDownload = new ArrayList<MusicCollection>();
+        ArrayList<MusicCollection> musicCollectionSuccessfullyDeleted = new ArrayList<MusicCollection>();
         File f;
-        int successfullyDeleted = 0;
 
         public MainMusicListUpdateTask() {
             Log.i(LOG_TAG, "Starting music update task");
@@ -186,7 +186,7 @@ public class AutomaticSynchronizationService extends Service {
 	    					Intent intent =new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
 	    					intent.setData(Uri.fromFile(new File(f.getAbsolutePath())));
 	    					sendBroadcast(intent);
-	    					successfullyDeleted++;
+	    					musicCollectionSuccessfullyDeleted.add(oneItemDelete);
 	        			}
 	        			//delete from existing base
 	        			ArrayList<MusicCollection> musicCollectionTemp = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.AUS_MAIN_LIST_BASE, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
@@ -204,6 +204,10 @@ public class AutomaticSynchronizationService extends Service {
 	        			sPref.edit().putString(Constants.AUS_MAIN_LIST_BASE, ObjectSerializer.serialize(musicCollectionTemp)).commit();
 	        		}
 	        	}
+	        	
+	        	//always saves the deleted items
+	        	sPref.edit().putString(Constants.SUCCESSFULLY_DELETED, ObjectSerializer.serialize(musicCollectionSuccessfullyDeleted)).commit();
+	        	sPref.edit().putString(Constants.SUCCESSFULLY_DOWNLOADED, "").commit();
 	        	
 	        	//compare our lists and catch what we need to download
 	        	for (MusicCollection oneLoadedItem : musicCollectionLoadedBase){
@@ -224,7 +228,7 @@ public class AutomaticSynchronizationService extends Service {
 	        	
 	        	if (musicCollectionToDownload.size()==0){
 	        		Log.i(LOG_TAG, "nothing to download");
-	        		if (sPref.getBoolean(Constants.PREFERENCE_NOTIFY_RESULT, true) && successfullyDeleted!=0){
+	        		if (sPref.getBoolean(Constants.PREFERENCE_NOTIFY_RESULT, true) && musicCollectionSuccessfullyDeleted.size()!=0){
 	        			// define sound URI, the sound to be played when there's a notification
 	        			Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 	    			
@@ -235,7 +239,7 @@ public class AutomaticSynchronizationService extends Service {
 	        			NotificationCompat.Builder mBuilder  = new NotificationCompat.Builder(mContext);
 	        			
 	        			mBuilder.setContentTitle(getString(R.string.app_name))
-	        			.setContentText(getString(R.string.notify_downloaded)+" "+0+" "+getString(R.string.notify_deleted)+" "+successfullyDeleted)
+	        			.setContentText(getString(R.string.notify_downloaded)+" "+0+" "+getString(R.string.notify_deleted)+" "+musicCollectionSuccessfullyDeleted.size())
 	        			.setSmallIcon(R.drawable.ic_menu_download)
 	        			.setContentIntent(contentIntent)
 	        			.setOngoing(false)
@@ -252,7 +256,6 @@ public class AutomaticSynchronizationService extends Service {
 	        			
 	  	    		  	//start service
 	  	    		  	Intent serviceIntent = new Intent(mContext, DownloadService.class); 
-	  	    		  	serviceIntent.putExtra(Constants.INTENT_SUCCESSFULLY_DELETED, successfullyDeleted);
 	  	    		  	mContext.startService(serviceIntent);
 	  	    	  	} else {
 	  	    	  		Log.i(LOG_TAG, "service is already running do it next time");

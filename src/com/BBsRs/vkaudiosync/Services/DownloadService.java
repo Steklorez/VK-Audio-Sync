@@ -59,6 +59,8 @@ public class DownloadService extends Service {
 	String LOG_TAG = "DownloadService";
 	
 	ArrayList<MusicCollection> musicCollection = new ArrayList<MusicCollection>();
+	ArrayList<MusicCollection> musicCollectionSuccessfullyDeleted = new ArrayList<MusicCollection>();
+	ArrayList<MusicCollection> musicCollectionSuccessfullyDownloaded = new ArrayList<MusicCollection>();
 	
 	PowerManager pm;
 	PowerManager.WakeLock wl;
@@ -73,7 +75,7 @@ public class DownloadService extends Service {
 	
 	MusicCollection currentTrackDownloading;
 	
-	int currentDownloadingIndex=0, totalQuanToDownload=0, NotID = 1, successfullyDownloaded = 0, successfullyDeleted=0;
+	int currentDownloadingIndex=0, totalQuanToDownload=0, NotID = 1;
 	
 	/*----------------------------VK API-----------------------------*/
     Account account=new Account();
@@ -107,7 +109,13 @@ public class DownloadService extends Service {
             api=new Api(account.access_token, Constants.API_ID);
         /*----------------------------VK API-----------------------------*/
         
-        successfullyDeleted = intent.getIntExtra(Constants.INTENT_SUCCESSFULLY_DELETED, 0);
+        try {
+        	musicCollectionSuccessfullyDeleted = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.SUCCESSFULLY_DELETED, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
+			if (musicCollectionSuccessfullyDeleted==null)
+				musicCollectionSuccessfullyDeleted = new ArrayList<MusicCollection>();
+	    } catch (IOException e) {
+	    	e.printStackTrace();
+	    }
         
 		try {
 			musicCollection = (ArrayList<MusicCollection>) ObjectSerializer.deserialize(sPref.getString(Constants.DOWNLOAD_SELECTION, ObjectSerializer.serialize(new ArrayList<MusicCollection>())));
@@ -132,7 +140,13 @@ public class DownloadService extends Service {
 		getApplicationContext().unregisterReceiver(someDeleted);
 		getApplicationContext().unregisterReceiver(someAdded);
 		
-		if ((sPref.getBoolean(Constants.PREFERENCE_NOTIFY_RESULT, true)) && (!(successfullyDownloaded==0 && successfullyDeleted==0))){
+		if ((sPref.getBoolean(Constants.PREFERENCE_NOTIFY_RESULT, true)) && (!(musicCollectionSuccessfullyDownloaded.size()==0 && musicCollectionSuccessfullyDeleted.size()==0))){
+			try {
+				sPref.edit().putString(Constants.SUCCESSFULLY_DOWNLOADED, ObjectSerializer.serialize(musicCollectionSuccessfullyDownloaded)).commit();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			// define sound URI, the sound to be played when there's a notification
 			Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 			
@@ -140,7 +154,7 @@ public class DownloadService extends Service {
 			contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(this, DialogActivity.class), Notification.FLAG_AUTO_CANCEL);        
 		
 			mBuilder.setContentTitle(getString(R.string.app_name))
-			.setContentText(getString(R.string.notify_downloaded)+" "+successfullyDownloaded+" "+getString(R.string.notify_deleted)+" "+successfullyDeleted)
+			.setContentText(getString(R.string.notify_downloaded)+" "+musicCollectionSuccessfullyDownloaded.size()+" "+getString(R.string.notify_deleted)+" "+musicCollectionSuccessfullyDeleted.size())
 			.setSmallIcon(R.drawable.ic_menu_download)
 			.setContentIntent(contentIntent)
 			.setOngoing(false)
@@ -541,7 +555,7 @@ public class DownloadService extends Service {
 			        i.putExtra(Constants.ONE_AUDIO_ITEM, (Parcelable)oneItem);
 			        sendBroadcast(i);
 					
-			        successfullyDownloaded++;
+			        musicCollectionSuccessfullyDownloaded.add(oneItem);
 		           return true;
 		   } catch (IOException e) {
 			   Log.d("DownloadManager", "Error: " + e);

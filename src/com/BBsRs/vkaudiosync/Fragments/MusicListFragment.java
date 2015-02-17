@@ -432,10 +432,10 @@ public class MusicListFragment extends Fragment {
     	if (!customOnRefreshListener.isRefreshing ){
     		switch (bundle.getInt(Constants.BUNDLE_MAIN_WALL_TYPE)){
     		case Constants.MAIN_MUSIC:
-    			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_main));
+    			getSupportActionBar().setSubtitle(getResources().getString(R.string.quan_songs_main)+" "+musicCollection.size());
     			break;
     		case Constants.WALL_MUSIC:
-    			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_wall));
+    			getSupportActionBar().setSubtitle(getResources().getString(R.string.quan_songs_wall)+" "+musicCollection.size());
     			break;
     		}
     		if (sPref.getBoolean(Constants.OTHER_FRAGMENT, false)){
@@ -683,10 +683,10 @@ public class MusicListFragment extends Fragment {
                 		getSupportActionBar().setTitle(PlaceName);
                 		switch (bundle.getInt(Constants.BUNDLE_MAIN_WALL_TYPE)){
                 		case Constants.MAIN_MUSIC:
-                			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_main));
+                			getSupportActionBar().setSubtitle(getResources().getString(R.string.quan_songs_main)+" "+musicCollection.size());
                 			break;
                 		case Constants.WALL_MUSIC:
-                			getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_wall));
+                			getSupportActionBar().setSubtitle(getResources().getString(R.string.quan_songs_wall)+" "+musicCollection.size());
                 			break;
                 		}
                 		

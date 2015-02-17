@@ -18,11 +18,11 @@
     <string name="app_name">VK Music Sync</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="quan_songs_main">songs in main list</string>
-    <string name="quan_songs_wall">songs on wall</string>
-    <string name="quan_songs_dm">songs in dm list</string>
-    <string name="quan_people">people</string>
-    <string name="quan_groups">communities</string>
+    <string name="quan_songs_main">Songs in main list:</string>
+    <string name="quan_songs_wall">Songs on wall:</string>
+    <string name="quan_songs_dm">Songs in dm list:</string>
+    <string name="quan_people">People:</string>
+    <string name="quan_groups">Communities:</string>
     <string name="download_selected">Download selected</string>
     <string name="app_slogan">Sync automatically,\nanywhere,\nanytime,\nwith all cover art!</string>
     <string name="service_running">Download service is in work state, please wait till download is continue!</string>

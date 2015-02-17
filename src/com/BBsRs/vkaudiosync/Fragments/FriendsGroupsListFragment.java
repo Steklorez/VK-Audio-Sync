@@ -229,10 +229,10 @@ public class FriendsGroupsListFragment extends Fragment {
     	if (!customOnRefreshListener.isRefreshing)
     	switch (bundle.getInt(Constants.BUNDLE_FRIENDS_GROUPS_TYPE)){
     	case Constants.FRIENDS:
-    		getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_people));
+    		getSupportActionBar().setSubtitle(getResources().getString(R.string.quan_people)+" "+friendsGroupsCollection.size());
     		break;
     	case Constants.GROUPS:
-    		getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_groups));
+    		getSupportActionBar().setSubtitle(getResources().getString(R.string.quan_groups)+" "+friendsGroupsCollection.size());
     		break;
     	}
     	
@@ -329,10 +329,10 @@ public class FriendsGroupsListFragment extends Fragment {
                     	getSupportActionBar().setTitle(PlaceName);
                     	switch (bundle.getInt(Constants.BUNDLE_FRIENDS_GROUPS_TYPE)){
                     	case Constants.FRIENDS:
-                    		getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_people));
+                    		getSupportActionBar().setSubtitle(getResources().getString(R.string.quan_people)+" "+friendsGroupsCollection.size());
                     		break;
                     	case Constants.GROUPS:
-                    		getSupportActionBar().setSubtitle(friendsGroupsCollection.size()+" "+getResources().getString(R.string.quan_groups));
+                    		getSupportActionBar().setSubtitle(getResources().getString(R.string.quan_groups)+" "+friendsGroupsCollection.size());
                     		break;
                     	}
                     	

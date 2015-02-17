@@ -115,7 +115,7 @@ public class DownloadManagerFragment extends Fragment {
         sPref.edit().putBoolean(Constants.OTHER_FRAGMENT, true).commit();
         
         getSupportActionBar().setTitle(getResources().getStringArray(R.array.slider_menu)[5]);
-        getSupportActionBar().setSubtitle(musicCollection.size()+" "+getResources().getString(R.string.quan_songs_dm));
+        getSupportActionBar().setSubtitle(getResources().getString(R.string.quan_songs_dm)+" "+musicCollection.size());
         if (musicCollection.size() == 0){
         	errorMessage.setText(getResources().getString(R.string.message_zero_count_audio_dm));
         	relativeErrorLayout.setVisibility(View.VISIBLE);
@@ -232,7 +232,7 @@ public class DownloadManagerFragment extends Fragment {
 				if (musicCollectionTemp==null)
             		musicCollectionTemp = new ArrayList<MusicCollection>();
 				
-				getSupportActionBar().setSubtitle(musicCollectionTemp.size()+" "+getResources().getString(R.string.quan_songs_dm));
+				getSupportActionBar().setSubtitle(getResources().getString(R.string.quan_songs_dm)+" "+musicCollectionTemp.size());
 				if (musicCollectionTemp.size() == 0){
   		        	errorMessage.setText(getResources().getString(R.string.message_zero_count_audio_dm));
   		        	relativeErrorLayout.setVisibility(View.VISIBLE);
@@ -264,7 +264,7 @@ public class DownloadManagerFragment extends Fragment {
 	  					indexTemp++;
 	  				}
 	  				
-	  				getSupportActionBar().setSubtitle(musicCollectionTemp.size()+" "+getResources().getString(R.string.quan_songs_dm));
+	  				getSupportActionBar().setSubtitle(getResources().getString(R.string.quan_songs_dm)+" "+musicCollectionTemp.size());
 	  				if (musicCollectionTemp.size() == 0){
 	  		        	errorMessage.setText(getResources().getString(R.string.message_zero_count_audio_dm));
 	  		        	relativeErrorLayout.setVisibility(View.VISIBLE);
@@ -306,7 +306,7 @@ public class DownloadManagerFragment extends Fragment {
   					indexTemp++;
   				}
   				
-  				getSupportActionBar().setSubtitle(musicCollectionTemp.size()+" "+getResources().getString(R.string.quan_songs_dm));
+  				getSupportActionBar().setSubtitle(getResources().getString(R.string.quan_songs_dm)+" "+musicCollectionTemp.size());
   				if (musicCollectionTemp.size() == 0){
   		        	errorMessage.setText(getResources().getString(R.string.message_zero_count_audio_dm));
   		        	relativeErrorLayout.setVisibility(View.VISIBLE);

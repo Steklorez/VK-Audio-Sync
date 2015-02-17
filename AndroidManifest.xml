@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.BBsRs.vkaudiosync"
+<manifest package="com.BBsRs.vkaudiosync"
     android:versionCode="7"
-    android:versionName="0.6 alpha" >
+    android:versionName="0.6 alpha" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -12,7 +11,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name="com.BBsRs.vkaudiosync.Application.VKMusicSyncApplication"
@@ -26,7 +26,7 @@
             android:label="@string/app_name" />
         <activity
             android:name="LoaderActivity"
-            android:theme="@style/Holo.Theme.Custom.NoActionBar">
+            android:theme="@style/Holo.Theme.Custom.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,17 +37,34 @@
         <service android:name=".Services.DownloadService" >
         </service>
 
-        <activity android:name="ContentShowActivity" android:launchMode="singleInstance">
+        <activity
+            android:name="ContentShowActivity"
+            android:launchMode="singleInstance" >
         </activity>
-        <activity android:name="DirChooseActivity" android:theme="@style/Holo.Theme.Dialog.Custom"></activity>
-        <service android:name=".Services.AutomaticSynchronizationService">
+        <activity
+            android:name="DirChooseActivity"
+            android:theme="@style/Holo.Theme.Dialog.Custom" >
+        </activity>
+
+        <service android:name=".Services.AutomaticSynchronizationService" >
         </service>
-        <receiver android:name=".Services.BootUpCatcherReceiver">
+
+        <receiver android:name=".Services.BootUpCatcherReceiver" >
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <activity android:name="DialogActivity" android:theme="@style/Holo.Theme.Custom.Transparent"></activity>
+
+        <activity
+            android:name="DialogActivity"
+            android:theme="@style/Holo.Theme.Custom.Transparent" >
+        </activity>
+
+        <receiver android:name=".Services.WiFiStateChangedReceiver" >
+            <intent-filter android:priority="100" >
+                <action android:name="android.net.wifi.STATE_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

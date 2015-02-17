@@ -627,7 +627,7 @@ public class MusicListFragment extends Fragment {
                             	if (musicCollectionTemp==null)
                             		musicCollectionTemp = new ArrayList<MusicCollection>();
                             	for (Audio one : musicList){
-                            		f = new File(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/"+(one.artist+" - "+one.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
+                            		f = new File(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/"+(one.artist+" - "+one.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
                             		if (f.exists()){
                             			quanOfExist++;
                             			musicCollection.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 1, 1, 101));

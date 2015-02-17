@@ -151,7 +151,7 @@ public class AutomaticSynchronizationService extends Service {
 	        	
 	        	//set up current and correct vk base 
 	        	for (Audio one : musicList){
-            		f = new File(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/"+(one.artist+" - "+one.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
+            		f = new File(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/"+(one.artist+" - "+one.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
             		if (f.exists())
             			musicCollectionLoadedBase.add(new MusicCollection(one.aid, one.owner_id, one.artist, one.title, one.duration, one.url, one.lyrics_id, 1, 1, 101));
             		else 
@@ -180,7 +180,7 @@ public class AutomaticSynchronizationService extends Service {
 	        	else {
 	        		Log.i(LOG_TAG, "deleting songs");
 	        		for (MusicCollection oneItemDelete : musicCollectionToDelete){
-	        			f = new File(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/"+(oneItemDelete.artist+" - "+oneItemDelete.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
+	        			f = new File(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/"+(oneItemDelete.artist+" - "+oneItemDelete.title+".mp3").replaceAll("[\\/:*?\"<>|]", ""));
 	        			if (f.exists()){
 	        				f.delete();
 	    					Intent intent =new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);

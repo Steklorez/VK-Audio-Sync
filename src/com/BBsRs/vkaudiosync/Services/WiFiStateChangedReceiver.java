@@ -32,7 +32,7 @@ public class WiFiStateChangedReceiver extends BroadcastReceiver {
 		//set up preferences
         sPref = PreferenceManager.getDefaultSharedPreferences(context);
         
-        //start aus service only if AUS is enabled by users preferences and if wifi is disconntected
+        //start aus service only if AUS is enabled by users preferences
         if (sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, true)){
         	
             SupplicantState supState;

@@ -1,5 +1,7 @@
 package com.BBsRs.vkaudiosync;
 
+import java.io.File;
+
 import net.rdrei.android.dirchooser.DirectoryChooserFragment;
 
 import org.holoeverywhere.app.Activity;
@@ -26,7 +28,14 @@ public class DirChooseActivity extends Activity implements DirectoryChooserFragm
         //set up preferences
         sPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         
-        mDialog = DirectoryChooserFragment.newInstance(getResources().getString(R.string.app_name), sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/");
+        //create dir if still doesnt exist
+        File root = new File (sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/");               
+        File dir = new File (root.getAbsolutePath());
+        if(dir.exists()==false) {
+             dir.mkdirs();
+        }
+        
+        mDialog = DirectoryChooserFragment.newInstance(getResources().getString(R.string.app_name), sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/");
         mDialog.show(getFragmentManager(), null);
     }
 

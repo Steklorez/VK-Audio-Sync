@@ -83,7 +83,6 @@ public class DownloadService extends Service {
     /*----------------------------VK API-----------------------------*/
 	
 	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -144,7 +143,6 @@ public class DownloadService extends Service {
 			try {
 				sPref.edit().putString(Constants.SUCCESSFULLY_DOWNLOADED, ObjectSerializer.serialize(musicCollectionSuccessfullyDownloaded)).commit();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			// define sound URI, the sound to be played when there's a notification
@@ -230,7 +228,6 @@ public class DownloadService extends Service {
 						if (musicCollection==null)
 				       		musicCollection = new ArrayList<MusicCollection>();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					
@@ -311,7 +308,7 @@ public class DownloadService extends Service {
 		Intent i;
 
 		   try {
-		           File root = new File (sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/");               
+		           File root = new File (sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/");               
 
 		           File dir = new File (root.getAbsolutePath());
 		           if(dir.exists()==false) {

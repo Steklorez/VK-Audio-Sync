@@ -44,7 +44,7 @@ public class SettingsFragment extends PreferenceFragment {
         sPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         
         chooseDir = (Preference) findPreference ("preference_folder");
-        chooseDir.setSummary(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/");
+        chooseDir.setSummary(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/");
         chooseDir.setOnPreferenceClickListener(new OnPreferenceClickListener(){
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
@@ -154,7 +154,7 @@ public class SettingsFragment extends PreferenceFragment {
 		getSupportActionBar().setSubtitle(null);
 		
 		sPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		chooseDir.setSummary(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music")+"/");
+		chooseDir.setSummary(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/");
 
 		updateViews();
 

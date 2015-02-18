@@ -149,8 +149,8 @@
         <item>Unlimited</item>
     </string-array>
     
-    <string name="prefs_what_todo_reach_max_size">What todo when your music library reach max size?</string>
-    <string name="prefs_what_todo_reach_max_size_default_value">0</string>
+    <string name="prefs_what_todo_reach_max_size">What do when reach max size?</string>
+    <string name="prefs_what_todo_reach_max_size_default_value">1</string>
     
     <string-array name="prefs_what_todo_reach_max_size_entry_values">
         <item>0</item>

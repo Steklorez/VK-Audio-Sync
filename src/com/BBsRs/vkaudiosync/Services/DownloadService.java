@@ -342,6 +342,7 @@ public class DownloadService extends Service {
 	       				   .setSmallIcon(R.drawable.ic_menu_download_disabled)
 	       				   .setContentIntent(contentIntent)
 	       				   .setOngoing(false)
+	       				   .setAutoCancel(true)
 	       				   .setProgress(0, 0, false);
 	       				   mNotificationManager.notify(NotID, mBuilder.build());
 	       				   NotID++;
@@ -354,6 +355,7 @@ public class DownloadService extends Service {
 		       				   .setSmallIcon(R.drawable.ic_menu_download_disabled)
 		       				   .setContentIntent(contentIntent)
 		       				   .setOngoing(false)
+		       				   .setAutoCancel(true)
 		       				   .setProgress(0, 0, false);
 		       				   mNotificationManager.notify(NotID, mBuilder.build());
 		       				   NotID++;
@@ -379,6 +381,7 @@ public class DownloadService extends Service {
 			       		   		.setSmallIcon(R.drawable.ic_menu_download_disabled)
 			       		   		.setContentIntent(contentIntent)
 			       		   		.setOngoing(false)
+			       		   		.setAutoCancel(true)
 			       		   		.setProgress(0, 0, false);
 		       				   mNotificationManager.notify(NotID, mBuilder.build());
 		       				   NotID++;
@@ -417,6 +420,7 @@ public class DownloadService extends Service {
 		       			   .setSmallIcon(R.drawable.ic_menu_download_disabled)
 		       			   .setContentIntent(contentIntent)
 		       			   .setOngoing(false)
+		       			   .setAutoCancel(true)
 		       			   .setProgress(0, 0, false);
 		       			   mNotificationManager.notify(NotID, mBuilder.build());
 		       			   NotID++;
@@ -621,6 +625,7 @@ public class DownloadService extends Service {
 				   .setSmallIcon(R.drawable.ic_menu_download_disabled)
 				   .setContentIntent(contentIntent)
 				   .setOngoing(false)
+				   .setAutoCancel(true)
 				   .setProgress(0, 0, false);
 				   mNotificationManager.notify(NotID, mBuilder.build());
 				   NotID++;
@@ -706,6 +711,7 @@ public class DownloadService extends Service {
 		   .setSmallIcon(R.drawable.ic_menu_download_disabled)
 		   .setContentIntent(contentIntent)
 		   .setOngoing(false)
+		   .setAutoCancel(true)
 		   .setProgress(0, 0, false);
 		   mNotificationManager.notify(NotID, mBuilder.build());
 		   NotID++;

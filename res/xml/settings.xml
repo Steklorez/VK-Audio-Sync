@@ -12,6 +12,13 @@
             android:entryValues="@array/prefs_max_size_entry_values"
             android:key="preference_max_size"
             android:title="@string/prefs_max_size" />
+        <ListPreference
+            android:defaultValue="@string/prefs_what_todo_reach_max_size_default_value"
+            android:dialogTitle="@string/prefs_what_todo_reach_max_size"
+            android:entries="@array/prefs_what_todo_reach_max_size_values"
+            android:entryValues="@array/prefs_what_todo_reach_max_size_entry_values"
+            android:key="preference_what_todo_reach_max_size"
+            android:title="@string/prefs_what_todo_reach_max_size" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="preference_skip_big"

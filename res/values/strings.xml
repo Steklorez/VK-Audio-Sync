@@ -131,7 +131,7 @@
     <string name="prefs_max_size_too_huge">Chosen value is too huge by your phones storage (%f) Gb, we\'ll set to unlimited</string>
         
     <string-array name="prefs_max_size_entry_values">
-        <item>20971520</item>
+        <item>104857600</item>
         <item>1073741824</item>
         <item>2147483648</item>
         <item>4294967296</item>
@@ -140,13 +140,25 @@
         <item>0</item>
     </string-array>
     <string-array name="prefs_max_size_values">
-        <item>20 Mb</item>
+        <item>100 Mb</item>
         <item>1 Gb</item>
         <item>2 Gb</item>
         <item>4 Gb</item>
         <item>8 Gb</item>
         <item>16 Gb</item>
         <item>Unlimited</item>
+    </string-array>
+    
+    <string name="prefs_what_todo_reach_max_size">What todo when your music library reach max size?</string>
+    <string name="prefs_what_todo_reach_max_size_default_value">0</string>
+    
+    <string-array name="prefs_what_todo_reach_max_size_entry_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="prefs_what_todo_reach_max_size_values">
+        <item>Delete old files until there is the right space for a new download</item>
+        <item>Nothiing. Stop download, notify me, and I\'ll clean download directory or external storage by myself</item>
     </string-array>
     
     <string-array name="slider_menu">

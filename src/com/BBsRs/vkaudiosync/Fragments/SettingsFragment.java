@@ -32,7 +32,7 @@ public class SettingsFragment extends PreferenceFragment {
     SharedPreferences sPref;
     
     Preference chooseDir;
-    ListPreference ausFrequency, skipBigSize, skipBigLength, maxSize;
+    ListPreference ausFrequency, skipBigSize, skipBigLength, maxSize, reachMaxSize;
     CheckBoxPreference aus, ausWifi, skipBig;
     
 	@Override
@@ -88,6 +88,17 @@ public class SettingsFragment extends PreferenceFragment {
         skipBigSize = (ListPreference)findPreference(Constants.PREFERENCE_SKIP_BIG_SIZE);
         skipBigLength = (ListPreference)findPreference(Constants.PREFERENCE_SKIP_BIG_LENGTH);
         maxSize = (ListPreference)findPreference(Constants.PREFERENCE_MAX_SIZE);
+        reachMaxSize = (ListPreference)findPreference(Constants.PREFERENCE_WHAT_TODO_REACH_MAX_SIZE);
+        
+        reachMaxSize.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+			@Override
+			public boolean onPreferenceChange(Preference preference,
+					Object newValue) {
+				reachMaxSize.setValue((String) newValue);
+				updateViews();
+				return false;
+			}
+        });
         
         maxSize.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
 			@Override
@@ -217,6 +228,15 @@ public class SettingsFragment extends PreferenceFragment {
 		for (String summaryValue : getActivity().getResources().getStringArray(R.array.prefs_max_size_entry_values)){
 			if (summaryValue.equals(sPref.getString(Constants.PREFERENCE_MAX_SIZE, getString(R.string.prefs_max_size_default_value)))){
 				maxSize.setSummary(getActivity().getResources().getStringArray(R.array.prefs_max_size_values)[index]);
+				break;
+			}
+			index++;
+		}
+		
+		index=0;
+		for (String summaryValue : getActivity().getResources().getStringArray(R.array.prefs_what_todo_reach_max_size_entry_values)){
+			if (summaryValue.equals(sPref.getString(Constants.PREFERENCE_WHAT_TODO_REACH_MAX_SIZE, getString(R.string.prefs_what_todo_reach_max_size_default_value)))){
+				reachMaxSize.setSummary(getActivity().getResources().getStringArray(R.array.prefs_what_todo_reach_max_size_values)[index]);
 				break;
 			}
 			index++;

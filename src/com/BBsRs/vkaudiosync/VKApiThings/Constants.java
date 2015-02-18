@@ -83,5 +83,6 @@ public class Constants {
 	public static final String PREFERENCE_REVERSE_DOWNLOADING = "preference_reverse_downloading";
 	public static final String PREFERENCE_NOTIFY_RESULT = "preference_notifiy_result";
 	public static final String PREFERENCE_MAX_SIZE = "preference_max_size";
+	public static final String PREFERENCE_WHAT_TODO_REACH_MAX_SIZE = "preference_what_todo_reach_max_size";
 	
 }

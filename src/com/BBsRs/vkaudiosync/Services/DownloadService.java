@@ -11,6 +11,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
@@ -142,6 +143,7 @@ public class DownloadService extends Service {
 		if ((sPref.getBoolean(Constants.PREFERENCE_NOTIFY_RESULT, true)) && (!(musicCollectionSuccessfullyDownloaded.size()==0 && musicCollectionSuccessfullyDeleted.size()==0))){
 			try {
 				sPref.edit().putString(Constants.SUCCESSFULLY_DOWNLOADED, ObjectSerializer.serialize(musicCollectionSuccessfullyDownloaded)).commit();
+				sPref.edit().putString(Constants.SUCCESSFULLY_DELETED, ObjectSerializer.serialize(musicCollectionSuccessfullyDeleted)).commit();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -368,16 +370,33 @@ public class DownloadService extends Service {
 		       		   if (realSizeDirectory+((long)lenghtOfFile*2)>maxSizeDirectory){
 		       			   Log.d("DownloadManager", String.format("No free space by users preferences. We need: %f Mb We have: %f Mb", (double)((long)lenghtOfFile*2)/1024/1024, (double)(maxSizeDirectory-realSizeDirectory)/1024/1024));
 		       			   
-		       			   isServiceStopped = true;
+		       			   if (sPref.getString(Constants.PREFERENCE_WHAT_TODO_REACH_MAX_SIZE, getString(R.string.prefs_what_todo_reach_max_size_default_value)).contains("1")){
+		       				   //notify if just notify
+		       				   isServiceStopped = true;
 			       		   
-			       		   mBuilder.setContentTitle(getApplicationContext().getResources().getString(R.string.no_free_space))
-			       		   .setContentText(getResources().getString(R.string.no_free_space_user_msg))
-			       		   .setSmallIcon(R.drawable.ic_menu_download_disabled)
-			       		   .setContentIntent(contentIntent)
-			       		   .setOngoing(false)
-			       		   .setProgress(0, 0, false);
-			       		   mNotificationManager.notify(NotID, mBuilder.build());
-			       		   NotID++;
+		       				   mBuilder.setContentTitle(getApplicationContext().getResources().getString(R.string.no_free_space))
+			       		   		.setContentText(getResources().getString(R.string.no_free_space_user_msg))
+			       		   		.setSmallIcon(R.drawable.ic_menu_download_disabled)
+			       		   		.setContentIntent(contentIntent)
+			       		   		.setOngoing(false)
+			       		   		.setProgress(0, 0, false);
+		       				   mNotificationManager.notify(NotID, mBuilder.build());
+		       				   NotID++;
+		       			   } else {
+		       				   //delete old files
+		       				   while (realSizeDirectory+((long)lenghtOfFile*2)>maxSizeDirectory){
+		       					   File fileToDelete = getOldestFile(root, null);
+		       					   if (fileToDelete!=null){
+		       						   	if (fileToDelete.exists())
+		       						   		fileToDelete.delete();
+		       					   		musicCollectionSuccessfullyDeleted.add(new MusicCollection(1, 0, fileToDelete.getName().substring(0, fileToDelete.getName().indexOf(" - ")), fileToDelete.getName().substring(fileToDelete.getName().indexOf(" - ")+3, fileToDelete.getName().length()-4), 0, null, null, 0, 0, 0));
+		       					   		Log.d("DownloadManager", String.format("We are deleted oldest file: %s", fileToDelete.getName()));
+		       					   		realSizeDirectory = dirSize(root);
+		       					   } else 
+		       						    break;
+		       				   }
+		       				   
+		       			   }
 		       		   }
 		       	   }
 		       	   
@@ -387,17 +406,34 @@ public class DownloadService extends Service {
 		       	   
 		       	   if ((long)lenghtOfFile*2 > sdAvailSize){
 		       		   Log.d("DownloadManager", "no free space, avail only " + sdAvailSize);
-		       		
-		       		   isServiceStopped = true;
 		       		   
-		       		   mBuilder.setContentTitle(getApplicationContext().getResources().getString(R.string.no_free_space))
-		       		   .setContentText(getResources().getString(R.string.no_free_space_msg))
-		       		   .setSmallIcon(R.drawable.ic_menu_download_disabled)
-		       		   .setContentIntent(contentIntent)
-		       		   .setOngoing(false)
-		       		   .setProgress(0, 0, false);
-		       		   mNotificationManager.notify(NotID, mBuilder.build());
-		       		   NotID++;
+		       		   if (sPref.getString(Constants.PREFERENCE_WHAT_TODO_REACH_MAX_SIZE, getString(R.string.prefs_what_todo_reach_max_size_default_value)).contains("1")){
+		       			   //notify if just notify
+		       		
+		       			   isServiceStopped = true;
+		       		   
+		       			   mBuilder.setContentTitle(getApplicationContext().getResources().getString(R.string.no_free_space))
+		       			   .setContentText(getResources().getString(R.string.no_free_space_msg))
+		       			   .setSmallIcon(R.drawable.ic_menu_download_disabled)
+		       			   .setContentIntent(contentIntent)
+		       			   .setOngoing(false)
+		       			   .setProgress(0, 0, false);
+		       			   mNotificationManager.notify(NotID, mBuilder.build());
+		       			   NotID++;
+		       		} else {
+	       				   //delete old files
+	       				   while (realSizeDirectory+((long)lenghtOfFile*2)>maxSizeDirectory){
+	       					   File fileToDelete = getOldestFile(root, null);
+	       					   if (fileToDelete!=null){
+	       						   	if (fileToDelete.exists())
+	       						   		fileToDelete.delete();
+	       					   		musicCollectionSuccessfullyDeleted.add(new MusicCollection(1, 0, fileToDelete.getName().substring(0, fileToDelete.getName().indexOf(" - ")), fileToDelete.getName().substring(fileToDelete.getName().indexOf(" - ")+3, fileToDelete.getName().length()-4), 0, null, null, 0, 0, 0));
+	       					   		Log.d("DownloadManager", String.format("We are deleted oldest file: %s", fileToDelete.getName()));
+	       					   		realSizeDirectory = dirSize(root);
+	       					   } else 
+	       						    break;
+	       				   }
+	       			   }
 		       	   }
 		           /*
 		            * Define InputStreams to read from the URLConnection.
@@ -612,6 +648,25 @@ public class DownloadService extends Service {
 		   }
 		   
 
+		}
+	
+	/**
+	 * Return the oldest file in a directory
+	 */
+	 private File getOldestFile(File parentDir, File parentOldest) {
+		 	File oldest = parentOldest;
+		 	if (oldest == null) if (parentDir.listFiles().length!=0) oldest = parentDir.listFiles()[0]; else return null;
+		    File[] files = parentDir.listFiles();
+		    for (File file : files) {
+		        if (file.isDirectory()) {
+		            oldest = getOldestFile(file, oldest);
+		        } else {
+		            if(file.getName().endsWith(".mp3") && file.lastModified()<oldest.lastModified()){
+		            	oldest = file;
+		            }
+		        }
+		    }
+		    return oldest;
 		}
 	
 	/**

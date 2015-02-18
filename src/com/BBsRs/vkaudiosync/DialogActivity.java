@@ -12,6 +12,7 @@ import org.holoeverywhere.preference.SharedPreferences;
 import org.holoeverywhere.widget.ListView;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -77,10 +78,15 @@ public class DialogActivity extends Activity {
 		musicCollectionCommonList.addAll(musicCollectionSuccessfullyDeleted);
 		
 		Log.i(LOG_TAG, "Deleted: " + musicCollectionSuccessfullyDeleted.size()+" Downloaded: "+musicCollectionSuccessfullyDownloaded.size());
+		
+		if (musicCollectionSuccessfullyDeleted.size()==0 && musicCollectionSuccessfullyDownloaded.size()==0){
+			startActivity(new Intent(this, ContentShowActivity.class));
+			finish();
+		}
 	    
 	    //showing dialog
 		final DialogFragment alertDialog = new DialogFragment(){
-  			private View makeNumberPicker() {
+  			public View makeNumberPicker() {
   		        View content = getLayoutInflater().inflate(
   		                R.layout.dialog_content);
   		        ListView musicList = (ListView)content.findViewById(R.id.listView1);

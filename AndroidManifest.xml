@@ -57,6 +57,7 @@
 
         <activity
             android:name="DialogActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/Holo.Theme.Custom.Transparent" >
         </activity>
 

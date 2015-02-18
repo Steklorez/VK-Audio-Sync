@@ -360,8 +360,31 @@ public class DownloadService extends Service {
 		       		   }
 		       	   }
 		       	   
+		       	   //here we check if we reach maxSize directory by users preferences
+		       	   long maxSizeDirectory = Long.parseLong(sPref.getString(Constants.PREFERENCE_MAX_SIZE, getString(R.string.prefs_max_size_default_value)));
+		       	   long realSizeDirectory = dirSize(root);
+		       	   
+		       	   if (maxSizeDirectory!=0){
+		       		   if (realSizeDirectory+((long)lenghtOfFile*2)>maxSizeDirectory){
+		       			   Log.d("DownloadManager", String.format("No free space by users preferences. We need: %f Mb We have: %f Mb", (double)((long)lenghtOfFile*2)/1024/1024, (double)(maxSizeDirectory-realSizeDirectory)/1024/1024));
+		       			   
+		       			   isServiceStopped = true;
+			       		   
+			       		   mBuilder.setContentTitle(getApplicationContext().getResources().getString(R.string.no_free_space))
+			       		   .setContentText(getResources().getString(R.string.no_free_space_user_msg))
+			       		   .setSmallIcon(R.drawable.ic_menu_download_disabled)
+			       		   .setContentIntent(contentIntent)
+			       		   .setOngoing(false)
+			       		   .setProgress(0, 0, false);
+			       		   mNotificationManager.notify(NotID, mBuilder.build());
+			       		   NotID++;
+		       		   }
+		       	   }
+		       	   
+		       	   //here we check if we have needed free space on external storage
 		       	   StatFs stat = new StatFs(root.getPath());
 		       	   long sdAvailSize = (long)stat.getAvailableBlocks() * (long)stat.getBlockSize();
+		       	   
 		       	   if ((long)lenghtOfFile*2 > sdAvailSize){
 		       		   Log.d("DownloadManager", "no free space, avail only " + sdAvailSize);
 		       		
@@ -590,6 +613,28 @@ public class DownloadService extends Service {
 		   
 
 		}
+	
+	/**
+	 * Return the size of a directory in bytes
+	 */
+	private static long dirSize(File dir) {
+
+	    if (dir.exists()) {
+	        long result = 0;
+	        File[] fileList = dir.listFiles();
+	        for(int i = 0; i < fileList.length; i++) {
+	            // Recursive call if it's a directory
+	            if(fileList[i].isDirectory()) {
+	                result += dirSize(fileList [i]);
+	            } else {
+	                // Sum the file size in bytes
+	                result += fileList[i].length();
+	            }
+	        }
+	        return result; // return the file size
+	    }
+	    return 0;
+	}
 	
 	public void noConnectionError(File file){
 		isServiceStopped = true;

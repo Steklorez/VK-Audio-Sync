@@ -51,6 +51,7 @@
     <string name="delete_all_msg">List is already empty</string>
     <string name="no_free_space">No more free space available.</string>
     <string name="no_free_space_msg">Clean storage and try again.</string>
+    <string name="no_free_space_user_msg">Clean download directory and try again.</string>
     <string name="no_conn">No internet connection available.</string>
     <string name="no_conn_msg">Check your connection and try again.</string>
     <string name="no_file">File:</string>
@@ -124,6 +125,29 @@
     
     <string name="prefs_revers_downloading">Revers downloading queue</string>
     <string name="prefs_revers_downloading_summary">If turned on music order in last added list will be just like on your vk page.</string>
+    
+    <string name="prefs_max_size">Maximum size of download directory</string>
+    <string name="prefs_max_size_default_value">0</string>
+    <string name="prefs_max_size_too_huge">Chosen value is too huge by your phones storage (%f) Gb, we\'ll set to unlimited</string>
+        
+    <string-array name="prefs_max_size_entry_values">
+        <item>20971520</item>
+        <item>1073741824</item>
+        <item>2147483648</item>
+        <item>4294967296</item>
+        <item>8589934592</item>
+        <item>17179869184</item>
+        <item>0</item>
+    </string-array>
+    <string-array name="prefs_max_size_values">
+        <item>20 Mb</item>
+        <item>1 Gb</item>
+        <item>2 Gb</item>
+        <item>4 Gb</item>
+        <item>8 Gb</item>
+        <item>16 Gb</item>
+        <item>Unlimited</item>
+    </string-array>
     
     <string-array name="slider_menu">
         <item>MUSIC</item>

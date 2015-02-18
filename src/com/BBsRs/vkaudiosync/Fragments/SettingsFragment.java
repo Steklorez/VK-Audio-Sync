@@ -17,6 +17,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StatFs;
 
 import com.BBsRs.vkaudiosync.DirChooseActivity;
 import com.BBsRs.vkaudiosync.LoaderActivity;
@@ -31,7 +32,7 @@ public class SettingsFragment extends PreferenceFragment {
     SharedPreferences sPref;
     
     Preference chooseDir;
-    ListPreference ausFrequency, skipBigSize, skipBigLength;
+    ListPreference ausFrequency, skipBigSize, skipBigLength, maxSize;
     CheckBoxPreference aus, ausWifi, skipBig;
     
 	@Override
@@ -86,9 +87,28 @@ public class SettingsFragment extends PreferenceFragment {
         skipBig = (CheckBoxPreference) findPreference(Constants.PREFERENCE_SKIP_BIG);
         skipBigSize = (ListPreference)findPreference(Constants.PREFERENCE_SKIP_BIG_SIZE);
         skipBigLength = (ListPreference)findPreference(Constants.PREFERENCE_SKIP_BIG_LENGTH);
+        maxSize = (ListPreference)findPreference(Constants.PREFERENCE_MAX_SIZE);
+        
+        maxSize.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+			@Override
+			public boolean onPreferenceChange(Preference preference,
+					Object newValue) {
+				
+				StatFs stat = new StatFs(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/");
+		       	long sdAvailSize = (long)stat.getBlockCount() * (long)stat.getBlockSize();
+				
+		       	if (Long.valueOf((String) newValue)>=sdAvailSize){
+		       		maxSize.setValue("0");
+		       		Toast.makeText(getActivity(), String.format(getString(R.string.prefs_max_size_too_huge), (double) sdAvailSize/1024/1024/1024), Toast.LENGTH_LONG).show();
+		       	} else { 
+		       		maxSize.setValue((String) newValue);
+		       	}
+				updateViews();
+				return false;
+			}
+        });
         
         skipBig.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
-
 			@Override
 			public boolean onPreferenceChange(Preference preference,
 					Object newValue) {
@@ -96,7 +116,6 @@ public class SettingsFragment extends PreferenceFragment {
 				updateViews();
 				return false;
 			}
-        	
         });
         
         ausFrequency.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
@@ -189,6 +208,15 @@ public class SettingsFragment extends PreferenceFragment {
 		for (String summaryValue : getActivity().getResources().getStringArray(R.array.prefs_skip_big_length_entry_values)){
 			if (summaryValue.equals(sPref.getString(Constants.PREFERENCE_SKIP_BIG_LENGTH, getString(R.string.prefs_skip_big_length_default_value)))){
 				skipBigLength.setSummary(getActivity().getResources().getStringArray(R.array.prefs_skip_big_length_values)[index]);
+				break;
+			}
+			index++;
+		}
+		
+		index=0;
+		for (String summaryValue : getActivity().getResources().getStringArray(R.array.prefs_max_size_entry_values)){
+			if (summaryValue.equals(sPref.getString(Constants.PREFERENCE_MAX_SIZE, getString(R.string.prefs_max_size_default_value)))){
+				maxSize.setSummary(getActivity().getResources().getStringArray(R.array.prefs_max_size_values)[index]);
 				break;
 			}
 			index++;

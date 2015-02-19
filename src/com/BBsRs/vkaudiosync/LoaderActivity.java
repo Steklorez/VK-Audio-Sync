@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 
+import com.BBsRs.Introduce.IntroduceOne;
 import com.BBsRs.vkaudiosync.Services.AutomaticSynchronizationService;
 import com.BBsRs.vkaudiosync.VKApiThings.Account;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
@@ -36,23 +37,27 @@ public class LoaderActivity extends Activity {
 
 		@Override
 		public void onFinish() {
-			if(api!=null){
-
-				try {
-		        	Intent refresh = new Intent(getApplicationContext(), ContentShowActivity.class);
-  			        refresh.putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT);
-  					//restart activity
-  					startActivity(refresh);   
-  					// stop curr activity
-  					finish();
-		        } catch (Exception e) {
-		            e.printStackTrace();
-		        }
-	        }else{
-	        	Intent intent = new Intent();
-	            intent.setClass(getApplicationContext(), LoginActivity.class);
-	            startActivityForResult(intent, REQUEST_LOGIN);
-	        }
+//			if(api!=null){
+//
+//				try {
+//		        	Intent refresh = new Intent(getApplicationContext(), ContentShowActivity.class);
+//  			        refresh.putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT);
+//  					//restart activity
+//  					startActivity(refresh);   
+//  					// stop curr activity
+//  					finish();
+//		        } catch (Exception e) {
+//		            e.printStackTrace();
+//		        }
+//	        }else{
+//	        	Intent intent = new Intent();
+//	            intent.setClass(getApplicationContext(), LoginActivity.class);
+//	            startActivityForResult(intent, REQUEST_LOGIN);
+//	        }
+			
+			Intent intent = new Intent();
+            intent.setClass(getApplicationContext(), IntroduceOne.class);
+            startActivity(intent);
 		}
 
 		@Override

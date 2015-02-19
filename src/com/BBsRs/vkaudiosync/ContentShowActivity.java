@@ -52,7 +52,6 @@ public class ContentShowActivity extends Activity {
         
 	    //init slider menu
         sliderMenu = addonSlider().obtainDefaultSliderMenu(R.layout.menu);
-        addonSlider().setOverlayActionBar(false);
         
         //set up preferences
         sPref = PreferenceManager.getDefaultSharedPreferences(this);

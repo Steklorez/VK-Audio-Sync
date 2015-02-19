@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    
+    <string name="intro_1">Welcome to \nVK Music Sync</string>
+    <string name="intro_2">Sign in with VK</string>
+    <string name="intro_3">Hi, %s!\nWe are glad to see you here. With this app you can instantly and automatically sync your music on device with your VK account.\nLet ask few bases questions before we start.\n\nWhere you want download music?</string>
+    <string name="intro_4">What you think about maximum music library folder size ?</string>
+    <string name="intro_5">1 Gb</string>
+    <string name="intro_6">2 Gb</string>
+    <string name="intro_7">4 Gb</string>
+    <string name="intro_8">8 Gb</string>
+    <string name="intro_9">16 Gb</string>
+    <string name="intro_10">Unlimited</string>
+    
+    <string name="intro_next">Next</string>
+    <string name="intro_back">Back</string>
+    <string name="intro_start">Start</string>
+    
     <string name="error_message">Check your connection and try again.</string>
     <string name="error_message_audio_disabled_user_wall">Audio seems been disabled on this wall, try check main page of this user.</string>
     <string name="error_message_audio_disabled_user_main">Audio seems been disabled on this page, try check wall of this user.</string>
@@ -70,14 +85,12 @@
     <string name="prefs_aus_freq_default_value">3600000</string>
 
     <string-array name="prefs_aus_freq_entry_values">
-        <item>60000</item>
         <item>1800000</item>
         <item>3600000</item>
         <item>7200000</item>
         <item>10800000</item>
     </string-array>
     <string-array name="prefs_aus_freq_values">
-        <item>1 minute</item>
         <item>30 minutes</item>
         <item>1 hour</item>
         <item>2 hours</item>
@@ -131,7 +144,6 @@
     <string name="prefs_max_size_too_huge">Chosen value is too huge by your phones storage (%f) Gb, we\'ll set to unlimited</string>
         
     <string-array name="prefs_max_size_entry_values">
-        <item>104857600</item>
         <item>1073741824</item>
         <item>2147483648</item>
         <item>4294967296</item>
@@ -140,7 +152,6 @@
         <item>0</item>
     </string-array>
     <string-array name="prefs_max_size_values">
-        <item>100 Mb</item>
         <item>1 Gb</item>
         <item>2 Gb</item>
         <item>4 Gb</item>
@@ -150,7 +161,7 @@
     </string-array>
     
     <string name="prefs_what_todo_reach_max_size">What do when reach max size?</string>
-    <string name="prefs_what_todo_reach_max_size_default_value">1</string>
+    <string name="prefs_what_todo_reach_max_size_default_value">0</string>
     
     <string-array name="prefs_what_todo_reach_max_size_entry_values">
         <item>0</item>

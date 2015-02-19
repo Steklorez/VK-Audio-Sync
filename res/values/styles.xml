@@ -36,6 +36,7 @@
         <item name="android:buttonStyle">@style/Button.Custom</item>
         <item name="android:imageButtonStyle">@style/ImageButton.Custom</item>
         <item name="android:homeAsUpIndicator">@drawable/apptheme_ic_navigation_drawer</item>
+        <item name="android:radioButtonStyle">@style/RadioButtonAppTheme</item>
     </style>
 
     <style name="Widget.AppCompat.Base.ActionBar.Solid.Custom" parent="Widget.AppCompat.Base.ActionBar.Solid">
@@ -69,6 +70,10 @@
 
     <style name="ImageButton.Custom" parent="android:Widget.ImageButton">
         <item name="android:background">@drawable/apptheme_btn_default_holo_dark</item>
+    </style>
+
+    <style name="RadioButtonAppTheme" parent="android:Widget.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/apptheme_btn_radio_holo_light</item>
     </style>
 
 </resources>

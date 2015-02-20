@@ -9,8 +9,17 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="Holo.Theme.Custom.NoActionBar.Introduce" parent="Holo.Theme.Custom.NoActionBar">
+    <style name="Holo.Theme.Light.Custom.NoActionBar.Introduce" parent="Holo.Theme.Light.Custom.NoActionBar">
         <item name="android:windowBackground">@color/background_intro</item>
+    </style>
+    
+    <style name="Holo.Theme.Light.Custom.NoActionBar" parent="Holo.Theme.Light.Custom">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="windowContentOverlay">@null</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="Holo.Theme.Custom.NoActionBar" parent="Holo.Theme.Custom">
@@ -29,6 +38,18 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="Holo.Theme.Light.Custom" parent="Holo.Theme.Light">
+        <item name="android:windowBackground">@drawable/ic_background</item>
+        <item name="actionBarStyle">@style/Widget.AppCompat.Base.ActionBar.Solid.Custom</item>
+        <item name="android:actionBarStyle">@style/Widget.AppCompat.Base.ActionBar.Solid.Custom</item>
+        <item name="android:checkboxStyle">@style/Holo.CompoundButton.CheckBox.Custom</item>
+        <item name="android:listSelector">@drawable/apptheme_list_selector_holo_dark</item>
+        <item name="android:buttonStyle">@style/Button.Custom</item>
+        <item name="android:imageButtonStyle">@style/ImageButton.Custom</item>
+        <item name="android:homeAsUpIndicator">@drawable/apptheme_ic_navigation_drawer</item>
+        <item name="android:radioButtonStyle">@style/RadioButtonAppTheme</item>
     </style>
 
     <style name="Holo.Theme.Custom" parent="Holo.Theme">

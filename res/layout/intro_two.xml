@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/intro_btn_default"
-            android:text="@string/intro_next"
+            android:text="@string/intro_okay"
             android:textColor="@color/text_color_white" />
 
     </LinearLayout>
@@ -51,6 +51,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/intro_button_padding"
+            android:layout_marginLeft="@dimen/intro_button_padding"
+            android:layout_marginRight="@dimen/intro_button_padding"
             android:gravity="center"
             android:text="@string/intro_user_personal_welcome"
             android:textAppearance="?android:attr/textAppearanceLarge"

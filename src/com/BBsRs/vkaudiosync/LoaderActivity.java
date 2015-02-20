@@ -37,27 +37,23 @@ public class LoaderActivity extends Activity {
 
 		@Override
 		public void onFinish() {
-//			if(api!=null){
-//
-//				try {
-//		        	Intent refresh = new Intent(getApplicationContext(), ContentShowActivity.class);
-//  			        refresh.putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT);
-//  					//restart activity
-//  					startActivity(refresh);   
-//  					// stop curr activity
-//  					finish();
-//		        } catch (Exception e) {
-//		            e.printStackTrace();
-//		        }
-//	        }else{
-//	        	Intent intent = new Intent();
-//	            intent.setClass(getApplicationContext(), LoginActivity.class);
-//	            startActivityForResult(intent, REQUEST_LOGIN);
-//	        }
-			
-			Intent intent = new Intent();
-            intent.setClass(getApplicationContext(), IntroduceOne.class);
-            startActivity(intent);
+			if(api!=null){
+
+				try {
+		        	Intent refresh = new Intent(getApplicationContext(), ContentShowActivity.class);
+  			        refresh.putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT);
+  					//restart activity
+  					startActivity(refresh);   
+  					// stop curr activity
+  					finish();
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		        }
+	        }else{
+	        	Intent intent = new Intent();
+	            intent.setClass(getApplicationContext(), IntroduceOne.class);
+	            startActivity(intent);
+	        }
 		}
 
 		@Override
@@ -85,12 +81,13 @@ public class LoaderActivity extends Activity {
 			if (!isMyServiceRunning(AutomaticSynchronizationService.class) && sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, true)){
         		getApplicationContext().startService(new Intent(getApplicationContext(), AutomaticSynchronizationService.class));
         	}
+			CountDownTimer = new timer(3000, 1000); // timer to 2 seconds (tick one // second)
+			CountDownTimer.start(); // start timer
+		} else{
+			Intent intent = new Intent();
+            intent.setClass(getApplicationContext(), IntroduceOne.class);
+            startActivity(intent);
 		}
-
-		CountDownTimer = new timer(3000, 1000); // timer to 2 seconds (tick one
-												// second)
-		CountDownTimer.start(); // start timer
-		// TODO Auto-generated method stub
 	}
 	
 	@Override

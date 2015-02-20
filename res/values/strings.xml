@@ -14,9 +14,20 @@
     <string name="intro_size_16">16 Gb</string>
     <string name="intro_size_0">Unlimited</string>
     
+    <string name="intro_what_todo_sized">Okay, and what we should do when your download directory reached %s size, or phones storage space ends?</string>
+    <string name="intro_what_todo_unlimited">Okay, and what we should do when phones storage space ends?</string>
+    <string name="intro_what_todo_1">Delete old music until there is the right space for a new download</string>
+    <string name="intro_what_todo_2">Nothiing. Stop download, notify me, and I\'ll clean download directory or external storage by myself</string>
+    
+    <string name="intro_almost_done">Almost done!</string>
+    <string name="intro_aus_question">Do you want to enable automatic synchronization with your main music list?</string>
+    <string name="intro_aus_question_help">With this feature all new added music since this moment will be automatically downloaded right into your phone, and additionally music will be deleted if you delete it on your page</string>
+    <string name="intro_aus_frequency">With which frequency check music list?</string>
+    
     <string name="intro_next">Next</string>
+    <string name="intro_okay">Okay</string>
     <string name="intro_back">Back</string>
-    <string name="intro_start">Start</string>
+    <string name="intro_start">Start!</string>
     
     <string name="error_message">Check your connection and try again.</string>
     <string name="error_message_audio_disabled_user_wall">Audio seems been disabled on this wall, try check main page of this user.</string>
@@ -170,7 +181,7 @@
         <item>1</item>
     </string-array>
     <string-array name="prefs_what_todo_reach_max_size_values">
-        <item>Delete old files until there is the right space for a new download</item>
+        <item>Delete old music until there is the right space for a new download</item>
         <item>Nothiing. Stop download, notify me, and I\'ll clean download directory or external storage by myself</item>
     </string-array>
     

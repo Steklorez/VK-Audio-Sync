@@ -37,4 +37,94 @@
         android:layout_margin="@dimen/intro_button_padding"
         android:src="@drawable/one_of_five_5" />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_margin="@dimen/intro_button_padding"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/intro_button_padding"
+            android:gravity="center"
+            android:text="@string/intro_almost_done"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/text_color_gray_intro" />
+
+        <TextView
+            android:id="@+id/text_question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:text="@string/intro_aus_question"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/text_color_gray_intro" />
+
+        <ImageView
+            android:id="@+id/ImageView01"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/intro_button_padding"
+            android:layout_marginLeft="@dimen/intro_button_padding"
+            android:layout_marginRight="@dimen/intro_button_padding"
+            android:scaleType="fitXY"
+            android:src="@color/text_color_gray" />
+
+        <CheckBox
+            android:id="@+id/aus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/prefs_aus"
+            android:textColor="@color/text_color_gray_intro" />
+
+        <CheckBox
+            android:id="@+id/ausWifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/prefs_aus_wifi"
+            android:textColor="@color/text_color_gray_intro" />
+
+        <TextView
+            android:id="@+id/TextView01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/intro_button_padding"
+            android:gravity="center_horizontal"
+            android:text="@string/intro_aus_frequency"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/text_color_gray_intro" />
+
+        <ImageView
+            android:id="@+id/ImageView02"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/intro_button_padding"
+            android:layout_marginLeft="@dimen/intro_button_padding"
+            android:layout_marginRight="@dimen/intro_button_padding"
+            android:scaleType="fitXY"
+            android:src="@color/text_color_gray" />
+
+        <Spinner
+            android:id="@+id/frequency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/prefs_aus_freq_values" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/intro_aus_question_help"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/text_color_gray_intro" />
+    </LinearLayout>
+
 </RelativeLayout>

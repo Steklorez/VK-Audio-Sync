@@ -37,4 +37,47 @@
         android:layout_margin="@dimen/intro_button_padding"
         android:src="@drawable/one_of_five_4" />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/intro_button_padding"
+        android:layout_centerVertical="true"
+        android:orientation="vertical" >
+        
+        <TextView
+            android:id="@+id/text_question_w"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:text="@string/intro_what_todo_sized"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/text_color_gray_intro" />
+
+        <ImageView
+            android:id="@+id/ImageView01"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/intro_button_padding"
+            android:layout_marginLeft="@dimen/intro_button_padding"
+            android:layout_marginRight="@dimen/intro_button_padding"
+            android:scaleType="fitXY"
+            android:src="@color/text_color_gray" />
+
+        <RadioButton
+            android:id="@+id/radioButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/intro_what_todo_1"
+            android:textColor="@color/text_color_gray_intro" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/intro_what_todo_2"
+            android:textColor="@color/text_color_gray_intro" />
+    </LinearLayout>
+
 </RelativeLayout>

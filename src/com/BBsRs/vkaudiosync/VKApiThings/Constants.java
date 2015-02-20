@@ -65,6 +65,7 @@ public class Constants {
 	
 	//shared preferences
 	public static final String USER_FIRST_NAME = "user_first_name";
+	public static final String USER_AVATAR = "user_avatar";
 	public static final String DOWNLOAD_DIRECTORY = "download_directory";
 	public static final String DOWNLOAD_SELECTION = "download_selection";
 	public static final String AUS_MAIN_LIST_BASE = "aus_main_list_base";

@@ -9,18 +9,21 @@ import org.holoeverywhere.widget.TextView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
-import com.BBsRs.vkaudiosync.DirChooseActivity;
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class IntroduceTwo extends Activity {
 
 	//preferences 
     SharedPreferences sPref;
     
-    TextView directoryText;
-
+    //with this options we will load images
+    DisplayImageOptions options ;
+    
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,24 +54,18 @@ public class IntroduceTwo extends Activity {
 			}
 		});
 	    
-	    Button directory = (Button)this.findViewById(R.id.directory);
-	    directoryText = (TextView)this.findViewById(R.id.directory_text);
-	    TextView message = (TextView)this.findViewById(R.id.text_message);
+	    //init image loader
+        options = new DisplayImageOptions.Builder()
+        .showStubImage(R.drawable.deactivated_100)
+        //.showImageForEmptyUri(R.drawable.logo)
+        .cacheOnDisc(true)	
+        .cacheInMemory(true)					
+        .build();
 	    
-	    directory.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				startActivity(new Intent(getApplicationContext(), DirChooseActivity.class));
-			}
-		});
+	    TextView name = (TextView)this.findViewById(R.id.text_name);
+	    ImageView userAvatar = (ImageView)this.findViewById(R.id.user_avatar);
 	    
-	    message.setText(String.format(getString(R.string.intro_3), sPref.getString(Constants.USER_FIRST_NAME, "Roman")));
+	    name.setText(String.format(getString(R.string.intro_user_personal_welcome), sPref.getString(Constants.USER_FIRST_NAME, "Undefined")));
+        ImageLoader.getInstance().displayImage(sPref.getString(Constants.USER_AVATAR, "http://vk.com/images/deactivated_100.gif"), userAvatar, options);
 	}
-	
-	@Override
-	public void onResume() {
-		super.onResume();
-		directoryText.setText(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/");
-	}
-
 }

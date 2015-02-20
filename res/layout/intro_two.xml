@@ -39,39 +39,42 @@
         android:src="@drawable/one_of_five_2" />
 
     <LinearLayout
+        android:id="@+id/msg_lt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:layout_margin="@dimen/intro_button_padding"
         android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/text_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="@string/intro_user_personal_welcome"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/text_color_gray_intro" />
 
         <TextView
             android:id="@+id/text_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/intro_button_padding"
             android:gravity="center_horizontal"
-            android:text="@string/intro_3"
+            android:text="@string/intro_user_personal_welcome_2"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/text_color_gray_intro" />
 
-        <Button
-            android:id="@+id/directory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/intro_btn_default"
-            android:text="@string/download_direcotry"
-            android:textColor="@color/text_color_white" />
-
-        <TextView
-            android:id="@+id/directory_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/text_color_gray_intro" />
-
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/user_avatar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_above="@+id/msg_lt"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/deactivated_100" />
 
 </RelativeLayout>

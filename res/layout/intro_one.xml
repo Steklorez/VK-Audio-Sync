@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="@string/intro_1"
+            android:text="@string/intro_welcome"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/text_color_gray_intro" />
     </LinearLayout>
@@ -36,8 +36,8 @@
         android:layout_margin="@dimen/intro_button_padding"
         android:background="@drawable/vk_btn_default"
         android:drawableLeft="@drawable/vk_logo"
-        android:textColor="@color/text_color_white" 
-        android:text="@string/intro_2" />
+        android:text="@string/intro_signin"
+        android:textColor="@color/text_color_white" />
 
     <ImageView
         android:id="@+id/imageView2"

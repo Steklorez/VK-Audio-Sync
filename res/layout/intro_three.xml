@@ -45,12 +45,49 @@
         android:layout_centerVertical="true"
         android:layout_margin="@dimen/intro_button_padding"
         android:orientation="vertical" >
+        
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="@string/intro_directory_question"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/text_color_gray_intro" />
+        
+        <Button
+            android:id="@+id/directory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/intro_btn_default"
+            android:text="@string/download_direcotry"
+            android:textColor="@color/text_color_white" />
+
+        <TextView
+            android:id="@+id/directory_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/text_color_gray_intro" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="@dimen/intro_button_padding"
+            android:scaleType="fitXY"
+            android:src="@color/text_color_gray" />
 
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/intro_4"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:text="@string/intro_size_question"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/text_color_gray_intro" />
 
@@ -58,35 +95,35 @@
             android:id="@+id/radioButton1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/intro_5"
+            android:text="@string/intro_size_1"
             android:textColor="@color/text_color_gray_intro" />
 
         <RadioButton
             android:id="@+id/radioButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/intro_6"
+            android:text="@string/intro_size_2"
             android:textColor="@color/text_color_gray_intro" />
 
         <RadioButton
             android:id="@+id/radioButton3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/intro_7"
+            android:text="@string/intro_size_4"
             android:textColor="@color/text_color_gray_intro" />
 
         <RadioButton
             android:id="@+id/radioButton4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/intro_8"
+            android:text="@string/intro_size_8"
             android:textColor="@color/text_color_gray_intro" />
 
         <RadioButton
             android:id="@+id/radioButton5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-			android:text="@string/intro_9"
+			android:text="@string/intro_size_16"
             android:textColor="@color/text_color_gray_intro"  />
 
         <RadioButton
@@ -94,7 +131,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="@string/intro_10"
+            android:text="@string/intro_size_0"
             android:textColor="@color/text_color_gray_intro" />
 
     </LinearLayout>

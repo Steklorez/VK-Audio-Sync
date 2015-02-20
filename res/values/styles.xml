@@ -9,6 +9,10 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="Holo.Theme.Custom.NoActionBar.Introduce" parent="Holo.Theme.Custom.NoActionBar">
+        <item name="android:windowBackground">@color/background_intro</item>
+    </style>
+
     <style name="Holo.Theme.Custom.NoActionBar" parent="Holo.Theme.Custom">
         <item name="android:windowContentOverlay">@null</item>
         <item name="windowContentOverlay">@null</item>

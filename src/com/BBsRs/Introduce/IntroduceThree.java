@@ -52,7 +52,7 @@ public class IntroduceThree extends Activity {
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(getApplicationContext(), IntroduceFour.class));
-				overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+				overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 				finish();
 			}
 		});
@@ -61,7 +61,7 @@ public class IntroduceThree extends Activity {
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(getApplicationContext(), IntroduceTwo.class));
-				overridePendingTransition(R.anim.push_left_out, R.anim.push_left_in);
+				overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 				finish();
 			}
 		});

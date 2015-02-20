@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
-import com.BBsRs.vkaudiosync.LoginActivity;
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.VKApiThings.Account;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
@@ -58,7 +57,7 @@ public class IntroduceOne extends Activity {
 				
 				//start second part
                 startActivity(new Intent(getApplicationContext(), IntroduceTwo.class));
-                overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
 			}
 		});
@@ -104,7 +103,7 @@ public class IntroduceOne extends Activity {
 	        public void run() {
 	        	//start second part
                 startActivity(new Intent(getApplicationContext(), IntroduceTwo.class));
-                overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
 	        }
 	    };

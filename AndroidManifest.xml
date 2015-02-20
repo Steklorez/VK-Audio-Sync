@@ -66,11 +66,11 @@
                 <action android:name="android.net.wifi.STATE_CHANGE" />
             </intent-filter>
         </receiver>
-        <activity android:name="com.BBsRs.Introduce.IntroduceOne" android:theme="@style/Holo.Theme.Custom.NoActionBar"></activity>
-        <activity android:name="com.BBsRs.Introduce.IntroduceTwo" android:theme="@style/Holo.Theme.Custom.NoActionBar"></activity>
-        <activity android:name="com.BBsRs.Introduce.IntroduceThree" android:theme="@style/Holo.Theme.Custom.NoActionBar"></activity>
-        <activity android:name="com.BBsRs.Introduce.IntroduceFour" android:theme="@style/Holo.Theme.Custom.NoActionBar"></activity>
-        <activity android:name="com.BBsRs.Introduce.IntroduceFive" android:theme="@style/Holo.Theme.Custom.NoActionBar"></activity>
+        <activity android:name="com.BBsRs.Introduce.IntroduceOne" android:theme="@style/Holo.Theme.Custom.NoActionBar.Introduce"></activity>
+        <activity android:name="com.BBsRs.Introduce.IntroduceTwo" android:theme="@style/Holo.Theme.Custom.NoActionBar.Introduce"></activity>
+        <activity android:name="com.BBsRs.Introduce.IntroduceThree" android:theme="@style/Holo.Theme.Custom.NoActionBar.Introduce"></activity>
+        <activity android:name="com.BBsRs.Introduce.IntroduceFour" android:theme="@style/Holo.Theme.Custom.NoActionBar.Introduce"></activity>
+        <activity android:name="com.BBsRs.Introduce.IntroduceFive" android:theme="@style/Holo.Theme.Custom.NoActionBar.Introduce"></activity>
     </application>
 
 </manifest>

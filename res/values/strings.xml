@@ -29,6 +29,22 @@
     <string name="intro_back">Back</string>
     <string name="intro_start">Start!</string>
     
+    <string name="about_version">0.7 alpha</string>
+    <string name="about_developer">Developer</string>
+    <string name="contacts_vk_1">Roman Gaitaev</string>
+    <string name="contacts_vk_2">vk.com/romzesrover</string>
+    <string name="contacts_vk_url">http://vk.com/romzesrover</string>
+    <string name="contacts_gmail_1">Gmail</string>
+    <string name="contacts_gmail_2">romzesrover@gmail.com</string>
+    <string name="contacts_gmail_url">mailto:romzesrover@gmail.com</string>
+    <string name="open_source_base">Open source project!</string>
+    <string name="open_source_base_1">GitHub</string>
+    <string name="open_source_base_2">github.com/RomzesRover/VK-Audio-Sync</string>
+    <string name="open_source_base_url">https://github.com/RomzesRover/VK-Audio-Sync</string>
+    <string name="group_vk_1">VK app community</string>
+    <string name="group_vk_2">vk.com/vkmusicsyncandroid</string>
+    <string name="group_vk_url">http://vk.com/club87972116</string>
+    
     <string name="error_message">Check your connection and try again.</string>
     <string name="error_message_audio_disabled_user_wall">Audio seems been disabled on this wall, try check main page of this user.</string>
     <string name="error_message_audio_disabled_user_main">Audio seems been disabled on this page, try check wall of this user.</string>
@@ -193,6 +209,7 @@
         <item>APPLICATION</item>
         <item>Download manager</item>
         <item>Settings</item>
+        <item>About</item>
     </string-array>
 
 </resources>

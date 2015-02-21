@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:holo="http://schemas.android.com/apk/res-auto" >
+
+    <Preference
+        android:icon="@drawable/ic_launcher"
+        android:selectable="false"
+        android:summary="@string/about_version"
+        android:title="@string/app_name" />
+    <Preference
+        android:icon="@drawable/logo_vk_com"
+        android:key="open_group"
+        android:summary="@string/group_vk_2"
+        android:title="@string/group_vk_1" />
+
+    <PreferenceCategory android:title="@string/about_developer" >
+        <Preference
+            android:icon="@drawable/logo_human"
+            android:key="open_vk"
+            android:summary="@string/contacts_vk_2"
+            android:title="@string/contacts_vk_1" />
+        <Preference
+            android:icon="@drawable/logo_gmail"
+            android:key="open_gmail"
+            android:summary="@string/contacts_gmail_2"
+            android:title="@string/contacts_gmail_1" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/open_source_base" >
+        <Preference
+            android:icon="@drawable/logo_github"
+            android:key="open_github"
+            android:summary="@string/open_source_base_2"
+            android:title="@string/open_source_base_1" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

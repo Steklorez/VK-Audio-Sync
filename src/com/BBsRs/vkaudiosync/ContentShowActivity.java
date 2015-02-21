@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 
+import com.BBsRs.vkaudiosync.Fragments.AboutFragment;
 import com.BBsRs.vkaudiosync.Fragments.DownloadManagerFragment;
 import com.BBsRs.vkaudiosync.Fragments.FriendsGroupsListFragment;
 import com.BBsRs.vkaudiosync.Fragments.MusicListFragment;
@@ -76,6 +77,7 @@ public class ContentShowActivity extends Activity {
         sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[4].toUpperCase()).setCustomLayout(R.layout.custom_slider_menu_item).clickable(false).setTextAppereance(1);
         sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[5], DownloadManagerFragment.class, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
         sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[6], SettingsFragment.class, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
+        sliderMenu.add(getResources().getStringArray(R.array.slider_menu)[7], AboutFragment.class, new int[]{R.color.slider_menu_custom_color_black, R.color.slider_menu_custom_color_orange}).setTextAppereanceInverse(1);
         
         bundle = getIntent().getExtras(); 
 

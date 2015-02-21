@@ -3,6 +3,7 @@ package com.BBsRs.vkaudiosync.VKApiThings;
 public class Constants {
     //VK API
     public static String API_ID="4701734";
+    public static final long GROUP_ID=87972116;
     public static String RIGHTS_REQUEST = "friends,audio,groups,offline,wall";
     //VK API
     
@@ -66,6 +67,11 @@ public class Constants {
 	//shared preferences
 	public static final String USER_FIRST_NAME = "user_first_name";
 	public static final String USER_AVATAR = "user_avatar";
+	public static final String FIRST_LAUNCH_TIME = "first_kiss";
+	public static final String SHOWN_NOTIFICATION = "Shown_of_the_death";
+	public static final String CLICKED_SUBSCRIBE = "clicked_subscribe";
+	public static final String CLICKED_REVIEW = "clicked_review";
+	public static final String DONT_SHOW_AGAIN = "dont_show_again";
 	public static final String DOWNLOAD_DIRECTORY = "download_directory";
 	public static final String DOWNLOAD_SELECTION = "download_selection";
 	public static final String AUS_MAIN_LIST_BASE = "aus_main_list_base";

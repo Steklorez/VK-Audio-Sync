@@ -4,8 +4,6 @@ package com.BBsRs.vkaudiosync.Fragments;
 import org.holoeverywhere.preference.Preference;
 import org.holoeverywhere.preference.Preference.OnPreferenceClickListener;
 import org.holoeverywhere.preference.PreferenceFragment;
-import org.holoeverywhere.preference.PreferenceManager;
-import org.holoeverywhere.preference.SharedPreferences;
 
 import android.content.Intent;
 import android.net.Uri;

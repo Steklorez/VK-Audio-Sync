@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="dont_show_again">Больше не показывать</string>
+    <string name="title_dialog">Нравится приложение?</string>
+    <string name="join_group">Вступить в группу VK MS</string>
+    <string name="join_group_summary">Вы будете всегда в курсе последних обновлений приложения, получите музыку, и другие ништяки в ваш Фид!</string>
+    <string name="join_group_success">Спасибо, Вы успешно вступили в группу VK MS</string>
+    <string name="review">Оценить в GPlay!</string>
+    <string name="review_summary">ты сделаешь неоценимый вклад в развитие проекта!</string>
     
     <string name="intro_welcome">Добро пожаловать в \nVK Music Sync</string>
     <string name="intro_signin">Войти в VK</string>
@@ -66,7 +73,7 @@
     <string name="quan_songs_wall">Песен на стене:</string>
     <string name="quan_songs_dm">Песен в списке загрузки:</string>
     <string name="quan_people">Людей:</string>
-    <string name="quan_groups">Групп:</string>
+    <string name="quan_groups">Сообществ:</string>
     <string name="download_selected">Скачать выбранные</string>
     <string name="app_slogan">Автоматическая синхронизация,\nВезде,\nВ любое время,\nСо всеми ковер-артами!</string>
     <string name="service_running">Сервис скачивания в процессе, пожалуйста подождите, когда загрузка продолжится!</string>

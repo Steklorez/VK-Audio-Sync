@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="dont_show_again">Don\'t show again</string>
+    <string name="title_dialog">Like this app?</string>
+    <string name="join_group">Join VK MS Group</string>
+    <string name="join_group_summary">You\'ll receive updates, new music, and other sweets into your VK feed!</string>
+    <string name="join_group_success">Thank you, you are successfully joined VK MS group</string>
+    <string name="review">Review on GPlay!</string>
+    <string name="review_summary">you will make an invaluable contribution to the development of the project!</string>
     
     <string name="intro_welcome">Welcome to \nVK Music Sync</string>
     <string name="intro_signin">Sign in with VK</string>

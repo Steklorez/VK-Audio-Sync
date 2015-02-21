@@ -102,6 +102,11 @@ public class IntroduceOne extends Activity {
 	public void secondPart(){
 		final Runnable updaterText = new Runnable() {
 	        public void run() {
+	        	//save first launch date
+	        	if (sPref.getLong(Constants.FIRST_LAUNCH_TIME, 0)==0){
+	        		sPref.edit().putLong(Constants.FIRST_LAUNCH_TIME, System.currentTimeMillis()).commit();
+	        		sPref.edit().putLong(Constants.SHOWN_NOTIFICATION, System.currentTimeMillis()).commit();
+	        	}
 	        	//start second part
                 startActivity(new Intent(getApplicationContext(), IntroduceTwo.class));
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);

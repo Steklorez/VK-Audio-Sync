@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="intro_welcome">Добро пожаловать в \nVK Music Sync</string>
+    <string name="intro_signin">Войти в VK</string>
+    <string name="intro_user_personal_welcome">Привет, %s!</string>
+    <string name="intro_user_personal_welcome_2">Мы очень рады видеть вас сдесь. С этим приложением можно быстро и автоматически синхронизировать музыку на устройстве с вашим аккаунтом ВКонтакте.\nПрежде чем мы начнем, позвольте спосить несколько основных вопросов.</string>
+    <string name="intro_directory_question">Куда вы хотите скачивать музыку?</string>
+    <string name="intro_size_question">А что вы думаете о максимальном размере папки со скаченной музыкой?</string>
+    <string name="intro_size_1">1 Гб</string>
+    <string name="intro_size_2">2 Гб</string>
+    <string name="intro_size_4">4 Гб</string>
+    <string name="intro_size_8">8 Гб</string>
+    <string name="intro_size_16">16 Гб</string>
+    <string name="intro_size_0">Неограниченно</string>
+    
+    <string name="intro_what_todo_sized">Хорошо, а что мы должны делать, когда размер папки со скаченной музыкой достигнет %s, или закончится память телефона?</string>
+    <string name="intro_what_todo_unlimited">Хорошо, а что мы должны делать, когда закончится память телефона?</string>
+    <string name="intro_what_todo_1">Удалять самую старую музыку, пока не освободится достаточно места для новой загрузки</string>
+    <string name="intro_what_todo_2">Ничего. Остановаить загрузку, уведомить меня, и я удалю музыку или очищю память самостоятельно</string>
+    
+    <string name="intro_almost_done">Почти готово!</string>
+    <string name="intro_aus_question">Хотите ли включить автоматическую синхронизацию с вашим главным списком музыки?</string>
+    <string name="intro_aus_question_help">С этой функцей вся новая музыка, добавленная на вашу страницу, будет автоматически скачиваться в ваш телефон, к тому же вся удаленная музыка с вашей страницы, будет удаляться и в вашем устройстве.</string>
+    <string name="intro_aus_frequency">С какой периодичностью проверять список музыки?</string>
+    
+    <string name="intro_next">Далее</string>
+    <string name="intro_okay">Хорошо</string>
+    <string name="intro_back">Назад</string>
+    <string name="intro_start">Старт!</string>
+    
+    <string name="about_version">0.7 alpha</string>
+    <string name="about_developer">Разработчик</string>
+    <string name="contacts_vk_1">Роман Гаитбаев</string>
+    <string name="contacts_vk_2">vk.com/romzesrover</string>
+    <string name="contacts_vk_url">http://vk.com/romzesrover</string>
+    <string name="contacts_gmail_1">Gmail</string>
+    <string name="contacts_gmail_2">romzesrover@gmail.com</string>
+    <string name="contacts_gmail_url">mailto:romzesrover@gmail.com</string>
+    <string name="open_source_base">Открытый исходный код!</string>
+    <string name="open_source_base_1">GitHub</string>
+    <string name="open_source_base_2">github.com/RomzesRover/VK-Audio-Sync</string>
+    <string name="open_source_base_url">https://github.com/RomzesRover/VK-Audio-Sync</string>
+    <string name="group_vk_1">Группа приложения в ВК</string>
+    <string name="group_vk_2">vk.com/vkmusicsyncandroid</string>
+    <string name="group_vk_url">http://vk.com/club87972116</string>
+    
+    <string name="error_message">Проверьте ваше подключение и попробуйте снова.</string>
+    <string name="error_message_audio_disabled_user_wall">Похоже, что аудиозаписи отключены на этой стене, попробуйте проверить основную страницу этого пользователя.</string>
+    <string name="error_message_audio_disabled_user_main">Похоже, что аудиозаписи отключены на этой странице, попробуйте проверить стену этого пользователя.</string>
+    <string name="error_message_audio_disabled_group_wall">Похоже, что аудиозаписи отключены на этой стене, попробуйте проверить основную страницу этой группы.</string>
+    <string name="error_message_audio_disabled_group_main">Похоже, что аудиозаписи отключены на этой странице, попробуйте проверить стену этой группы.</string>
+    <string name="error_message_zero_count_audio_user_wall">Аудиозаписей тут нет, попробуйте проверить основную страницу этого пользователя.</string>
+    <string name="error_message_zero_count_audio_user_main">Аудиозаписей тут нет, попробуйте проверить стену этого пользователя.</string>
+    <string name="error_message_zero_count_audio_group_wall">Аудиозаписей тут нет, попробуйте проверить основную страницу этой группы.</string>
+    <string name="error_message_zero_count_audio_group_main">Аудиозаписей тут нет, попробуйте проверить стену этой группы.</string>
+    <string name="message_zero_count_audio_dm">Аудиозаписей тут нет, попробуйте добавить аудиозаписи в менеджер загрузок со своего основного списка, со списков друзей, групп, или с их стен.</string>
+    <string name="error_retry">Попробовать снова</string>
+    <string name="of">из</string>
+    <string name="dm_inprogrees">Загрузка в процессе.</string>
+    <string name="dm_inprogrees_cover">Загрузка завершена, устанавливаем ковер арт, и исправляем теги.</string>
+    <string name="app_name">VK Music Sync</string>
+    <string name="hello_world">Привет, мир!</string>
+    <string name="action_settings">Настройки</string>
+    <string name="quan_songs_main">Песен в основном списке:</string>
+    <string name="quan_songs_wall">Песен на стене:</string>
+    <string name="quan_songs_dm">Песен в списке загрузки:</string>
+    <string name="quan_people">Людей:</string>
+    <string name="quan_groups">Групп:</string>
+    <string name="download_selected">Скачать выбранные</string>
+    <string name="app_slogan">Автоматическая синхронизация,\nВезде,\nВ любое время,\nСо всеми ковер артами!</string>
+    <string name="service_running">Сервис скачивания в процессе, пожалуйста подождите, когда загрузка продолжится!</string>
+    <string name="downloading">Загузка</string>
+    <string name="account">Аккаунт</string>
+    <string name="logout">Выйти</string>
+    <string name="imageloader">Загрузчик картинок</string>
+    <string name="imageloader_pause_scroll">Пауза при скролле</string>
+    <string name="imageloader_pause_scroll_summary">Отключение может сделать прокрутку более глючной</string>
+    <string name="imageloader_pause_fling">Пауза при броске списка</string>
+    <string name="imageloader_pause_fling_summary">Отключение может сделать прокрутку более глючной</string>
+    <string name="imageloader_clear_cache">Очистить кеш</string>
+    <string name="imageloader_clear_cache_success">Кеш успешно очищен!</string>
+    <string name="download_direcotry">Место скачивания</string>
+    <string name="moreover">больше</string>
+    <string name="main">Основная музыка</string>
+    <string name="check_all">Отметить первые ..</string>
+    <string name="ok">Хорошо</string>
+    <string name="delete_all">Удалить все</string>
+    <string name="wait_check">Подождите, пока мы отметим и добавим в список загрузки ваши аудиозаписи..</string>
+    <string name="wait_uncheck">Подожите, пока мы отменим отмеченные, и удалим из списказ загрузки ваши аудиозаписи..</string>
+    <string name="cancel">Отмена</string>
+    <string name="uncheck_all">Отменить отмеченные</string>
+    <string name="stop_dm">Остановить загузку</string>
+    <string name="stop_dm_msg">Загрузка не запущена, что бы ее остановить</string>
+    <string name="delete_all_msg">Список уже пуст</string>
+    <string name="no_free_space">Свободное место закончилось.</string>
+    <string name="no_free_space_msg">Очистите память телефона, и попробуйте снова.</string>
+    <string name="no_free_space_user_msg">Очистите место скачивания, и попробуйте снова</string>
+    <string name="no_conn">Нет связи с интернетом.</string>
+    <string name="no_conn_msg">Проверьте ваше подключение и попробуйте снова.</string>
+    <string name="no_file">Файл:</string>
+    <string name="no_file_msg">отсутсвует на сервере, пропускаем.</string>
+    <string name="file_huge_size_msg">Слишком большой по размеру, пропускаем.</string>
+    <string name="file_huge_length_msg">Слишком длинный по длине, пропускаем.</string>
+    <string name="wall">Со стены</string>
+    <string name="refreshing">Обновление...</string>
+    <string name="prefs_aus">Автоматическая синхронизация</string>
+    <string name="prefs_aus_summary">вся новая музыка, добавленная на вашу страницу, будет автоматически скачиваться в ваш телефон, к тому же вся удаленная музыка с вашей страницы, будет удаляться и в вашем устройстве.</string>
+    <string name="prefs_aus_summary_enabled">Список автоматически синхронизируется, наслаждайтесь.</string>
+    <string name="prefs_aus_freq">Периодичность обновления</string>
+    <string name="prefs_aus_wifi">Обновлять только по WiFi</string>
+    <string name="prefs_aus_wifi_summary">Сохраняет мобильный трафик</string>
+    <string name="prefs_aus_freq_default_value">3600000</string>
+
+    <string-array name="prefs_aus_freq_entry_values">
+        <item>1800000</item>
+        <item>3600000</item>
+        <item>7200000</item>
+        <item>10800000</item>
+    </string-array>
+    <string-array name="prefs_aus_freq_values">
+        <item>30 минут</item>
+        <item>1 час</item>
+        <item>2 часа</item>
+        <item>3 часа</item>
+    </string-array>
+
+    <string name="prefs_skip_big">Предотвращать загрузку больших треков</string>
+    <string name="prefs_skip_big_summary">Большие треки по размеру или длине никогда не будут загружены, даже через автоматическую синхронизацию</string>
+    <string name="prefs_skip_big_size">Максимальный размер аудиозаписи, которая может быть загружена</string>
+    <string name="prefs_skip_big_size_default_value">31457280</string>
+
+    <string-array name="prefs_skip_big_size_entry_values">
+        <item>20971520</item>
+        <item>31457280</item>
+        <item>52428800</item>
+        <item>104857600</item>
+    </string-array>
+    <string-array name="prefs_skip_big_size_values">
+        <item>20 Мб</item>
+        <item>30 Мб</item>
+        <item>50 Мб</item>
+        <item>100 Мб</item>
+    </string-array>
+    
+    <string name="prefs_skip_big_length">Максимальная длина аудиозаписи, которая может быть загружена</string>
+    <string name="prefs_skip_big_length_default_value">900</string>
+
+    <string-array name="prefs_skip_big_length_entry_values">
+        <item>600</item>
+        <item>900</item>
+        <item>1200</item>
+        <item>1800</item>
+    </string-array>
+    <string-array name="prefs_skip_big_length_values">
+        <item>10 минут</item>
+        <item>15 минут</item>
+        <item>20 минут</item>
+        <item>30 минут</item>
+    </string-array>
+    
+    <string name="prefs_notify_result">Оповещать об окончании загрузки</string>
+    <string name="prefs_notify_result_summary">После окончания загрузки, вы получите уведомление с результатом, так же с автоматической синхронизации.</string>
+    <string name="notify_deleted">Удалено:</string>
+    <string name="notify_downloaded">Скачано:</string>
+    
+    <string name="prefs_revers_downloading">Обратная очередь загрузки</string>
+    <string name="prefs_revers_downloading_summary">Если включено, то список последних добавленных в вашем плеере будет соответствовать списку на вашей странице в ВК.</string>
+    
+    <string name="prefs_max_size">Максимальный размер папки для скачивания</string>
+    <string name="prefs_max_size_default_value">0</string>
+    <string name="prefs_max_size_too_huge">Выбранный размер больше вашей памяти (%f) Гб, Мы поставим неограниченно</string>
+        
+    <string-array name="prefs_max_size_entry_values">
+        <item>1073741824</item>
+        <item>2147483648</item>
+        <item>4294967296</item>
+        <item>8589934592</item>
+        <item>17179869184</item>
+        <item>0</item>
+    </string-array>
+    <string-array name="prefs_max_size_values">
+        <item>1 Гб</item>
+        <item>2 Гб</item>
+        <item>4 Гб</item>
+        <item>8 Гб</item>
+        <item>16 Гб</item>
+        <item>Неограниченно</item>
+    </string-array>
+    
+    <string name="prefs_what_todo_reach_max_size">Что делать когда закончится свободная память?</string>
+    <string name="prefs_what_todo_reach_max_size_default_value">0</string>
+    
+    <string-array name="prefs_what_todo_reach_max_size_entry_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="prefs_what_todo_reach_max_size_values">
+        <item>Удалять самую старую музыку, пока не освободится достаточно места для новой загрузки</item>
+        <item>Ничего. Остановаить загрузку, уведомить меня, и я удалю музыку или очищю память самостоятельно</item>
+    </string-array>
+    
+    <string-array name="slider_menu">
+        <item>МУЗЫКА</item>
+        <item>Мои аудиозаписи</item>
+        <item>Друзья</item>
+        <item>Группы</item>
+        <item>ПРИЛОЖЕНИЕ</item>
+        <item>Менеджер загрузок</item>
+        <item>Настройки</item>
+        <item>О приложении</item>
+    </string-array>
+
+</resources>

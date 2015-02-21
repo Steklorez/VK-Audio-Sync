@@ -102,7 +102,6 @@
     <string name="no_file_msg">is missed on VK server, skip it.</string>
     <string name="file_huge_size_msg">is too huge by size, skip it.</string>
     <string name="file_huge_length_msg">is too huge by length, skip it.</string>
-    <string name="more_than">You can\'t check and download more that 100 songs per one time</string>
     <string name="wall">Wall music</string>
     <string name="refreshing">Refreshing...</string>
     <string name="prefs_aus">Automatic synchronization</string>
@@ -165,7 +164,7 @@
     <string name="notify_deleted">Deleted:</string>
     <string name="notify_downloaded">Downloaded:</string>
     
-    <string name="prefs_revers_downloading">Revers downloading queue</string>
+    <string name="prefs_revers_downloading">Reverse downloading queue</string>
     <string name="prefs_revers_downloading_summary">If turned on music order in last added list will be just like on your vk page.</string>
     
     <string name="prefs_max_size">Maximum size of download directory</string>

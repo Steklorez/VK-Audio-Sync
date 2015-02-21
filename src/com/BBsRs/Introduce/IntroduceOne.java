@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
+import com.BBsRs.vkaudiosync.LoginActivity;
 import com.BBsRs.vkaudiosync.R;
 import com.BBsRs.vkaudiosync.VKApiThings.Account;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
@@ -51,14 +52,14 @@ public class IntroduceOne extends Activity {
 	    login.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				Intent intent = new Intent();
-//	            intent.setClass(getApplicationContext(), LoginActivity.class);
-//	            startActivityForResult(intent, REQUEST_LOGIN);
+				Intent intent = new Intent();
+	            intent.setClass(getApplicationContext(), LoginActivity.class);
+	            startActivityForResult(intent, REQUEST_LOGIN);
 				
-				//start second part
-                startActivity(new Intent(getApplicationContext(), IntroduceTwo.class));
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                finish();
+//				//start second part
+//                startActivity(new Intent(getApplicationContext(), IntroduceTwo.class));
+//                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+//                finish();
 			}
 		});
 	}

@@ -4,7 +4,7 @@
     <string name="intro_welcome">Добро пожаловать в \nVK Music Sync</string>
     <string name="intro_signin">Войти в VK</string>
     <string name="intro_user_personal_welcome">Привет, %s!</string>
-    <string name="intro_user_personal_welcome_2">Мы очень рады видеть вас сдесь. С этим приложением можно быстро и автоматически синхронизировать музыку на устройстве с вашим аккаунтом ВКонтакте.\nПрежде чем мы начнем, позвольте спосить несколько основных вопросов.</string>
+    <string name="intro_user_personal_welcome_2">Мы очень рады видеть вас здесь. С этим приложением можно быстро и автоматически синхронизировать музыку на устройстве с вашим аккаунтом ВКонтакте.\nПрежде чем мы начнем, позвольте спросить несколько основных вопросов.</string>
     <string name="intro_directory_question">Куда вы хотите скачивать музыку?</string>
     <string name="intro_size_question">А что вы думаете о максимальном размере папки со скаченной музыкой?</string>
     <string name="intro_size_1">1 Гб</string>
@@ -17,11 +17,11 @@
     <string name="intro_what_todo_sized">Хорошо, а что мы должны делать, когда размер папки со скаченной музыкой достигнет %s, или закончится память телефона?</string>
     <string name="intro_what_todo_unlimited">Хорошо, а что мы должны делать, когда закончится память телефона?</string>
     <string name="intro_what_todo_1">Удалять самую старую музыку, пока не освободится достаточно места для новой загрузки</string>
-    <string name="intro_what_todo_2">Ничего. Остановаить загрузку, уведомить меня, и я удалю музыку или очищю память самостоятельно</string>
+    <string name="intro_what_todo_2">Ничего. Остановить загрузку, уведомить меня, и я удалю музыку или очищу память самостоятельно</string>
     
     <string name="intro_almost_done">Почти готово!</string>
     <string name="intro_aus_question">Хотите ли включить автоматическую синхронизацию с вашим главным списком музыки?</string>
-    <string name="intro_aus_question_help">С этой функцей вся новая музыка, добавленная на вашу страницу, будет автоматически скачиваться в ваш телефон, к тому же вся удаленная музыка с вашей страницы, будет удаляться и в вашем устройстве.</string>
+    <string name="intro_aus_question_help">С этой функцией вся новая музыка, добавленная на вашу страницу, будет автоматически скачиваться в ваш телефон, к тому же вся удаленная музыка с вашей страницы, будет удаляться и в вашем устройстве.</string>
     <string name="intro_aus_frequency">С какой периодичностью проверять список музыки?</string>
     
     <string name="intro_next">Далее</string>
@@ -58,7 +58,7 @@
     <string name="error_retry">Попробовать снова</string>
     <string name="of">из</string>
     <string name="dm_inprogrees">Загрузка в процессе.</string>
-    <string name="dm_inprogrees_cover">Загрузка завершена, устанавливаем ковер арт, и исправляем теги.</string>
+    <string name="dm_inprogrees_cover">Загрузка завершена, устанавливаем ковер-арт, и исправляем теги.</string>
     <string name="app_name">VK Music Sync</string>
     <string name="hello_world">Привет, мир!</string>
     <string name="action_settings">Настройки</string>
@@ -68,9 +68,9 @@
     <string name="quan_people">Людей:</string>
     <string name="quan_groups">Групп:</string>
     <string name="download_selected">Скачать выбранные</string>
-    <string name="app_slogan">Автоматическая синхронизация,\nВезде,\nВ любое время,\nСо всеми ковер артами!</string>
+    <string name="app_slogan">Автоматическая синхронизация,\nВезде,\nВ любое время,\nСо всеми ковер-артами!</string>
     <string name="service_running">Сервис скачивания в процессе, пожалуйста подождите, когда загрузка продолжится!</string>
-    <string name="downloading">Загузка</string>
+    <string name="downloading">Загрузка</string>
     <string name="account">Аккаунт</string>
     <string name="logout">Выйти</string>
     <string name="imageloader">Загрузчик картинок</string>
@@ -78,8 +78,8 @@
     <string name="imageloader_pause_scroll_summary">Отключение может сделать прокрутку более глючной</string>
     <string name="imageloader_pause_fling">Пауза при броске списка</string>
     <string name="imageloader_pause_fling_summary">Отключение может сделать прокрутку более глючной</string>
-    <string name="imageloader_clear_cache">Очистить кеш</string>
-    <string name="imageloader_clear_cache_success">Кеш успешно очищен!</string>
+    <string name="imageloader_clear_cache">Очистить кэш</string>
+    <string name="imageloader_clear_cache_success">Кэш успешно очищен!</string>
     <string name="download_direcotry">Место скачивания</string>
     <string name="moreover">больше</string>
     <string name="main">Основная музыка</string>
@@ -87,10 +87,10 @@
     <string name="ok">Хорошо</string>
     <string name="delete_all">Удалить все</string>
     <string name="wait_check">Подождите, пока мы отметим и добавим в список загрузки ваши аудиозаписи..</string>
-    <string name="wait_uncheck">Подожите, пока мы отменим отмеченные, и удалим из списказ загрузки ваши аудиозаписи..</string>
+    <string name="wait_uncheck">Подождите, пока мы отменим отмеченные, и удалим из списка загрузки ваши аудиозаписи..</string>
     <string name="cancel">Отмена</string>
     <string name="uncheck_all">Отменить отмеченные</string>
-    <string name="stop_dm">Остановить загузку</string>
+    <string name="stop_dm">Остановить загрузку</string>
     <string name="stop_dm_msg">Загрузка не запущена, что бы ее остановить</string>
     <string name="delete_all_msg">Список уже пуст</string>
     <string name="no_free_space">Свободное место закончилось.</string>
@@ -99,7 +99,7 @@
     <string name="no_conn">Нет связи с интернетом.</string>
     <string name="no_conn_msg">Проверьте ваше подключение и попробуйте снова.</string>
     <string name="no_file">Файл:</string>
-    <string name="no_file_msg">отсутсвует на сервере, пропускаем.</string>
+    <string name="no_file_msg">отсутствует на сервере, пропускаем.</string>
     <string name="file_huge_size_msg">Слишком большой по размеру, пропускаем.</string>
     <string name="file_huge_length_msg">Слишком длинный по длине, пропускаем.</string>
     <string name="wall">Со стены</string>
@@ -197,7 +197,7 @@
     </string-array>
     <string-array name="prefs_what_todo_reach_max_size_values">
         <item>Удалять самую старую музыку, пока не освободится достаточно места для новой загрузки</item>
-        <item>Ничего. Остановаить загрузку, уведомить меня, и я удалю музыку или очищю память самостоятельно</item>
+        <item>Ничего. Остановить загрузку, уведомить меня, и я удалю музыку или очищу память самостоятельно</item>
     </string-array>
     
     <string-array name="slider_menu">

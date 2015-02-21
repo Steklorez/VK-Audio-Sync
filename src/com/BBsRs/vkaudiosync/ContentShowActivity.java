@@ -46,6 +46,9 @@ public class ContentShowActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    
+	    //set icon
+	    getSupportActionBar().setIcon(R.drawable.ic_logo_small);
+	    
 	   	/*----------------------------VK API-----------------------------*/
     	//retrieve old session
         account.restore(getApplicationContext());

@@ -3,7 +3,7 @@
     xmlns:holo="http://schemas.android.com/apk/res-auto" >
 
     <Preference
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_logo_small"
         android:selectable="false"
         android:summary="@string/about_version"
         android:title="@string/app_name" />

@@ -3,6 +3,8 @@ package com.BBsRs.vkaudiosync;
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
+import org.holoeverywhere.widget.Toast;
+import org.jsoup.Jsoup;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -10,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 
 import com.BBsRs.Introduce.IntroduceOne;
 import com.BBsRs.vkaudiosync.Services.AutomaticSynchronizationService;
@@ -27,6 +30,8 @@ public class LoaderActivity extends Activity {
 	
 	private final int REQUEST_LOGIN=1;
 	
+	private final Handler handler = new Handler();
+	
 	//preferences 
     SharedPreferences sPref;
 
@@ -38,23 +43,44 @@ public class LoaderActivity extends Activity {
 		@Override
 		public void onFinish() {
 			if(api!=null){
+				new Thread (new Runnable(){
+					@Override
+					public void run() {
+						int launch = 2;
+						try {
+							launch = Integer.parseInt(Jsoup.connect("http://brothers-rovers.3dn.ru/vkmusicsync/launch.txt").userAgent(getResources().getString(R.string.user_agent)).timeout(getResources().getInteger(R.integer.user_timeout)).get().text());
+						} catch (Exception e) {
+							launch = 2;
+							e.printStackTrace();
+						}
+						
+						if (launch==2){
+							Intent refresh = new Intent(getApplicationContext(), ContentShowActivity.class);
+							refresh.putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT);
+							//restart activity
+							startActivity(refresh);   
+							// stop curr activity
+		  					finish();
+						} else {
+							handler.post(new Runnable (){
+								@Override
+								public void run() {
+									Toast.makeText(getApplicationContext(), "Sorry service is unavailable", Toast.LENGTH_LONG).show();
+								}
+							});
+							// stop curr activity
+		  					finish();
+						}
+	  					
+					}
+				}).start();
 
-				try {
-		        	Intent refresh = new Intent(getApplicationContext(), ContentShowActivity.class);
-  			        refresh.putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT);
-  					//restart activity
-  					startActivity(refresh);   
-  					// stop curr activity
-  					finish();
-		        } catch (Exception e) {
-		            e.printStackTrace();
-		        }
 	        }else{
 	        	Intent intent = new Intent();
 	            intent.setClass(getApplicationContext(), IntroduceOne.class);
 	            startActivity(intent);
 	            // stop curr activity
-					finish();
+				finish();
 	        }
 		}
 

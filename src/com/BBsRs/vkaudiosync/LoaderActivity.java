@@ -53,6 +53,8 @@ public class LoaderActivity extends Activity {
 	        	Intent intent = new Intent();
 	            intent.setClass(getApplicationContext(), IntroduceOne.class);
 	            startActivity(intent);
+	            // stop curr activity
+					finish();
 	        }
 		}
 
@@ -87,6 +89,8 @@ public class LoaderActivity extends Activity {
 			Intent intent = new Intent();
             intent.setClass(getApplicationContext(), IntroduceOne.class);
             startActivity(intent);
+            // stop curr activity
+			finish();
 		}
 	}
 	

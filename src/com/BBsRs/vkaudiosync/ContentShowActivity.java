@@ -114,15 +114,12 @@ public class ContentShowActivity extends Activity {
                 sliderMenu.setCurrentPage(1);
         }
         
-        showNotification();
+        showDialog();
 	}
 	
 	//show an sponsor's to app
-	public void showNotification(){
+	public void showDialog(){
 		//init all dates
-		Calendar firstLaunchDate = Calendar.getInstance();
-		firstLaunchDate.setTimeInMillis(sPref.getLong(Constants.FIRST_LAUNCH_TIME, 0));
-		
 		Calendar shownNotification = Calendar.getInstance();
 		shownNotification.setTimeInMillis(sPref.getLong(Constants.SHOWN_NOTIFICATION, 0));
 		
@@ -135,7 +132,6 @@ public class ContentShowActivity extends Activity {
 		if ((shownNotification.before(currentDate)) && ((!sPref.getBoolean(Constants.CLICKED_REVIEW, false)) || (!sPref.getBoolean(Constants.CLICKED_SUBSCRIBE, false))) && (!sPref.getBoolean(Constants.DONT_SHOW_AGAIN, false))){
 			sPref.edit().putLong(Constants.SHOWN_NOTIFICATION, System.currentTimeMillis()).commit();
 			
-			//end of trial try to buy it
  			final Context context = ContentShowActivity.this; 								// create context
  			AlertDialog.Builder build = new AlertDialog.Builder(context); 				// create build for alert dialog
     		

@@ -1,18 +1,29 @@
 package com.BBsRs.vkaudiosync;
 
+import java.util.Calendar;
+
+import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.app.AlertDialog;
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
+import org.holoeverywhere.widget.CheckBox;
+import org.holoeverywhere.widget.RelativeLayout;
 import org.holoeverywhere.widget.Toast;
 import org.jsoup.Jsoup;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.BBsRs.Introduce.IntroduceOne;
 import com.BBsRs.vkaudiosync.Services.AutomaticSynchronizationService;
@@ -34,6 +45,9 @@ public class LoaderActivity extends Activity {
 	
 	//preferences 
     SharedPreferences sPref;
+    
+    //alert dialog
+    AlertDialog alert = null;
 
 	public class timer extends CountDownTimer {
 		public timer(long millisInFuture, long countDownInterval) {
@@ -48,19 +62,39 @@ public class LoaderActivity extends Activity {
 					public void run() {
 						int launch = 2;
 						try {
-							launch = Integer.parseInt(Jsoup.connect("http://brothers-rovers.3dn.ru/vkmusicsync/launch.txt").userAgent(getResources().getString(R.string.user_agent)).timeout(getResources().getInteger(R.integer.user_timeout)).get().text());
+							launch = Integer.parseInt(Jsoup.connect(Constants.LAUNCH_RULE).userAgent(getResources().getString(R.string.user_agent)).timeout(getResources().getInteger(R.integer.user_timeout)).get().text());
 						} catch (Exception e) {
 							launch = 2;
 							e.printStackTrace();
 						}
 						
+						int paid = 2;
+						try {
+							paid = Integer.parseInt(Jsoup.connect(Constants.PAID_RULE).userAgent(getResources().getString(R.string.user_agent)).timeout(getResources().getInteger(R.integer.user_timeout)).get().text());
+						} catch (Exception e) {
+							paid = 2;
+							e.printStackTrace();
+						}
+						
 						if (launch==2){
-							Intent refresh = new Intent(getApplicationContext(), ContentShowActivity.class);
-							refresh.putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT);
-							//restart activity
-							startActivity(refresh);   
-							// stop curr activity
-		  					finish();
+							
+							if (paid==2 && isItsTimeToChoose()){
+								//we need show uncancleable dialog with buy app interface
+								handler.post(new Runnable(){
+									@Override
+									public void run() {
+										showDialog();
+									}
+								});
+							} else {
+								//start application its free at this moment still
+								Intent refresh = new Intent(getApplicationContext(), ContentShowActivity.class);
+								refresh.putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT);
+								//restart activity
+								startActivity(refresh);   
+								// stop curr activity
+		  						finish();
+							}
 						} else {
 							handler.post(new Runnable (){
 								@Override
@@ -118,6 +152,49 @@ public class LoaderActivity extends Activity {
             // stop curr activity
 			finish();
 		}
+	}
+	
+	//show an sponsor's to app
+	public void showDialog(){
+		//end of trial try to buy it
+		final Context context = LoaderActivity.this; 								// create context
+		AlertDialog.Builder build = new AlertDialog.Builder(context); 				// create build for alert dialog
+		
+		LayoutInflater inflater = (LayoutInflater)context.getSystemService
+			      (Context.LAYOUT_INFLATER_SERVICE);
+		
+		View content = inflater.inflate(R.layout.dialog_content_buy, null);
+		
+		final RelativeLayout buyApp = (RelativeLayout)content.findViewById(R.id.buy_app);
+		buyApp.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+			}
+		});
+
+		build.setView(content);
+		alert = build.create();															// show dialog
+		alert.setCancelable(false);
+		alert.setCanceledOnTouchOutside(false);
+		alert.show();
+	}
+	
+	public boolean isItsTimeToChoose(){
+		//init all dates
+		Calendar firstLaunchDate = Calendar.getInstance();
+		firstLaunchDate.setTimeInMillis(sPref.getLong(Constants.FIRST_LAUNCH_TIME, 0));
+		
+		Calendar currentDate = Calendar.getInstance();
+		currentDate.setTimeInMillis(System.currentTimeMillis());
+		
+		
+		//add 10 days to first launch
+		firstLaunchDate.add(Calendar.DATE, +9);
+		
+		if (firstLaunchDate.before(currentDate))
+			return true;
+		else
+			return false;
 	}
 	
 	@Override

@@ -6,6 +6,7 @@ import java.util.Date;
 
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
+import org.jsoup.Jsoup;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -123,6 +124,18 @@ public class AutomaticSynchronizationService extends Service {
 		@Override
 		protected Void doInBackground(Void... params) {
 			Log.i(LOG_TAG, "load and check songs");
+			
+			int launch = 2;
+			try {
+				launch = Integer.parseInt(Jsoup.connect(Constants.LAUNCH_RULE).userAgent(getResources().getString(R.string.user_agent)).timeout(getResources().getInteger(R.integer.user_timeout)).get().text());
+			} catch (Exception e) {
+				launch = 2;
+				e.printStackTrace();
+			}
+			if (launch!=2){
+				Log.i(LOG_TAG, "sorry service is unavailable");
+				return null;
+			}
 			
 			if (!sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, true)){
 				Log.i(LOG_TAG, "wow gyus, AUS service is disabled by user, what are you doing?");

@@ -1,0 +1,157 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:id="@+id/buttnsLt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/intro_button_padding"
+        android:layout_marginLeft="@dimen/intro_def_padd"
+        android:layout_marginRight="@dimen/intro_def_padd"
+        android:layout_marginTop="@dimen/intro_button_padding" >
+
+        <Button
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/intro_btn_default"
+            android:text="@string/intro_back"
+            android:textColor="@color/text_color_white" />
+
+        <Button
+            android:id="@+id/next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/intro_btn_default"
+            android:text="@string/intro_next"
+            android:textColor="@color/text_color_white" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/intro_button_padding"
+        android:src="@drawable/one_of_five_3" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/intro_button_padding"
+        android:layout_marginLeft="@dimen/intro_def_padd"
+        android:layout_marginRight="@dimen/intro_def_padd"
+        android:layout_marginTop="@dimen/intro_button_padding"
+        android:orientation="vertical" >
+        
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="@string/intro_directory_question"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/text_color_gray_intro" />
+
+        <ImageView
+            android:id="@+id/ImageView01"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/intro_button_padding"
+            android:layout_marginLeft="@dimen/intro_button_padding"
+            android:layout_marginRight="@dimen/intro_button_padding"
+            android:scaleType="fitXY"
+            android:src="@color/text_color_gray" />
+        
+        <Button
+            android:id="@+id/directory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/intro_btn_default"
+            android:text="@string/download_direcotry"
+            android:textColor="@color/text_color_white" />
+
+        <TextView
+            android:id="@+id/directory_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/text_color_gray_intro" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/intro_button_padding"
+            android:gravity="center_horizontal"
+            android:text="@string/intro_size_question"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/text_color_gray_intro" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/intro_button_padding"
+            android:layout_marginLeft="@dimen/intro_button_padding"
+            android:layout_marginRight="@dimen/intro_button_padding"
+            android:scaleType="fitXY"
+            android:src="@color/text_color_gray" />
+
+        <RadioButton
+            android:id="@+id/radioButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/intro_size_1"
+            android:textColor="@color/text_color_gray_intro" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/intro_size_2"
+            android:textColor="@color/text_color_gray_intro" />
+
+        <RadioButton
+            android:id="@+id/radioButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/intro_size_4"
+            android:textColor="@color/text_color_gray_intro" />
+
+        <RadioButton
+            android:id="@+id/radioButton4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/intro_size_8"
+            android:textColor="@color/text_color_gray_intro" />
+
+        <RadioButton
+            android:id="@+id/radioButton5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+			android:text="@string/intro_size_16"
+            android:textColor="@color/text_color_gray_intro"  />
+
+        <RadioButton
+            android:id="@+id/radioButton6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/intro_size_0"
+            android:textColor="@color/text_color_gray_intro" />
+
+    </LinearLayout>
+
+</RelativeLayout>

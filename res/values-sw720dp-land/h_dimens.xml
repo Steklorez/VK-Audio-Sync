@@ -1,0 +1,5 @@
+<resources>
+
+    <dimen name="intro_def_padd">360dp</dimen>
+
+</resources>

@@ -1,0 +1,88 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:id="@+id/buttnsLt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/intro_button_padding"
+        android:layout_marginLeft="@dimen/intro_def_padd"
+        android:layout_marginRight="@dimen/intro_def_padd"
+        android:layout_marginTop="@dimen/intro_button_padding" >
+
+        <Button
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/intro_btn_default"
+            android:text="@string/intro_back"
+            android:textColor="@color/text_color_white" />
+
+        <Button
+            android:id="@+id/next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/intro_btn_default"
+            android:text="@string/intro_okay"
+            android:textColor="@color/text_color_white" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/intro_button_padding"
+        android:src="@drawable/one_of_five_2" />
+
+    <LinearLayout
+        android:id="@+id/msg_lt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/intro_button_padding"
+        android:layout_marginLeft="@dimen/intro_def_padd"
+        android:layout_marginRight="@dimen/intro_def_padd"
+        android:layout_marginTop="@dimen/intro_button_padding"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/text_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/intro_button_padding"
+            android:layout_marginLeft="@dimen/intro_button_padding"
+            android:layout_marginRight="@dimen/intro_button_padding"
+            android:gravity="center"
+            android:text="@string/intro_user_personal_welcome"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/text_color_gray_intro" />
+
+        <TextView
+            android:id="@+id/text_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/intro_user_personal_welcome_2"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/text_color_gray_intro" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/user_avatar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_above="@+id/msg_lt"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/deactivated_100" />
+
+</RelativeLayout>

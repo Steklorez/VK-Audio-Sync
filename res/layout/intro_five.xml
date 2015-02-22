@@ -124,7 +124,27 @@
             android:layout_height="wrap_content"
             android:text="@string/intro_aus_question_help"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/text_color_gray_intro"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/ImageView03"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/intro_button_padding"
+            android:layout_marginLeft="@dimen/intro_button_padding"
+            android:layout_marginRight="@dimen/intro_button_padding"
+            android:scaleType="fitXY"
+            android:src="@color/text_color_gray" />
+
+        <CheckBox
+            android:id="@+id/joinGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/join_group"
             android:textColor="@color/text_color_gray_intro" />
+
     </LinearLayout>
 
 </RelativeLayout>

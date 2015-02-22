@@ -124,6 +124,11 @@ public class AutomaticSynchronizationService extends Service {
 		protected Void doInBackground(Void... params) {
 			Log.i(LOG_TAG, "load and check songs");
 			
+			if (!sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, true)){
+				Log.i(LOG_TAG, "wow gyus, AUS service is disabled by user, what are you doing?");
+				return null;
+			}
+			
 			if (sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION_WIFI, true)){
 				ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 				NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);

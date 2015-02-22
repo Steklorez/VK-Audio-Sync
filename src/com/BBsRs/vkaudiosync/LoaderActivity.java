@@ -162,7 +162,7 @@ public class LoaderActivity extends Activity {
 	}
 	
 	public void startMainTask(){
-		bp.consumePurchase(Constants.BUY_ITEM_HIGH);
+//		bp.consumePurchase(Constants.BUY_ITEM_HIGH);
 		
 		// Восстановление сохранённой сессии
 		account.restore(this);

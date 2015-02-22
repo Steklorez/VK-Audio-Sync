@@ -7,7 +7,6 @@ import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.app.AlertDialog;
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
-import org.holoeverywhere.widget.CheckBox;
 import org.holoeverywhere.widget.RelativeLayout;
 import org.holoeverywhere.widget.Toast;
 import org.jsoup.Jsoup;
@@ -16,19 +15,19 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.BBsRs.Introduce.IntroduceOne;
 import com.BBsRs.vkaudiosync.Services.AutomaticSynchronizationService;
 import com.BBsRs.vkaudiosync.VKApiThings.Account;
 import com.BBsRs.vkaudiosync.VKApiThings.Constants;
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.TransactionDetails;
 import com.perm.kate.api.Api;
 
 public class LoaderActivity extends Activity {
@@ -39,8 +38,6 @@ public class LoaderActivity extends Activity {
 	// for timer
 	private timer CountDownTimer;
 	
-	private final int REQUEST_LOGIN=1;
-	
 	private final Handler handler = new Handler();
 	
 	//preferences 
@@ -48,6 +45,13 @@ public class LoaderActivity extends Activity {
     
     //alert dialog
     AlertDialog alert = null;
+    
+    /*--------------------INIT IN APP BILLING-------------------------*/
+    //inAppBillingData
+    // PRODUCT & SUBSCRIPTION IDS
+	private BillingProcessor bp;
+	private boolean readyToPurchase = false;
+	/*--------------------INIT IN APP BILLING-------------------------*/
 
 	public class timer extends CountDownTimer {
 		public timer(long millisInFuture, long countDownInterval) {
@@ -132,6 +136,34 @@ public class LoaderActivity extends Activity {
         //set up preferences
         sPref = PreferenceManager.getDefaultSharedPreferences(this);
         
+        /*--------------------INIT IN APP BILLING-------------------------*/
+        bp = new BillingProcessor(this, Constants.LICENSE_KEY, new BillingProcessor.IBillingHandler() {
+            @Override
+            public void onProductPurchased(String productId, TransactionDetails details) {
+            	activityRefresh();
+            }
+            @Override
+            public void onBillingError(int errorCode, Throwable error) {
+            	Toast.makeText(getApplicationContext(), "Sorry service is unavailable", Toast.LENGTH_LONG).show();
+            	finish();
+            }
+            @Override
+            public void onBillingInitialized() {
+                readyToPurchase = true;
+                bp.loadOwnedPurchasesFromGoogle();
+                startMainTask();
+            }
+            @Override
+            public void onPurchaseHistoryRestored() {
+            }
+        });
+        /*--------------------INIT IN APP BILLING-------------------------*/
+
+	}
+	
+	public void startMainTask(){
+		bp.consumePurchase(Constants.BUY_ITEM_HIGH);
+		
 		// Восстановление сохранённой сессии
 		account.restore(this);
 
@@ -169,17 +201,28 @@ public class LoaderActivity extends Activity {
 		buyApp.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if (readyToPurchase)
+					bp.purchase(Constants.BUY_ITEM_HIGH);
 			}
 		});
 
 		build.setView(content);
 		alert = build.create();															// show dialog
-		alert.setCancelable(false);
 		alert.setCanceledOnTouchOutside(false);
+		alert.setOnCancelListener(new OnCancelListener(){
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				finish();
+			}
+		});
 		alert.show();
 	}
 	
 	public boolean isItsTimeToChoose(){
+		//if user on high
+		if (bp.isPurchased(Constants.BUY_ITEM_HIGH))	
+			return false;
+		
 		//init all dates
 		Calendar firstLaunchDate = Calendar.getInstance();
 		firstLaunchDate.setTimeInMillis(sPref.getLong(Constants.FIRST_LAUNCH_TIME, 0));
@@ -199,16 +242,8 @@ public class LoaderActivity extends Activity {
 	
 	@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_LOGIN) {
-            if (resultCode == RESULT_OK) {
-                //авторизовались успешно 
-                account.access_token=data.getStringExtra("token");
-                account.user_id=data.getLongExtra("user_id", 0);
-                account.save(LoaderActivity.this);
-                api=new Api(account.access_token, Constants.API_ID);
-                activityRefresh();
-            }
-        }
+		if (!bp.handleActivityResult(requestCode, resultCode, data))
+            super.onActivityResult(requestCode, resultCode, data);
     }
 	
 	private void activityRefresh(){
@@ -229,6 +264,14 @@ public class LoaderActivity extends Activity {
             }
         }
         return false;
+    }
+	
+    @Override
+    public void onDestroy() {
+        if (bp != null) 
+            bp.release();
+
+        super.onDestroy();
     }
 
 }

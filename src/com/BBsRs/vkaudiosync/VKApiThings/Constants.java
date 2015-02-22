@@ -7,8 +7,10 @@ public class Constants {
     public static String API_ID="4701734";
     public static final long GROUP_ID=87972116;
     public static String RIGHTS_REQUEST = "friends,audio,groups,offline,wall";
-    //VK API
     
+    //Google IABV3
+	public static String LICENSE_KEY="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAi9xZmMPIulg3L4w5Zn8foUP3wGJZP+FX7iUzbFevZ8WoeeLX8A36nrhAtszp7Bj7Jkw1U3V7mk9kPf5TZ+3b6/QeDKST21LYnkvjb8t8KIkAFWPnNaYmMFhVrsS7GsPi68G4IRT1XnUDfchInJjFQwDXiG+T2no5/pmoS9k/DLb9p9p8EtHu92GNVTdYUPkUuDFvV5XnviKYvGs+fPqn1TeGcwNbgOLxqxGG4rCCNagbBsLsPDupNiBLEgW7n6yHgy3gk1tlz3BLwsOjtFDHhaOCpVsYpuK9QzmudI/6ApC9cbdl1CbNyPGtrrCRAfHEjvWFw975fCl5pLSRYnEmuwIDAQAB";
+	public static String BUY_ITEM_HIGH="buy_item_high";
     
     public static final String BUNDLE_USER_ID = "user_id";
     public static final String BUNDLE_GROUP_ID = "group_id";

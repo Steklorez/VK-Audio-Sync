@@ -1,6 +1,5 @@
 package com.BBsRs.vkaudiosync;
 
-import java.io.IOException;
 import java.util.Calendar;
 
 import org.holoeverywhere.LayoutInflater;
@@ -10,7 +9,6 @@ import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
 import org.holoeverywhere.widget.RelativeLayout;
 import org.holoeverywhere.widget.Toast;
-import org.json.JSONException;
 import org.jsoup.Jsoup;
 
 import android.app.ActivityManager;
@@ -31,7 +29,6 @@ import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
 import com.perm.kate.api.Api;
-import com.perm.kate.api.KException;
 
 public class LoaderActivity extends Activity {
 

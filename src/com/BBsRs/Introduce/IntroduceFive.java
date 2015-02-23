@@ -8,7 +8,6 @@ import org.holoeverywhere.widget.AdapterView.OnItemSelectedListener;
 import org.holoeverywhere.widget.Button;
 import org.holoeverywhere.widget.CheckBox;
 import org.holoeverywhere.widget.Spinner;
-import org.holoeverywhere.widget.Toast;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;

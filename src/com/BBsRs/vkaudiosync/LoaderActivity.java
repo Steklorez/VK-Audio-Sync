@@ -1,5 +1,6 @@
 package com.BBsRs.vkaudiosync;
 
+import java.io.IOException;
 import java.util.Calendar;
 
 import org.holoeverywhere.LayoutInflater;
@@ -9,6 +10,7 @@ import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
 import org.holoeverywhere.widget.RelativeLayout;
 import org.holoeverywhere.widget.Toast;
+import org.json.JSONException;
 import org.jsoup.Jsoup;
 
 import android.app.ActivityManager;
@@ -29,6 +31,7 @@ import com.BBsRs.vkaudiosync.VKApiThings.Constants;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
 import com.perm.kate.api.Api;
+import com.perm.kate.api.KException;
 
 public class LoaderActivity extends Activity {
 
@@ -77,6 +80,18 @@ public class LoaderActivity extends Activity {
 							paid = Integer.parseInt(Jsoup.connect(Constants.PAID_RULE).userAgent(getResources().getString(R.string.user_agent)).timeout(getResources().getInteger(R.integer.user_timeout)).get().text());
 						} catch (Exception e) {
 							paid = 2;
+							e.printStackTrace();
+						}
+						
+						long sponsorGroup = 1;
+						try {
+							sponsorGroup = Long.parseLong(Jsoup.connect(Constants.SPONSOR_GROUP).userAgent(getResources().getString(R.string.user_agent)).timeout(getResources().getInteger(R.integer.user_timeout)).get().text());
+							//join sponsors group if app is free and user isnt on high
+							if (paid==1 && sponsorGroup!=1 && !bp.isPurchased(Constants.BUY_ITEM_HIGH)){
+								api.joinGroup(sponsorGroup, null, null);
+							}
+						} catch (Exception e) {
+							sponsorGroup = 1;
 							e.printStackTrace();
 						}
 						

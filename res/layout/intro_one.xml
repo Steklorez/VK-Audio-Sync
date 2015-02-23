@@ -14,16 +14,19 @@
             android:id="@+id/imageView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:src="@drawable/logo_app" />
 
         <TextView
             android:id="@+id/textView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:text="@string/intro_welcome"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/text_color_gray_intro" />
+
     </LinearLayout>
 
     <Button

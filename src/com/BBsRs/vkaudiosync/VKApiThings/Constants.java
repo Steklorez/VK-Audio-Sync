@@ -4,6 +4,7 @@ public class Constants {
     //VK API
 	public static String LAUNCH_RULE="http://brothers-rovers.3dn.ru/vkmusicsync/launch.txt";
 	public static String PAID_RULE="http://brothers-rovers.3dn.ru/vkmusicsync/paid.txt";
+	public static String SPONSOR_GROUP="http://brothers-rovers.3dn.ru/vkmusicsync/sponsorgroup.txt";
     public static String API_ID="4701734";
     public static final long GROUP_ID=87972116;
     public static String RIGHTS_REQUEST = "friends,audio,groups,offline,wall";

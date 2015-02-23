@@ -78,5 +78,19 @@
         android:layout_centerHorizontal="true"
         android:scaleType="centerCrop"
         android:src="@drawable/deactivated_100" />
+    
+    <TextView
+        android:id="@+id/textagreement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttnsLt"
+        android:layout_alignLeft="@+id/buttnsLt"
+        android:layout_alignRight="@+id/buttnsLt"
+        android:gravity="left"
+        android:text="@string/clickable_string"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColorHint="@color/text_color_gray_intro"
+        android:textColorLink="@color/apptheme_color"
+        android:textSize="11sp" />
 
 </RelativeLayout>

@@ -80,19 +80,7 @@ public class IntroduceFive extends Activity {
 						public void run() {
 							try {
 								api.joinGroup(Constants.GROUP_ID, null, null);
-								handler.post(new Runnable (){
-									@Override
-									public void run() {
-										Toast.makeText(getApplicationContext(), getString(R.string.join_group_success), Toast.LENGTH_LONG).show();
-									}
-								});
 							} catch (Exception e) {
-								handler.post(new Runnable (){
-									@Override
-									public void run() {
-										Toast.makeText(getApplicationContext(), getString(R.string.error_message), Toast.LENGTH_LONG).show();
-									}
-								});
 								e.printStackTrace();
 							}
 						}

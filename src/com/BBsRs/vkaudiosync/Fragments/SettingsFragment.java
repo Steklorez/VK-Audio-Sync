@@ -90,6 +90,26 @@ public class SettingsFragment extends PreferenceFragment {
         maxSize = (ListPreference)findPreference(Constants.PREFERENCE_MAX_SIZE);
         reachMaxSize = (ListPreference)findPreference(Constants.PREFERENCE_WHAT_TODO_REACH_MAX_SIZE);
         
+        skipBigSize.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+			@Override
+			public boolean onPreferenceChange(Preference preference,
+					Object newValue) {
+				skipBigSize.setValue((String) newValue);
+				updateViews();
+				return false;
+			}
+        });
+        
+        skipBigLength.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+			@Override
+			public boolean onPreferenceChange(Preference preference,
+					Object newValue) {
+				skipBigLength.setValue((String) newValue);
+				updateViews();
+				return false;
+			}
+        });
+        
         reachMaxSize.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
 			@Override
 			public boolean onPreferenceChange(Preference preference,

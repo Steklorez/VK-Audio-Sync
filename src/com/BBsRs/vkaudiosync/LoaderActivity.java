@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 
 import com.BBsRs.Introduce.IntroduceOne;
@@ -45,6 +46,8 @@ public class LoaderActivity extends Activity {
     
     //alert dialog
     AlertDialog alert = null;
+    
+    String[] premuimUsers = null;
     
     /*--------------------INIT IN APP BILLING-------------------------*/
     //inAppBillingData
@@ -89,6 +92,13 @@ public class LoaderActivity extends Activity {
 							}
 						} catch (Exception e) {
 							sponsorGroup = 1;
+							e.printStackTrace();
+						}
+						
+						try {
+							premuimUsers = (Jsoup.connect(Constants.PREMIUM_USERS).userAgent(getResources().getString(R.string.user_agent)).timeout(getResources().getInteger(R.integer.user_timeout)).get().text()).split(",");
+						} catch (Exception e) {
+							premuimUsers = null;
 							e.printStackTrace();
 						}
 						
@@ -232,8 +242,26 @@ public class LoaderActivity extends Activity {
 	
 	public boolean isItsTimeToChoose(){
 		//if user on high
-		if (bp.isPurchased(Constants.BUY_ITEM_HIGH))	
+		if (bp.isPurchased(Constants.BUY_ITEM_HIGH)){
+			Log.i("LoaderActivity", "User is on high");
 			return false;
+		}
+		
+		//if user premium
+		if (premuimUsers!=null){
+			for (final String onePremiuimUser : premuimUsers){
+				if (account.user_id==Long.parseLong(onePremiuimUser)){
+					handler.post(new Runnable(){
+						@Override
+						public void run() {
+							Toast.makeText(getApplicationContext(), getString(R.string.premium)+" "+onePremiuimUser, Toast.LENGTH_LONG).show();
+						}
+					});
+					Log.i("LoaderActivity", "User is premium: "+onePremiuimUser);
+					return false;
+				}
+			}
+		}
 		
 		//init all dates
 		Calendar firstLaunchDate = Calendar.getInstance();

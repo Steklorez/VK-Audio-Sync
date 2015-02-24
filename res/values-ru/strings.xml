@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="premium">Премиум:</string>
     <string name="dont_show_again">Больше не показывать</string>
     <string name="title_dialog">Нравится приложение?</string>
     <string name="join_group">Вступить в группу VK MS</string>

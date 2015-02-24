@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="premium">Premium:</string>
     <string name="dont_show_again">Don\'t show again</string>
     <string name="title_dialog">Like this app?</string>
     <string name="join_group">Join VK MS Group</string>

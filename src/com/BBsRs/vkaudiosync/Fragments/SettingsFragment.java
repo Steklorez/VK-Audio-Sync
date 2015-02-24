@@ -1,5 +1,7 @@
 package com.BBsRs.vkaudiosync.Fragments;
 
+import java.io.File;
+
 import org.holoeverywhere.preference.CheckBoxPreference;
 import org.holoeverywhere.preference.ListPreference;
 import org.holoeverywhere.preference.Preference;
@@ -126,8 +128,13 @@ public class SettingsFragment extends PreferenceFragment {
 					Object newValue) {
 				
 				try {
-					StatFs stat = new StatFs(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/");
-		       		long sdAvailSize = (long)stat.getBlockCount() * (long)stat.getBlockSize();
+					File root = new File (sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/");               
+		        	if(root.exists()==false) {
+		        		root.mkdirs();
+		        	}
+		        	
+					StatFs stat = new StatFs(root.getAbsolutePath());
+					long sdAvailSize = (long)stat.getBlockCount() * (long)stat.getBlockSize();
 				
 		       		if (Long.valueOf((String) newValue)>=sdAvailSize){
 		       			maxSize.setValue("0");

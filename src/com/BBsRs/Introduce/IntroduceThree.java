@@ -1,5 +1,6 @@
 package com.BBsRs.Introduce;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.holoeverywhere.app.Activity;
@@ -14,6 +15,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.StatFs;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -92,7 +94,12 @@ public class IntroduceThree extends Activity {
 						}
 						
 						try {
-							StatFs stat = new StatFs(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/");
+							File root = new File (sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/");               
+				        	if(root.exists()==false) {
+				        		root.mkdirs();
+				        	}
+				        	
+							StatFs stat = new StatFs(root.getAbsolutePath());
 							long sdAvailSize = (long)stat.getBlockCount() * (long)stat.getBlockSize();
 					
 							if (Long.valueOf(getResources().getStringArray(R.array.prefs_max_size_entry_values)[index])>=sdAvailSize){
@@ -102,6 +109,7 @@ public class IntroduceThree extends Activity {
 								sPref.edit().putString(Constants.PREFERENCE_MAX_SIZE, getResources().getStringArray(R.array.prefs_max_size_entry_values)[index]).commit();
 							}
 						} catch (Exception e){
+							Log.i("ds", "exception");
 							e.printStackTrace();
 							sPref.edit().putString(Constants.PREFERENCE_MAX_SIZE, getResources().getStringArray(R.array.prefs_max_size_entry_values)[index]).commit();
 						}

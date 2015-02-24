@@ -244,7 +244,7 @@ public class LoaderActivity extends Activity {
 		
 		
 		//add 10 days to first launch
-		firstLaunchDate.add(Calendar.DATE, +9);
+		firstLaunchDate.add(Calendar.DATE, +6);
 		
 		if (firstLaunchDate.before(currentDate))
 			return true;

@@ -8,13 +8,13 @@
     <string name="review">Review on GPlay!</string>
     <string name="review_summary">you will make an invaluable contribution to the development of the project!</string>
     
-    <string name="buy_title_dialog">VK Music Sync\n10 day trial is ended :(</string>
+    <string name="buy_title_dialog">VK Music Sync\n7-day trial is ended :(</string>
     <string name="buy">Buy this app via GPlay!</string>
     <string name="buy_summary">By buying you\'ll support the development of the project and will get a working version of the app for ever, for all devices</string>
     
     <string name="clickable_string">by clicking next, you agree with [agreement]</string>
     <string name="agreement_top">Agreement:</string>
-    <string name="intro_agreement">VK Music Sync application provides access only to the service of audio vkontakte, We do not store music on their own servers. Rightholders ask about removing music from accessing apply directly to the administration site vk.com. The application programmer can change the way you distribute the application to the free version. With free distribution model application, users have bought the full version can be recruited in the sponsored group vkontakte</string>
+    <string name="intro_agreement">VK Music Sync application provides access only to the service of audio VK, We do not store music on their own servers. Rightholders ask about removing music from accessing apply directly to the administration site vk.com. The application programmer can change the way you distribute the application to the free version. With free distribution model application, users have bought the full version can be recruited in the sponsored group VK</string>
     <string name="intro_welcome">Welcome to \nVK Music Sync</string>
     <string name="intro_signin">Sign in with VK</string>
     <string name="intro_user_personal_welcome">Hi, %s!</string>

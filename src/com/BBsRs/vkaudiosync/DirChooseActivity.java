@@ -28,14 +28,19 @@ public class DirChooseActivity extends Activity implements DirectoryChooserFragm
         //set up preferences
         sPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         
-        //create dir if still doesnt exist
-        File root = new File (sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/");               
-        File dir = new File (root.getAbsolutePath());
-        if(dir.exists()==false) {
-             dir.mkdirs();
+        File root;
+        try {
+        	//create dir if still doesnt exist
+        	root = new File (sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/");               
+        	if(root.exists()==false) {
+        		root.mkdirs();
+        	}
+        } catch(Exception e) {
+        	e.printStackTrace();
+        	root = new File(android.os.Environment.getRootDirectory()+"/");
         }
         
-        mDialog = DirectoryChooserFragment.newInstance(getResources().getString(R.string.app_name), sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/");
+        mDialog = DirectoryChooserFragment.newInstance(getResources().getString(R.string.app_name), root.exists() ? root.getAbsolutePath() : "/");
         mDialog.show(getFragmentManager(), null);
     }
 

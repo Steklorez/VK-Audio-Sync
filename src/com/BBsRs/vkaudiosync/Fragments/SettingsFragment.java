@@ -125,15 +125,20 @@ public class SettingsFragment extends PreferenceFragment {
 			public boolean onPreferenceChange(Preference preference,
 					Object newValue) {
 				
-				StatFs stat = new StatFs(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/");
-		       	long sdAvailSize = (long)stat.getBlockCount() * (long)stat.getBlockSize();
+				try {
+					StatFs stat = new StatFs(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/");
+		       		long sdAvailSize = (long)stat.getBlockCount() * (long)stat.getBlockSize();
 				
-		       	if (Long.valueOf((String) newValue)>=sdAvailSize){
-		       		maxSize.setValue("0");
-		       		Toast.makeText(getActivity(), String.format(getString(R.string.prefs_max_size_too_huge), (double) sdAvailSize/1024/1024/1024), Toast.LENGTH_LONG).show();
-		       	} else { 
-		       		maxSize.setValue((String) newValue);
-		       	}
+		       		if (Long.valueOf((String) newValue)>=sdAvailSize){
+		       			maxSize.setValue("0");
+		       			Toast.makeText(getActivity(), String.format(getString(R.string.prefs_max_size_too_huge), (double) sdAvailSize/1024/1024/1024), Toast.LENGTH_LONG).show();
+		       		} else { 
+		       			maxSize.setValue((String) newValue);
+		       		}
+				} catch (Exception e){
+					e.printStackTrace();
+					maxSize.setValue((String) newValue);
+				}
 				updateViews();
 				return false;
 			}

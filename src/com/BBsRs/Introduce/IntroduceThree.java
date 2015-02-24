@@ -90,16 +90,21 @@ public class IntroduceThree extends Activity {
 							}
 							index++;
 						}
+						
+						try {
+							StatFs stat = new StatFs(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/");
+							long sdAvailSize = (long)stat.getBlockCount() * (long)stat.getBlockSize();
 					
-						StatFs stat = new StatFs(sPref.getString(Constants.DOWNLOAD_DIRECTORY, android.os.Environment.getExternalStorageDirectory()+"/Music/"+getString(R.string.app_name))+"/");
-			       		long sdAvailSize = (long)stat.getBlockCount() * (long)stat.getBlockSize();
-					
-			       		if (Long.valueOf(getResources().getStringArray(R.array.prefs_max_size_entry_values)[index])>=sdAvailSize){
-			       			sPref.edit().putString(Constants.PREFERENCE_MAX_SIZE, "0").commit();
-			       			Toast.makeText(getApplicationContext(), String.format(getString(R.string.prefs_max_size_too_huge), (double) sdAvailSize/1024/1024/1024), Toast.LENGTH_LONG).show();
-			       		} else { 
-			       			sPref.edit().putString(Constants.PREFERENCE_MAX_SIZE, getResources().getStringArray(R.array.prefs_max_size_entry_values)[index]).commit();
-			       		}
+							if (Long.valueOf(getResources().getStringArray(R.array.prefs_max_size_entry_values)[index])>=sdAvailSize){
+								sPref.edit().putString(Constants.PREFERENCE_MAX_SIZE, "0").commit();
+								Toast.makeText(getApplicationContext(), String.format(getString(R.string.prefs_max_size_too_huge), (double) sdAvailSize/1024/1024/1024), Toast.LENGTH_LONG).show();
+							} else { 
+								sPref.edit().putString(Constants.PREFERENCE_MAX_SIZE, getResources().getStringArray(R.array.prefs_max_size_entry_values)[index]).commit();
+							}
+						} catch (Exception e){
+							e.printStackTrace();
+							sPref.edit().putString(Constants.PREFERENCE_MAX_SIZE, getResources().getStringArray(R.array.prefs_max_size_entry_values)[index]).commit();
+						}
 			       		updateViews();
 					}
 				}

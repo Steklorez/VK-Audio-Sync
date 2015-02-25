@@ -81,10 +81,10 @@
         android:background="@drawable/list_selector_holo_light" >
 
         <TextView
-            android:id="@+id/TextView02"
+            android:id="@+id/TextView15"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/ImageView01"
+            android:layout_toLeftOf="@+id/TextView16"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_horizontal_margin"
@@ -92,12 +92,12 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/TextView01"
+            android:id="@+id/TextView14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/TextView02"
-            android:layout_alignRight="@+id/TextView02"
-            android:layout_below="@+id/TextView02"
+            android:layout_alignLeft="@+id/TextView15"
+            android:layout_alignRight="@+id/TextView15"
+            android:layout_below="@+id/TextView15"
             android:paddingBottom="@dimen/activity_horizontal_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
@@ -109,15 +109,16 @@
             android:textSize="13sp" />
 
         <ImageView
-            android:id="@+id/ImageView01"
+            android:id="@+id/TextView16"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignBottom="@+id/TextView01"
+            android:layout_alignBottom="@+id/TextView14"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:gravity="center"
             android:scaleType="center"
             android:src="@drawable/logo_vk_com" />
+
     </RelativeLayout>
 
 </LinearLayout>

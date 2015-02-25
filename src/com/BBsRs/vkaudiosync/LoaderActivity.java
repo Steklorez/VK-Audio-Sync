@@ -63,7 +63,6 @@ public class LoaderActivity extends Activity {
 
 		@Override
 		public void onFinish() {
-			if(api!=null){
 				new Thread (new Runnable(){
 					@Override
 					public void run() {
@@ -103,23 +102,30 @@ public class LoaderActivity extends Activity {
 						}
 						
 						if (launch==2){
-							
-							if (paid==2 && isItsTimeToChoose()){
-								//we need show uncancleable dialog with buy app interface
-								handler.post(new Runnable(){
-									@Override
-									public void run() {
-										showDialog();
-									}
-								});
+							if (api!=null){
+								if (paid==2 && isItsTimeToChoose()){
+									//we need show uncancleable dialog with buy app interface
+									handler.post(new Runnable(){
+										@Override
+										public void run() {
+											showDialog();
+										}
+									});
+								} else {
+									//start application its free at this moment still
+									Intent refresh = new Intent(getApplicationContext(), ContentShowActivity.class);
+									refresh.putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT);
+									//restart activity
+									startActivity(refresh);   
+									// stop curr activity
+		  							finish();
+								}
 							} else {
-								//start application its free at this moment still
-								Intent refresh = new Intent(getApplicationContext(), ContentShowActivity.class);
-								refresh.putExtra(Constants.INITIAL_PAGE, Constants.MUSIC_LIST_FRAGMENT);
-								//restart activity
-								startActivity(refresh);   
-								// stop curr activity
-		  						finish();
+								Intent intent = new Intent();
+					            intent.setClass(getApplicationContext(), IntroduceOne.class);
+					            startActivity(intent);
+					            // stop curr activity
+								finish();
 							}
 						} else {
 							handler.post(new Runnable (){
@@ -134,14 +140,6 @@ public class LoaderActivity extends Activity {
 	  					
 					}
 				}).start();
-
-	        }else{
-	        	Intent intent = new Intent();
-	            intent.setClass(getApplicationContext(), IntroduceOne.class);
-	            startActivity(intent);
-	            // stop curr activity
-				finish();
-	        }
 		}
 
 		@Override
@@ -197,15 +195,9 @@ public class LoaderActivity extends Activity {
 			if (!isMyServiceRunning(AutomaticSynchronizationService.class) && sPref.getBoolean(Constants.PREFERENCE_AUTOMATIC_SYNCHRONIZATION, true)){
         		getApplicationContext().startService(new Intent(getApplicationContext(), AutomaticSynchronizationService.class));
         	}
-			CountDownTimer = new timer(3000, 1000); // timer to 2 seconds (tick one // second)
-			CountDownTimer.start(); // start timer
-		} else{
-			Intent intent = new Intent();
-            intent.setClass(getApplicationContext(), IntroduceOne.class);
-            startActivity(intent);
-            // stop curr activity
-			finish();
 		}
+		CountDownTimer = new timer(3000, 1000); // timer to 2 seconds (tick one // second)
+		CountDownTimer.start(); // start timer
 	}
 	
 	//show an sponsor's to app

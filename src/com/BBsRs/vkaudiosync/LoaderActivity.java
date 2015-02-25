@@ -17,6 +17,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -217,6 +218,18 @@ public class LoaderActivity extends Activity {
 			public void onClick(View v) {
 				if (readyToPurchase)
 					bp.purchase(Constants.BUY_ITEM_HIGH);
+			}
+		});
+		
+		final RelativeLayout contactDev = (RelativeLayout)content.findViewById(R.id.contact_developer);
+		contactDev.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				intent.setData(Uri
+						.parse(getResources().getString(R.string.contacts_vk_url)));
+				startActivity(intent);
+				// open browser or intent here
 			}
 		});
 

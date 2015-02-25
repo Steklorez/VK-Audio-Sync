@@ -25,7 +25,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="5dp" >
-    
+
     <RelativeLayout
         android:id="@+id/buy_app"
         android:layout_width="match_parent"
@@ -71,7 +71,53 @@
             android:gravity="center"
             android:scaleType="center"
             android:src="@drawable/logo_google_play" />
+    </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/contact_developer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/list_selector_holo_light" >
+
+        <TextView
+            android:id="@+id/TextView02"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/ImageView01"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_horizontal_margin"
+            android:text="@string/contact_developer"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/TextView01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/TextView02"
+            android:layout_alignRight="@+id/TextView02"
+            android:layout_below="@+id/TextView02"
+            android:paddingBottom="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:text="@string/contact_developer_summary"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/slider_menu_custom_text_color"
+            android:textColorHint="@color/slider_menu_custom_text_color"
+            android:textColorLink="@color/slider_menu_custom_text_color"
+            android:textSize="13sp" />
+
+        <ImageView
+            android:id="@+id/ImageView01"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignBottom="@+id/TextView01"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:scaleType="center"
+            android:src="@drawable/logo_vk_com" />
     </RelativeLayout>
 
 </LinearLayout>

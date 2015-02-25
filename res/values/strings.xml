@@ -12,6 +12,8 @@
     <string name="buy_title_dialog">VK Music Sync\n7-day trial is ended :(</string>
     <string name="buy">Buy this app via GPlay!</string>
     <string name="buy_summary">By buying you\'ll support the development of the project and will get a working version of the app for ever, for all devices</string>
+    <string name="contact_developer">Contact with developer</string>
+    <string name="contact_developer_summary">Contact with developer to get premiuim status by other ways</string>
     
     <string name="clickable_string">by clicking next, you agree with [agreement]</string>
     <string name="agreement_top">Agreement:</string>

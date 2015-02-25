@@ -11,7 +11,9 @@
     
     <string name="buy_title_dialog">VK Music Sync\n7-дневный пробный период закончился</string>
     <string name="buy">Купить приложение с помощью Google Play!</string>
-    <string name="buy_summary">Покупая вы поддержите развитие проекта, и получите рабочую версию приложения навсегда, на все устройства</string>
+    <string name="buy_summary">Покупая вы поддержите развитие проекта, и получите рабочую версию приложения навсегда, на все устройства, на все аккаунты ВК</string>
+    <string name="contact_developer">Связаться с разработчиком</string>
+    <string name="contact_developer_summary">Связаться с разработчиком для получения статуса премиум другими путями: Можно сделать пожертвование либо выполнить задания</string>
     
     <string name="clickable_string">Продолжая, вы принимаете условия [соглашения]</string>
     <string name="agreement_top">Соглашение:</string>

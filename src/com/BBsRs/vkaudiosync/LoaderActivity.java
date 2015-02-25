@@ -101,7 +101,7 @@ public class LoaderActivity extends Activity {
 							e.printStackTrace();
 						}
 						
-						if (launch==2){
+						if (launch==2 || isUserOnHigh()){
 							if (api!=null){
 								if (paid==2 && isItsTimeToChoose()){
 									//we need show uncancleable dialog with buy app interface
@@ -232,11 +232,11 @@ public class LoaderActivity extends Activity {
 		alert.show();
 	}
 	
-	public boolean isItsTimeToChoose(){
+	public boolean isUserOnHigh(){
 		//if user on high
 		if (bp.isPurchased(Constants.BUY_ITEM_HIGH)){
 			Log.i("LoaderActivity", "User is on high");
-			return false;
+			return true;
 		}
 		
 		//if user premium
@@ -250,9 +250,17 @@ public class LoaderActivity extends Activity {
 						}
 					});
 					Log.i("LoaderActivity", "User is premium: "+onePremiuimUser);
-					return false;
+					return true;
 				}
 			}
+		}
+		return false;
+	}
+	
+	public boolean isItsTimeToChoose(){
+
+		if (isUserOnHigh()){
+			return false;
 		}
 		
 		//init all dates
